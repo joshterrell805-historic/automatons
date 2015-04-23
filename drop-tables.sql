@@ -1,0 +1,17 @@
+drop table Audit;
+drop table Merge;
+drop table MProvider_PracticeAddress;
+drop table MProvider_MailingAddress;
+drop table MProvider_PrimarySpecialty;
+drop table MProvider_SecondarySpecialty;
+drop table MProvider_PhoneNumber;
+drop table MIndividual;
+drop table MOrganization;
+drop table MProvider;
+drop table COrganization;
+drop table CIndividual;
+drop table CProvider;
+drop table Specialty;
+drop table Address;
+drop table PhoneNumber;
+drop table SProvider;
