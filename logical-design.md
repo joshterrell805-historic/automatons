@@ -1,0 +1,125 @@
+## Schema
+- SProvider
+  - id
+  - type
+  - name
+  - gender
+  - dateOfBirth
+  - isSoleProprietor
+  - primarySpecialty
+  - secondarySpecialty
+  - phone
+  - mStreet
+  - mUnit
+  - mCity
+  - mRegion
+  - mPostCode
+  - mCounty
+  - mCountry
+  - pStreet
+  - pUnit
+  - pCity
+  - pRegion
+  - pPostCode
+  - pCounty
+  - pCountry
+  - pk (id)
+- PhoneNumber
+  - id
+  - phone
+  - pk (id)
+- Address
+  - id
+  - address
+  - pk (id)
+- Specialty
+  - code
+  - description
+  - parent
+  - fk (parent) -> Specialty (code)
+- CProvider
+  - id
+  - type
+  - name
+  - phone
+  - billingAddress
+  - mailingAddress
+  - primarySpecialty
+  - secondarySpecialty
+  - fk (id) -> SProvider
+  - fk (phone) -> PhoneNumber (id)
+  - fk (billingAddress) -> Address (id)
+  - fk (mailingAddress) -> Address (id)
+  - fk (primarySpecialty) -> Specialty (code)
+  - fk (secondarySpecialty) -> Specialty (code)
+- CIndividual
+  - id
+  - gender
+  - dateOfBirth
+  - isSoleProprietor
+  - fk (id) -> CProvider (id)
+- COrganization
+  - id
+  - fk (id) -> CProvider (id)
+- MProvider
+  - id
+  - type
+  - name
+- MOrganization
+  - id
+  - fk (id) -> MProvider(id)
+- MIndividual
+  - id
+  - gender
+  - dateOfBirth
+  - isSoleProprietor
+  - fk (id) -> MProvider(id)
+- MProvider\_PhoneNumber
+  - mId
+  - phone
+  - primary
+  - fk (mId) -> MProvider (id)
+  - fk (phone) -> PhoneNumber (id)
+- MProvider\_SecondarySpecialty
+  - mId
+  - specialty
+  - primary
+  - fk (mId) -> MProvider (id)
+  - fk (specialty) -> Specialty (code)
+- MProvider\_PrimarySpecialty
+  - mId
+  - specialty
+  - primary
+  - fk (mId) -> MProvider (id)
+  - fk (specialty) -> Specialty (code)
+- MProvider\_MailingAddress
+  - mId
+  - address
+  - pk (mId, address)
+  - fk (mId) -> MProvider (id)
+  - fk (address) -> Address (id)
+- MProvider\_PracticeAddress
+  - mId
+  - address
+  - pk (mId, address)
+  - fk (mId) -> MProvider (id)
+  - fk (address) -> Address (id)
+- Merge
+  - mId
+  - sId
+  - pk (mId, sId)
+  - fk (mId) -> MProvider (id)
+  - fk (sId) -> CProvider (id)
+- Audit
+  - id
+  - sId
+  - mId
+  - *these fields are provisional;*
+  - *we haven't developed audit details much*
+  - action
+  - fk (sId, mId) -> Merge (sId, mId)
+
+## Additional Constraints
+- Cleaned phone numbers must be in correct format
+- Make sure all source records that are tied to a single master record have the same type
+- For every single merge that occurs there must be an audit (this is not expressed in our ER Diagram)
