@@ -1,13 +1,10 @@
 create table SProvider (
     id int not null primary key,
-    type enum('Organization', 'Individual') not null,
+    type varchar(255),
     name varchar(255),
-    gender char(1),
-    dateOfBirth varchar(255), /* possibly date? */
-    isSoleProprietor enum('y','n','x'),
-    primarySpecialty varchar(255),
-    secondarySpecialty varchar(255),
-    phone varchar(255),
+    gender varchar(255),
+    dateOfBirth varchar(255),
+    isSoleProprietor varchar(255),
     mStreet varchar(255),
     mUnit varchar(255),
     mCity varchar(255),
@@ -21,7 +18,10 @@ create table SProvider (
     pRegion varchar(255),
     pPostCode varchar(255),
     pCounty varchar(255),
-    pCountry varchar(255)
+    pCountry varchar(255),
+    phone varchar(255),
+    primarySpecialty varchar(255),
+    secondarySpecialty varchar(255)
 );
 create table PhoneNumber (
     id int not null auto_increment primary key,
