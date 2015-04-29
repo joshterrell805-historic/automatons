@@ -7,7 +7,7 @@ Given /^the following record:$/ do |string|
 end
 
 Given /^a standard record with:$/ do |string|
-   @record = get_standard_record
+   @record = Example.get_standard_record
    @record.update string
 end
 
@@ -21,7 +21,7 @@ Then /^I should have this record:$/ do |string|
 end
 
 Then /^I should have the same record with:$/ do |string|
-   record = get_standard_record
+   record = Example.get_standard_record
    record.update string
    expect(@record).to eq(record)
 end

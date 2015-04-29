@@ -6,7 +6,7 @@ ID: '24614'
 TYPE: Individual
 NAME: Christina L Grant
 GENDER: F
-DateOfBirth: ''
+DateOfBirth: '01-01-2000'
 IS_SOLE_PROPRIETOR: N
 MAILING_STREET: 225 E Chicago Ave
 MAILING_UNIT: ''
@@ -24,10 +24,10 @@ PRACTICE_COUNTY: Cook
 PRACTICE_COUNTRY: USA
 PRIMARY_PHONE: '(555) 555-5555'
 PRIMARY_SPECIALTY: 390200000X
-SECONDARY_SPECIALTY: 390200000X
+SECONDARY_SPECIALTY: 390200000Y
 END
 
-   def get_standard_record
+   def Example.get_standard_record
       MDM::Record.new STANDARD_RECORD
    end
 end
