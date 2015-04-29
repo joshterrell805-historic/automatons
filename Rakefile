@@ -20,3 +20,14 @@ desc "Create a cleaned version of the Providers file with no duplicate ids"
 file "Providers-clean.tsv" => "Providers.tsv" do |t|
    sh "ruby #{BIN}/transform.rb Providers.tsv > #{t.name}"
 end
+
+desc "Run tests"
+task test: [:cucumber, :rspec]
+
+task :cucumber do
+   sh "cucumber"
+end
+
+task :rspec do
+   sh "rspec"
+end
