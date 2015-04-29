@@ -22,7 +22,7 @@ file "Providers-clean.tsv" => "Providers.tsv" do |t|
 end
 
 desc "Run tests"
-task test: [:cucumber, :rspec]
+task test: [:rspec, :cucumber]
 
 task :cucumber do
    sh "cucumber"
