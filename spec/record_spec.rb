@@ -13,6 +13,11 @@ module MDM
             @record.clean
             expect(@record.phone).to eq("(555) 555-5555")
          end
+         it "makes no change to (###) ###-#### [x####] numbers" do
+            @record.phone = "(555) 555-5555 [x1234]"
+            @record.clean
+            expect(@record.phone).to eq("(555) 555-5555 [x1234]")
+         end
       end
 
       describe "#initialize" do
@@ -27,6 +32,13 @@ module MDM
             expect(record.phone).to eq('(555) 555-5555')
             expect(record.primary_specialty).to eq('390200000X')
             expect(record.secondary_specialty).to eq('390200000Y')
+         end
+      end
+
+      describe "#update" do
+         it "parses YAML and updates the document" do
+            @record.update 'ID: "111111"'
+            expect(@record.id).to eq('111111')
          end
       end
 
