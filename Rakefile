@@ -25,9 +25,9 @@ desc "Run tests"
 task test: [:rspec, :cucumber]
 
 task :cucumber do
-   sh "cucumber"
+   sh "cucumber --format progress"
 end
 
 task :rspec do
-   sh "rspec"
+   sh "rspec --format progress"
 end
