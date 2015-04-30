@@ -25,17 +25,29 @@ create table SProvider (
 );
 create table PhoneNumber (
     id int not null auto_increment primary key,
-    phone varchar(255) not null
+    phone varchar(255) not null,
+    unique(phone)
 );
 create table Address (
     id int not null auto_increment primary key,
-    address varchar(255) not null
+    street varchar(255),
+    unit varchar(255),
+    city varchar(255),
+    region varchar(255),
+    postcode varchar(255),
+    county varchar(255),
+    country varchar(255),
+    CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
 );
 create table Specialty (
-    code varchar(255) not null primary key,
+    parentid int not null,
+    id int not null primary key,
+    title varchar(255),
+    code varchar(255),
     description varchar(255),
-    parent varchar(255),
-    foreign key (parent) references Specialty (code)
+    foreign key (parentid) references Specialty (id),
+    unique (code),
+    CONSTRAINT uc_Specialty UNIQUE (parentid, title)
 );
 create table CProvider (
     id int not null primary key,
@@ -129,6 +141,7 @@ create table Audit (
     -- these fields are provisional;
     -- we haven't developed audit details much
     action varchar(255) not null,
-    foreign key (sId, mId) references Merge (sId, mId)
+    foreign key (sId, mId) references Merge (sId, mId),
+    CONSTRAINT uc_Audit UNIQUE (sId, mId)
 );
 
