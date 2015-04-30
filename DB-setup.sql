@@ -30,15 +30,14 @@ create table PhoneNumber (
 );
 create table Address (
     id int not null auto_increment primary key,
-    street varchar(255),
-    unit varchar(255),
-    city varchar(255),
-    region varchar(255),
-    postcode varchar(255),
-    county varchar(255),
-    country varchar(255)
-    -- "specified key is too long..."
-    -- CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
+    street varchar(100),
+    unit varchar(10),
+    city varchar(100),
+    region varchar(5),
+    postcode varchar(20),
+    county varchar(100),
+    country varchar(5),
+    CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
 );
 create table Specialty (
     parentId int,
@@ -144,4 +143,3 @@ create table Audit (
     foreign key (sId, mId) references Merge (sId, mId),
     CONSTRAINT uc_Audit UNIQUE (sId, mId)
 );
-
