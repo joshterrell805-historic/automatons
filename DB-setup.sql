@@ -36,17 +36,17 @@ create table Address (
     region varchar(255),
     postcode varchar(255),
     county varchar(255),
-    country varchar(255),
-    CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
+    country varchar(255)
+    -- "specified key is too long..."
+    -- CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
 );
 create table Specialty (
-    parentid int not null,
+    parentId int,
     id int not null primary key,
     title varchar(255),
-    code varchar(255),
-    description varchar(255),
-    foreign key (parentid) references Specialty (id),
-    unique (code),
+    code varchar(255) unique,
+    definition varchar(255),
+    foreign key (parentId) references Specialty (id),
     CONSTRAINT uc_Specialty UNIQUE (parentid, title)
 );
 create table CProvider (
@@ -56,14 +56,14 @@ create table CProvider (
     phone int,
     billingAddress int,
     mailingAddress int,
-    primarySpecialty varchar(255),
-    secondarySpecialty varchar(255),
+    primarySpecialty int,
+    secondarySpecialty int,
     foreign key (id) references SProvider (id),
     foreign key (phone) references PhoneNumber (id),
     foreign key (billingAddress) references Address (id),
     foreign key (mailingAddress) references Address (id),
-    foreign key (primarySpecialty) references Specialty (code),
-    foreign key (secondarySpecialty) references Specialty (code)
+    foreign key (primarySpecialty) references Specialty (id),
+    foreign key (secondarySpecialty) references Specialty (id)
 );
 create table CIndividual (
     id int not null primary key,
@@ -101,17 +101,17 @@ create table MProvider_PhoneNumber (
 );
 create table MProvider_SecondarySpecialty (
     mId int not null,
-    specialty varchar(255) not null,
+    specialty int not null,
     primary key (mId, specialty),
     foreign key (mId) references MProvider (id),
-    foreign key (specialty) references Specialty (code)
+    foreign key (specialty) references Specialty (id)
 );
 create table MProvider_PrimarySpecialty (
     mId int not null,
-    specialty varchar(255) not null,
+    specialty int not null,
     primary key (mId, specialty),
     foreign key (mId) references MProvider (id),
-    foreign key (specialty) references Specialty (code)
+    foreign key (specialty) references Specialty (id)
 );
 create table MProvider_MailingAddress (
     mId int not null,

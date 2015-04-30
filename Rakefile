@@ -9,10 +9,15 @@ ENV["mysql_user"] = "automatons"
 ENV["mysql_database"] = "automatons"
 
 task default: [:loadDB]
+task loadDB: [:loadProviders, :loadSpecialties]
 
-desc "Load the cleaned Providers file into the database"
-task loadDB: "Providers-clean.tsv" do
-   sh "node insert-providers.js Providers-clean.tsv"
+desc "Load the raw Providers into the database"
+task loadProviders: "Providers-clean.tsv" do
+   sh "node #{BIN}/insert-providers.js Providers-clean.tsv"
+end
+desc "Load the raw Specialties into the database"
+task :loadSpecialties do
+   sh "node #{BIN}/insert-specialties.js Specialties.tsv"
 end
 CLEAN << "Providers-clean.tsv"
 
