@@ -1,2 +1,2 @@
 var insertDataset = require('./insert-dataset');
-insertDataset('SProvider', 23);
+insertDataset('Specialty', 5, true);

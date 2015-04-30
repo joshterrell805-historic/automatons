@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "mysql": "*",
-    "promise": "*"
+    "promise": "*",
+    "underscore": "*"
   }
 }
