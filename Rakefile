@@ -12,18 +12,13 @@ task default: [:loadDB]
 task loadDB: [:loadProviders, :loadSpecialties]
 
 desc "Load the raw Providers into the database"
-task loadProviders: "Providers-clean.tsv" do
-   sh "node #{BIN}/insert-providers.js Providers-clean.tsv"
+task :loadProviders do
+   sh "node #{BIN}/insert-providers.js Providers.tsv"
 end
+
 desc "Load the raw Specialties into the database"
 task :loadSpecialties do
    sh "node #{BIN}/insert-specialties.js Specialties.tsv"
-end
-CLEAN << "Providers-clean.tsv"
-
-desc "Create a cleaned version of the Providers file with no duplicate ids"
-file "Providers-clean.tsv" => "Providers.tsv" do |t|
-   sh "ruby #{BIN}/transform.rb Providers.tsv > #{t.name}"
 end
 
 desc "Run tests"
