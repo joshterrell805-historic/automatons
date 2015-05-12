@@ -20,5 +20,5 @@ When(/^I run the cleanse$/) do
 end
 
 Then(/^"(.*?)" should be "(.*?)"$/) do |arg1, arg2|
-   expect(@cleansed[arg1]).to eq(arg2)
+   expect(@cleansed[arg1.to_sym]).to eq(arg2)
 end
