@@ -2,6 +2,7 @@ require 'cleanser'
 
 Before do
    @cleanser = Cleanser.new
+   @data = {}
 end
 
 Given(/^this cleanse rule:$/) do |string|
@@ -11,7 +12,7 @@ Given(/^this cleanse rule:$/) do |string|
 end
 
 Given(/^data with "(.*?)" set to "(.*?)"$/) do |arg1, arg2|
-   @data = {arg1.to_s => arg2}
+   @data[arg1.to_sym] = arg2
 end
 
 When(/^I run the cleanse$/) do
