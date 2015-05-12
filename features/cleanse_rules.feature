@@ -25,6 +25,7 @@ Feature: Cleanse rule format
       When I run the cleanse
       Then "thing" should be "ppp"
 
+      @wip
    Scenario:
       Given this cleanse rule:
       """
