@@ -59,14 +59,6 @@ describe Cleanser do
          end
          expect(@cleanser.cleanse({:field => 'taco'})).to eq({:field => "taco"})
       end
-      it "cleans a field" do
-         @cleanser.add do
-            rule :field, /test/, "test this" do |string, match|
-               "abc"
-            end
-         end
-         expect(@cleanser.cleanse({:field => 'test taco'})).to eq({:field => "abc"})
-      end
       it "passes the MatchData to the block" do
          @cleanser.add do
             rule :phone, /(\d{3})-(\d{3})-(\d{4})/, "change pty to ppp" do |match|
