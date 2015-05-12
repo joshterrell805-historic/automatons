@@ -1,20 +1,13 @@
-Rule = Struct.new :field, :regex, :name, :block
-class Rule
-   def run data
-      self[:block].call data
-   end
-end
-
+require "rule.rb"
 class Realm
    attr_reader :rules
 
    def initialize
-      @rules = {}
+      @rules = []
    end
 
    def rule field, *args, &block
-      @rules[field] ||= []
-      @rules[field] << Rule.new(field, *args, block)
+      @rules << Rule.new(field, *args, block)
    end
 end
 
@@ -25,10 +18,8 @@ class Cleanser
 
    ## Returns a list of names of defined rules
    def dump_rules
-      @realm.rules.flat_map do |field, rule_list|
-         rule_list.map do |rule|
-            rule.name
-         end
+      @realm.rules.map do |rule|
+         rule.name
       end
    end
 
@@ -37,16 +28,14 @@ class Cleanser
    end
 
    def cleanse data
-      data.each_key do |field|
-         rules = @realm.rules[field]
-         if rules
-            rules.each do |rule|
-               match = rule.regex.match data[field]
-               if match
-                  data[field] = rule.run(match)
-               end
-            end
-         end
+      @realm.rules.each do |rule|
+         data = rule.run data
       end
+      data
+   end
+
+   def run_rule name, data
+      rule = @realm.rules.find {|r| r.name == name}
+      rule.run data
    end
 end
