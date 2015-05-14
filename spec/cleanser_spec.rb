@@ -77,4 +77,16 @@ describe Cleanser do
          expect(@cleanser.cleanse({:name => "tony", :phone => '805-555-5555'})).to eq({:name => "tony", :phone => "555-555-5555"})
       end
    end
+
+   describe "#add" do
+      it "adds a rule to the cleanser" do
+         @cleanser.add do
+            rule :test, nil, "add rule" do |rule|
+               "thing"
+            end
+         end
+
+         expect(@cleanser.dump_rules).to contain("add rule")
+      end
+   end
 end
