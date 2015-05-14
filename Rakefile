@@ -3,9 +3,9 @@ require 'rake/clean'
 BIN = File.absolute_path './bin'
 ENV["PATH"] += BIN
 
-ENV["mysql_host"] = "localhost"
+ENV["mysql_host"]     = "localhost"
 ENV["mysql_password"] = "z8eEnVt*"
-ENV["mysql_user"] = "automatons"
+ENV["mysql_user"]     = "automatons"
 ENV["mysql_database"] = "automatons"
 
 task default: [:loadDB]
