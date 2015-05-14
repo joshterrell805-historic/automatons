@@ -14,7 +14,7 @@ Feature: Business Rules
       Then "phone" should be "(555) 555-5555"
 
    Scenario:
-      Given "phone" with value "555555555555555"
+      Given "phone" with value "011555555555555"
       When I run "international phone"
-      Then "phone" should be "555 55 (555) 555-5555"
+      Then "phone" should be "011 55 (555) 555-5555"
 

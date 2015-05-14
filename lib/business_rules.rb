@@ -17,7 +17,7 @@ class BusinessRules
             "(%s) %s-%s" % parts
          end
 
-         def format_internation_phone parts
+         def format_international_phone parts
             "%s %s (%s) %s-%s" % parts
          end
 
