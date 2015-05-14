@@ -17,6 +17,10 @@ class BusinessRules
             "(%s) %s-%s" % parts
          end
 
+         def format_internation_phone parts
+            "%s %s (%s) %s-%s" % parts
+         end
+
          rule :phone, /(\d{3})\.(\d{3})\.(\d{4})/, "dotted phone" do |match|
             format_phone match[1..3]
          end
@@ -27,6 +31,10 @@ class BusinessRules
 
          rule :phone, /(\d{3})(\d{3})(\d{4})/, "all number phone" do |match|
             format_phone match[1..3]
+         end
+
+         rule :phone, /(011)(\d{2})(\d{3})(\d{3})(\d{4})/, "international phone" do |match|
+            format_international_phone match[1..5]
          end
       end
    end
