@@ -7,3 +7,9 @@ Feature: Business Rules
       Given "phone" with value "555-555-5555"
       When I run "dashed phone"
       Then "phone" should be "(555) 555-5555"
+
+   Scenario:
+      Given "phone" with value "555.555.5555"
+      When I run "dotted phone"
+      Then "phone" should be "(555) 555-5555"
+

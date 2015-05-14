@@ -24,6 +24,10 @@ class BusinessRules
          rule :phone, /(\d{3})-(\d{3})-(\d{4})/, "dashed phone" do |match|
             format_phone match[1..3]
          end
+
+         rule :phone, /(\d{3})(\d{3})(\d{4})/, "all number phone" do |match|
+            format_phone match[1..3]
+         end
       end
    end
 end
