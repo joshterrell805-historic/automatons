@@ -7,19 +7,6 @@ module MDM
          @record = Example.get_standard_record
       end
 
-      describe "#clean" do
-         it "converts ###-###-#### phone numbers to (###) ###-####" do
-            @record.phone = "555-555-5555"
-            @record.clean
-            expect(@record.phone).to eq("(555) 555-5555")
-         end
-         it "makes no change to (###) ###-#### [x####] numbers" do
-            @record.phone = "(555) 555-5555 [x1234]"
-            @record.clean
-            expect(@record.phone).to eq("(555) 555-5555 [x1234]")
-         end
-      end
-
       describe "#initialize" do
          it "parses record" do
             record = Record.new(Example::STANDARD_RECORD)
