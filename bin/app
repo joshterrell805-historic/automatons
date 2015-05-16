@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+# This is the main file for our entire project
+# It provides an interface to the App class, which does the main work.
+# This arrangement is for ease of testing.
+$LOAD_PATH << File.absolute_path(File.join(File.dirname(__FILE__),'..', 'lib'))
+require 'main'
+require 'database'
+require 'business_rules'
+
+db = Database.new ENV["mysql_database"]
+cleanser = BusinessRules.new
+
+main = Main.new db, cleanser.cleanser
+main.run ARGV
