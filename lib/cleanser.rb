@@ -6,8 +6,8 @@ class Realm
       @rules = []
    end
 
-   def rule field, *args, &block
-      @rules << Rule.new(field, *args, block)
+   def rule *args, &block
+      @rules << Rule.new(*args, block)
    end
 end
 
