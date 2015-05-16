@@ -55,3 +55,14 @@ end
 Then /^"(.*?)" should be "(.*?)"$/ do |arg1, arg2|
    expect(@cleansed[arg1.to_sym]).to eq(arg2)
 end
+
+Then /^the "(.*?)" table should contain:$/ do |table, yaml|
+   expected = Psych.parse(yaml).to_ruby
+   table = @db[table.to_sym]
+
+   q = expected.reduce(table) do |query, pair|
+      query.where(pair.first.to_sym => pair.last)
+   end
+
+   expect(q.count).to eq(1)
+end
