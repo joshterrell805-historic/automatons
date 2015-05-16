@@ -44,7 +44,7 @@ When /^I clean it$/ do
    a.cleanse
 end
 
-When /^I run "(.*?)"$/ do |rule_name|
+When /^I run the "(.*?)" rule$/ do |rule_name|
    @cleansed = @cleanser.run_rule rule_name, @data
 end
 
