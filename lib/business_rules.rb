@@ -1,3 +1,4 @@
+require 'cleanser'
 class BusinessRules
    attr_accessor :cleanser
    def initialize
