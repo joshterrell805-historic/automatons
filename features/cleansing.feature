@@ -16,33 +16,33 @@ Feature: Cleaning
       """
       And the "Address" table should contain:
       """
-      mStreet: 225 E Chicago Ave
-      mUnit: ''
-      mCity: Chicago
-      mRegion: IL
-      mPostCode: '60611'
-      mCounty: Cook
-      mCountry: USA
+      street: 225 E Chicago Ave
+      unit: ''
+      city: Chicago
+      region: IL
+      postCode: '60611'
+      county: Cook
+      country: USA
       """
       And the "Address" table should contain:
       """
-      pStreet: 225 E Chicago Ave
-      pUnit: ''
-      pCity: Chicago
-      pRegion: IL
-      pPostCode: '60611'
-      pCounty: Cook
-      pCountry: USA
+      street: 225 E Chicago Ave
+      unit: ''
+      city: Chicago
+      region: IL
+      postCode: '60611'
+      county: Cook
+      country: USA
       """
       And the "CProvider" table should contain:
       """
-      id: '24614'
+      id: 24614
       type: Individual
       name: Christina L Grant
       """
       And the "CIndividual" table should contain:
       """
       gender: F
-      DateOfBirth: '01-01-2000'
+      dateOfBirth: '01-01-2000'
       isSoleProprietor: N
       """
