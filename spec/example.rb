@@ -1,33 +1,37 @@
-require 'record.rb'
-
+require 'psych'
+# This module provides an easy way to get a record like the ones from the
+# database
 module Example
    STANDARD_RECORD = <<END
-ID: '24614'
-TYPE: Individual
-NAME: Christina L Grant
-GENDER: F
+id: '24614'
+type: Individual
+name: Christina L Grant
+gender: F
 DateOfBirth: '01-01-2000'
-IS_SOLE_PROPRIETOR: N
-MAILING_STREET: 225 E Chicago Ave
-MAILING_UNIT: ''
-MAILING_CITY: Chicago
-MAILING_REGION: IL
-MAILING_POST_CODE: '60611'
-MAILING_COUNTY: Cook
-MAILING_COUNTRY: USA
-PRACTICE_STREET: 225 E Chicago Ave
-PRACTICE_UNIT: ''
-PRACTICE_CITY: Chicago
-PRACTICE_REGION: IL
-PRACTICE_POST_CODE: '60611'
-PRACTICE_COUNTY: Cook
-PRACTICE_COUNTRY: USA
-PRIMARY_PHONE: '(555) 555-5555'
-PRIMARY_SPECIALTY: 390200000X
-SECONDARY_SPECIALTY: 390200000Y
+isSoleProprietor: N
+mStreet: 225 E Chicago Ave
+mUnit: ''
+mCity: Chicago
+mRegion: IL
+mPostCode: '60611'
+mCounty: Cook
+mCountry: USA
+pStreet: 225 E Chicago Ave
+pUnit: ''
+pCity: Chicago
+pRegion: IL
+pPostCode: '60611'
+pCounty: Cook
+pCountry: USA
+phone: '(555) 555-5555 [x5565]'
+primarySpecialty: 390200000X
+secondarySpecialty: 390200000X
 END
 
    def Example.get_standard_record
-      MDM::Record.new STANDARD_RECORD
+      # Parse the YAML hash above into a Ruby hash. Easier than trying to clone
+      # independent copies of the data to avoid things touching each other's
+      # data
+      Psych.parse(STANDARD_RECORD).to_ruby
    end
 end
