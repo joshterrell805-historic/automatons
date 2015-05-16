@@ -1,8 +1,6 @@
-require './spec/example.rb'
 require 'database'
 require 'cleanser'
-require 'app'
-require 'business_rules.rb'
+require 'business_rules'
 
 Before do
    @cleanser = Cleanser.new
