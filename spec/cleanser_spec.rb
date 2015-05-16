@@ -86,7 +86,7 @@ describe Cleanser do
             end
          end
 
-         expect(@cleanser.dump_rules).to contain("add rule")
+         expect(@cleanser.dump_rules).to include("add rule")
       end
    end
 end
