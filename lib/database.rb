@@ -7,10 +7,10 @@ require 'sequel'
 # connecting.
 class Database < Delegator
 
-   def initialize database
+   def initialize
       @db = Sequel.connect adapter: 'mysql2',
          host: ENV["mysql_host"],
-         database: database,
+         database: ENV["mysql_database"],
          password: ENV["mysql_password"],
          user: ENV["mysql_user"]
 

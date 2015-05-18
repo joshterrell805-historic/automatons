@@ -7,7 +7,7 @@ require 'main'
 require 'database'
 require 'business_rules'
 
-db = Database.new ENV["mysql_database"]
+db = Database.new
 cleanser = BusinessRules.new
 
 main = Main.new db, cleanser.cleanser

@@ -11,12 +11,6 @@ Given /^the standard business rules$/ do
    @cleanser = BusinessRules.new.cleanser
 end
 
-Given /^an empty database$/ do
-   @db = Database.new "automatons_test"
-   @db.source "DB-cleanup.sql"
-   @db.source "DB-setup.sql"
-end
-
 Given /^this cleanse rule:$/ do |string|
    @cleanser.add do
       eval string
