@@ -13,9 +13,5 @@ describe Main do
          expect(@cleanser).to receive(:cleanse).with({}).exactly(2).times
          @main.cleanse
       end
-      xit "splits the data into the proper columns" do
-
-      end
-
    end
 end
