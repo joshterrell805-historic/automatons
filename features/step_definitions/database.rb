@@ -28,11 +28,14 @@ end
 
 Then /^the "(.*?)" table should contain:$/ do |table, yaml|
    expected = Psych.parse(yaml).to_ruby
-   table = @db[table.to_sym]
+   data = {}
 
-   q = expected.reduce(table) do |query, pair|
-      query.where(pair.first.to_sym => pair.last)
+   # Convert string keys to symbol keys
+   expected.each do |key, value|
+      data[key.to_sym] = value
    end
 
-   expect(q.count).to eq(1)
+   dataset = @db[table.to_sym]
+
+   expect(dataset.where(data).count).to eq(1)
 end

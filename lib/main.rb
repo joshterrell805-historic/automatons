@@ -145,15 +145,8 @@ class Main
    end
 
    def check_insert table, id, data
-      q = data.reduce(@db[table]) do |table, point|
-         table.where(point.first => point.last)
-      end
-
-      result = q.get(id)
-      if not result
-         result = @db[table].insert data
-      end
-      result
+      @db[table].where(data).get(id) or
+         @db[table].insert data
    end
 
    def Main.filter_data data, *filters
