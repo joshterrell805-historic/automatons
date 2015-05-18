@@ -1,6 +1,7 @@
 require 'docopt'
 require 'sequel'
 require_relative '../lib/database.rb'
+require 'hash'
 
 class Main
    # Attributes to store the database object and the cleanser
@@ -60,7 +61,7 @@ class Main
    end
 
    def insert_phone record
-      data = record.filter_self [:phone]
+      data = record.filter [:phone]
       id = check_insert :PhoneNumber, :id, data
       record[:phone_id] = id
    end
@@ -93,8 +94,8 @@ class Main
          :county,
          :country]
 
-      data = record.filter_self source, destination
-      data2 = record.filter_self source2, destination
+      data = record.filter source, destination
+      data2 = record.filter source2, destination
       id = check_insert :Address, :id, data
       id2 = check_insert :Address, :id, data2
       record[:mAddress_id] = id
@@ -105,8 +106,8 @@ class Main
       source = [:primarySpecialty]
       source2 = [:secondarySpecialty]
       dest = [:code]
-      data = record.filter_self source, dest
-      data2 = record.filter_self source2, dest
+      data = record.filter source, dest
+      data2 = record.filter source2, dest
       id = check_insert :Specialty, :id, data
       id2 = check_insert :Specialty, :id, data2
       record[:primarySpecialty_id] = id
@@ -119,7 +120,7 @@ class Main
          :type,
          :name
       ]
-      data = record.filter_self source, {mAddress_id: :mailingAddress, pAddress_id: :practiceAddress, phone_id: :phone, primarySpecialty_id: :primarySpecialty, secondarySpecialty_id: :secondarySpecialty}
+      data = record.filter source, {mAddress_id: :mailingAddress, pAddress_id: :practiceAddress, phone_id: :phone, primarySpecialty_id: :primarySpecialty, secondarySpecialty_id: :secondarySpecialty}
       @db[:CProvider].insert data
    end
 
@@ -130,7 +131,7 @@ class Main
          :isSoleProprietor,
          :id
       ]
-      data = record.filter_self source
+      data = record.filter source
       id = @db[:CIndividual].insert data
       record[:cIndividual_id] = id
    end
@@ -139,7 +140,7 @@ class Main
       source = [
          :id
       ]
-      data = record.filter_self source
+      data = record.filter source
       id = @db[:COrganization].insert data
       record[:cOrganization_id] = id
    end
@@ -147,45 +148,5 @@ class Main
    def check_insert table, id, data
       @db[table].where(data).get(id) or
          @db[table].insert data
-   end
-
-end
-class Hash
-   def filter_self *filters
-      result = {}
-
-      first = nil
-      filters.each do |filter|
-         case filter
-         when Array
-            if first
-               first.zip(filter).each do |pair|
-                  result[pair.last] = self[pair.first]
-               end
-               first = nil
-            else
-               first = filter
-            end
-         when Hash
-            if first
-               first.each do |key|
-                  result[key] = self[key]
-               end
-               first = nil
-            end
-
-            filter.each do |source_key, result_key|
-               result[result_key] = self[source_key]
-            end
-         end
-      end
-
-      if first
-         first.each do |key|
-            result[key] = self[key]
-         end
-         first = nil
-      end
-      result
    end
 end
