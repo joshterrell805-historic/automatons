@@ -20,12 +20,13 @@ describe Main do
       describe "#check_insert" do
          it "checks for duplicate records in the db" do
             table = double("table")
-            expect(@db).to receive(:[]).and_return table
+            allow(@db).to receive(:[]).and_return table
             expect(table).to receive(:where).with(abc: "def").and_return(table)
             expect(table).to receive(:where).with(def: "thing").and_return(table)
-            expect(table).to receive(:count).and_return 1
+            expect(table).to receive(:get).and_return nil
+            expect(table).to receive(:insert)
 
-            @main.check_insert(:table, {abc: "def", def: "thing"})
+            @main.check_insert(:table, :abc, {abc: "def", def: "thing"})
          end
 
          it "does not insert if the record exists" do
@@ -33,10 +34,10 @@ describe Main do
             allow(@db).to receive(:[]).and_return table
             expect(table).to receive(:where).with(abc: "def").and_return(table)
             expect(table).to receive(:where).with(def: "thing").and_return(table)
-            expect(table).to receive(:count).and_return 1
+            expect(table).to receive(:get).and_return "def"
             expect(table).to_not receive(:insert)
 
-            @main.check_insert(:table, {abc: "def", def: "thing"})
+            @main.check_insert(:table, :abc, {abc: "def", def: "thing"})
          end
       end
 
