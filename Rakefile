@@ -29,3 +29,11 @@ end
 task :rspec do
    sh "rspec --format progress"
 end
+
+task :create do
+   sh "./connect-to-mysql.sh < DB-setup.sql"
+end
+
+task :clobber do
+   sh "./connect-to-mysql.sh < DB-cleanup.sql"
+end
