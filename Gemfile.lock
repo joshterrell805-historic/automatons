@@ -2,9 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     docopt (0.5.0)
+    dotenv (2.0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   docopt
+  dotenv
