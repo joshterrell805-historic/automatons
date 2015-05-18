@@ -23,6 +23,8 @@ class Cleanser
       end
    end
 
+   ## This method allows rules to be defined with the 
+   #  rule :field, "name"
    def add &block
       @realm.instance_exec &block
    end

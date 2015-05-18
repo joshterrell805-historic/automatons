@@ -1,4 +1,3 @@
-require 'database'
 require 'cleanser'
 require 'business_rules'
 
@@ -25,16 +24,8 @@ Given /^"(.*?)" with value "(.*?)"$/ do |field, value|
    @data = {field.to_sym => value}
 end
 
-Given /^a standard record in SProvider$/ do
-   record = Example.get_standard_record
-   table = @db[:SProvider]
-   table.insert record
-end
-
-When /^I clean it$/ do
-   a = App.new
-   a.db = @db
-   a.cleanser = @cleanser
+When /^I run a clean$/ do
+   a = Main.new @db, @cleanser
    a.cleanse
 end
 
@@ -50,13 +41,3 @@ Then /^"(.*?)" should be "(.*?)"$/ do |arg1, arg2|
    expect(@cleansed[arg1.to_sym]).to eq(arg2)
 end
 
-Then /^the "(.*?)" table should contain:$/ do |table, yaml|
-   expected = Psych.parse(yaml).to_ruby
-   table = @db[table.to_sym]
-
-   q = expected.reduce(table) do |query, pair|
-      query.where(pair.first.to_sym => pair.last)
-   end
-
-   expect(q.count).to eq(1)
-end
