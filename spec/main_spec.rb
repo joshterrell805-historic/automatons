@@ -19,25 +19,27 @@ describe Main do
 
       describe "#check_insert" do
          it "checks for duplicate records in the db" do
+            key_field = :abc
             table = double("table")
             allow(@db).to receive(:[]).and_return table
-            expect(table).to receive(:where).with(abc: "def").and_return(table)
-            expect(table).to receive(:where).with(def: "thing").and_return(table)
-            expect(table).to receive(:get).and_return nil
+            allow(table).to receive(:where).and_return(table)
+            expect(table).to receive(:get).with(key_field).and_return nil
             expect(table).to receive(:insert)
 
-            @main.check_insert(:table, :abc, {abc: "def", def: "thing"})
+            @main.check_insert(:table, key_field, {key_field => "def", other: "thing"})
          end
 
          it "does not insert if the record exists" do
+            key_field = :abc
+            key_value = "def"
+
             table = double("table")
             allow(@db).to receive(:[]).and_return table
-            expect(table).to receive(:where).with(abc: "def").and_return(table)
-            expect(table).to receive(:where).with(def: "thing").and_return(table)
-            expect(table).to receive(:get).and_return "def"
+            allow(table).to receive(:where).and_return(table)
+            expect(table).to receive(:get).with(key_field).and_return key_value
             expect(table).to_not receive(:insert)
 
-            @main.check_insert(:table, :abc, {abc: "def", def: "thing"})
+            @main.check_insert(:table, key_field, {key_field => key_value, other: "thing"})
          end
       end
 
