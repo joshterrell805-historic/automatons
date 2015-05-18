@@ -10,12 +10,12 @@ task default: [:loadDB]
 task loadDB: [:loadProviders, :loadSpecialties]
 
 desc "Load the raw Providers into the database"
-task :loadProviders do
+task :loadProviders => :create do
    sh "node #{BIN}/insert-providers.js Providers.tsv"
 end
 
 desc "Load the raw Specialties into the database"
-task :loadSpecialties do
+task :loadSpecialties => :create do
    sh "node #{BIN}/insert-specialties.js Specialties.tsv"
 end
 

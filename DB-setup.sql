@@ -1,4 +1,4 @@
-create table SProvider (
+create table if not exists SProvider (
     id int not null primary key,
     type varchar(255),
     name varchar(255),
@@ -23,12 +23,12 @@ create table SProvider (
     primarySpecialty varchar(255),
     secondarySpecialty varchar(255)
 );
-create table PhoneNumber (
+create table if not exists PhoneNumber (
     id int not null auto_increment primary key,
     phone varchar(255) not null,
     unique(phone)
 );
-create table Address (
+create table if not exists Address (
     id int not null auto_increment primary key,
     street varchar(100),
     unit varchar(10),
@@ -39,7 +39,7 @@ create table Address (
     country varchar(5),
     CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
 );
-create table Specialty (
+create table if not exists Specialty (
     parentId int,
     id int not null primary key,
     title varchar(255),
@@ -48,7 +48,7 @@ create table Specialty (
     foreign key (parentId) references Specialty (id),
     CONSTRAINT uc_Specialty UNIQUE (parentid, title)
 );
-create table CProvider (
+create table if not exists CProvider (
     id int not null primary key,
     type enum('Organization', 'Individual') not null,
     name varchar(255),
@@ -64,76 +64,76 @@ create table CProvider (
     foreign key (primarySpecialty) references Specialty (id),
     foreign key (secondarySpecialty) references Specialty (id)
 );
-create table CIndividual (
+create table if not exists CIndividual (
     id int not null primary key,
     gender char(1),
     dateOfBirth varchar(255),
     isSoleProprietor enum('y', 'n', 'x'),
     foreign key (id) references CProvider (id)
 );
-create table COrganization (
+create table if not exists COrganization (
     id int not null auto_increment primary key,
     foreign key (id) references CProvider (id)
 );
-create table MProvider (
+create table if not exists MProvider (
     id int not null auto_increment primary key,
     type enum('Organization', 'Individual') not null,
     name varchar(255) not null
 );
-create table MOrganization (
+create table if not exists MOrganization (
     id int not null primary key,
     foreign key (id) references MProvider(id)
 );
-create table MIndividual (
+create table if not exists MIndividual (
     id int not null primary key,
     gender char(1),
     dateOfBirth varchar(255),
     isSoleProprietor enum('y', 'n', 'x'),
     foreign key (id) references MProvider(id)
 );
-create table MProvider_PhoneNumber (
+create table if not exists MProvider_PhoneNumber (
     mId int not null,
     phone int not null,
     primary key (mId, phone),
     foreign key (mId) references MProvider (id),
     foreign key (phone) references PhoneNumber (id)
 );
-create table MProvider_SecondarySpecialty (
+create table if not exists MProvider_SecondarySpecialty (
     mId int not null,
     specialty int not null,
     primary key (mId, specialty),
     foreign key (mId) references MProvider (id),
     foreign key (specialty) references Specialty (id)
 );
-create table MProvider_PrimarySpecialty (
+create table if not exists MProvider_PrimarySpecialty (
     mId int not null,
     specialty int not null,
     primary key (mId, specialty),
     foreign key (mId) references MProvider (id),
     foreign key (specialty) references Specialty (id)
 );
-create table MProvider_MailingAddress (
+create table if not exists MProvider_MailingAddress (
     mId int not null,
     address int not null,
     primary key (mId, address),
     foreign key (mId) references MProvider (id),
     foreign key (address) references Address (id)
 );
-create table MProvider_PracticeAddress (
+create table if not exists MProvider_PracticeAddress (
     mId int not null,
     address int not null,
     primary key (mId, address),
     foreign key (mId) references MProvider (id),
     foreign key (address) references Address (id)
 );
-create table Merge (
+create table if not exists Merge (
     mId int not null,
     sId int not null,
     primary key (mId, sId),
     foreign key (mId) references MProvider (id),
     foreign key (sId) references CProvider (id)
 );
-create table Audit (
+create table if not exists Audit (
     id int not null auto_increment primary key,
     sId int not null,
     mId int not null,
