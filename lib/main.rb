@@ -144,10 +144,6 @@ class Main
       record[:cOrganization_id] = id
    end
 
-   def ignore_keys table, data
-      @db[table].insert(data)
-   end
-
    def check_insert table, id, data
       q = data.reduce(@db[table]) do |table, point|
          table.where(point.first => point.last)
