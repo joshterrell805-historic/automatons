@@ -3,6 +3,8 @@ require 'sequel'
 require_relative '../lib/database.rb'
 require 'hash'
 
+Sequel.extension :check_insert
+
 class Main
    # Attributes to store the database object and the cleanser
    def initialize db, cleanser
@@ -62,7 +64,7 @@ class Main
 
    def insert_phone record
       data = record.filter [:phone]
-      id = check_insert :PhoneNumber, :id, data
+      id = @db[:PhoneNumber].check_insert :id, data
       record[:phone_id] = id
    end
 
@@ -96,8 +98,8 @@ class Main
 
       data = record.filter source, destination
       data2 = record.filter source2, destination
-      id = check_insert :Address, :id, data
-      id2 = check_insert :Address, :id, data2
+      id = @db[:Address].check_insert :id, data
+      id2 = @db[:Address].check_insert :id, data2
       record[:mAddress_id] = id
       record[:pAddress_id] = id2
    end
@@ -108,8 +110,8 @@ class Main
       dest = [:code]
       data = record.filter source, dest
       data2 = record.filter source2, dest
-      id = check_insert :Specialty, :id, data
-      id2 = check_insert :Specialty, :id, data2
+      id = @db[:Specialty].check_insert :id, data
+      id2 = @db[:Specialty].check_insert :id, data2
       record[:primarySpecialty_id] = id
       record[:secondarySpecialty_id] = id
    end
@@ -143,10 +145,5 @@ class Main
       data = record.filter source
       id = @db[:COrganization].insert data
       record[:cOrganization_id] = id
-   end
-
-   def check_insert table, id, data
-      @db[table].where(data).get(id) or
-         @db[table].insert data
    end
 end
