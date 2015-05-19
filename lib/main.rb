@@ -66,8 +66,12 @@ class Main
    end
 
    def insert_phone record
-      data = record.filter [:phone]
-      id = @db[:PhoneNumber].check_insert :id, data
+      if not record[:phone].nil?
+         data = record.filter [:phone]
+         id = @db[:PhoneNumber].check_insert :id, data
+      else
+         id = nil
+      end
       record[:phone_id] = id
    end
 
