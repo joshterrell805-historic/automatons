@@ -3,4 +3,5 @@ gem 'docopt'
 gem 'dotenv'
 gem 'cucumber'
 gem 'aruba'
-
+gem 'rspec'
+gem 'sequel'
