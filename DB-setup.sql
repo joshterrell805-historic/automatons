@@ -41,7 +41,7 @@ create table if not exists Address (
 );
 create table if not exists Specialty (
     parentId int,
-    id int not null primary key,
+    id int not null primary key auto_increment,
     title varchar(255),
     code varchar(255) unique,
     definition varchar(255),
