@@ -57,6 +57,9 @@ class Main
          end
 
          count += 1
+         if count % 100 == 0
+	    puts "Cleansed #{count} record#{count != 1 ? 's' : ''}"
+	 end
       end
 
       count
