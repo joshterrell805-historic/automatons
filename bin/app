@@ -3,6 +3,7 @@
 # It provides an interface to the App class, which does the main work.
 # This arrangement is for ease of testing.
 $LOAD_PATH << File.absolute_path(File.join(File.dirname(__FILE__),'..', 'lib'))
+require 'bundler/setup'
 require 'main'
 require 'database'
 require 'business_rules'
