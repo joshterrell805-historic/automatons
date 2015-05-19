@@ -31,7 +31,7 @@ create table if not exists PhoneNumber (
 create table if not exists Address (
     id int not null auto_increment primary key,
     street varchar(100),
-    unit varchar(10),
+    unit varchar(52), -- max length of unit from source records
     city varchar(100),
     region varchar(5),
     postcode varchar(20),
