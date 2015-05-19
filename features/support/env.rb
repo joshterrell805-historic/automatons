@@ -1,7 +1,7 @@
 require 'aruba/cucumber'
 
 require 'dotenv'
-Dotenv.load
+Dotenv.load ".env.test"
 
 ROOTDIR=File.join(File.dirname(__FILE__), '..', '..')
 require File.join(ROOTDIR, 'spec', 'example.rb')

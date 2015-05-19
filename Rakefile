@@ -31,9 +31,13 @@ task :rspec do
 end
 
 task :create do
-   sh "./connect-to-mysql.sh < DB-setup.sql"
+   sh "#{mysql} < DB-setup.sql"
 end
 
 task :clobber do
-   sh "./connect-to-mysql.sh < DB-cleanup.sql"
+   sh "#{mysql} < DB-cleanup.sql"
+end
+
+def mysql
+   "mysql -u #{ENV['mysql_user']} -p'#{ENV['mysql_password']}' -h #{ENV['mysql_host']} --database #{ENV['mysql_database']}"
 end
