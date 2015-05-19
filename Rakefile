@@ -34,6 +34,10 @@ task :create do
    sh "#{mysql} < DB-setup.sql"
 end
 
+task :clean do
+   sh "#{mysql} < DB-truncate-clean.sql"
+end
+
 task :clobber do
    sh "#{mysql} < DB-cleanup.sql"
 end
