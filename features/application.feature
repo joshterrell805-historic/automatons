@@ -17,3 +17,11 @@ Feature: Running the application
       """
       Cleansed 2 records
       """
+
+   Scenario: Boot and merge
+      When I run `app --cleanse`
+      And I run `app --merge`
+      Then the output should contain
+      """
+      Merged 2 records
+      """
