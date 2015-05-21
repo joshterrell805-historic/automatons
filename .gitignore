@@ -1,2 +1,12 @@
 node_modules/
 *.sw*
+bin/cucumber
+bin/dotenv
+bin/htmldiff
+bin/ldiff
+bin/rspec
+bin/sequel
+vendor/
+audit.log
+Providers-clean.tsv
+.bundle/
