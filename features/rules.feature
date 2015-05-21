@@ -16,6 +16,11 @@ Feature: Business Rules
       Then "phone" should be "(555) 555-5555"
 
    Scenario:
+      Given "phone" with value "7776668888"
+      When I run the "all number phone" rule
+      Then "phone" should be "(777) 666-8888"
+
+   Scenario:
       Given "phone" with value "011555555555555"
       When I run the "international phone" rule
       Then "phone" should be "011 55 (555) 555-5555"
