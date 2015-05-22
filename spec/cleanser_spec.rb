@@ -40,8 +40,8 @@ describe Cleanser do
                end
             end
             expect(@cleanser.run_rule "taco",
-                   {:a => "s", :b => "q", :c => "is"})
-            .to eq({:a => "rawr", :b => "q", :c => "rawr"})
+                   {:a => "s", :sid => 43, :b => "q", :c => "is"})
+            .to eq({:a => "rawr", :sid => 43, :b => "q", :c => "rawr"})
          end
       end
    end

@@ -5,6 +5,8 @@ module Rules
    class Each
       def run data
          data.each do |key, value|
+	    next unless value.is_a? String
+
             regex = self[:regex]
 
             if regex
