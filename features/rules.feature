@@ -7,12 +7,12 @@ Feature: Business Rules
 
    Scenario: 
       Given "phone" with value "555-555-5555"
-      When I run the "dashed phone" rule
+      When I run the "separated phone" rule
       Then "phone" should be "(555) 555-5555"
 
    Scenario:
       Given "phone" with value "555.555.5555"
-      When I run the "dotted phone" rule
+      When I run the "separated phone" rule
       Then "phone" should be "(555) 555-5555"
 
    Scenario:
@@ -37,3 +37,13 @@ Feature: Business Rules
       And "c" should be "67"
       And "d" should be "83"
       And "e" should be nil
+
+   Scenario:
+      Given "phone" with value "55555555555"
+      When I run the "international phone" rule
+      Then "phone" should be "5 (555) 555-5555"
+
+   Scenario:
+      Given "phone" with value "555555555555"
+      When I run the "country code" rule
+      Then "phone" should be "55 (555) 555-5555"
