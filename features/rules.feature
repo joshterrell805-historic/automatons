@@ -25,3 +25,15 @@ Feature: Business Rules
       When I run the "international phone" rule
       Then "phone" should be "011 55 (555) 555-5555"
 
+   Scenario:
+      Given "a" with value " 88"
+      And "b" with value " 99"
+      And "c" with value "  67 "
+      And "d" with value "83"
+      And "e" with value nil
+      When I run the "strip whitespace" rule
+      Then "a" should be "88"
+      And "b" should be "99"
+      And "c" should be "67"
+      And "d" should be "83"
+      And "e" should be nil

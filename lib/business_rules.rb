@@ -37,6 +37,10 @@ class BusinessRules
          rule :phone, /(011)(\d{2})(\d{3})(\d{3})(\d{4})/, "international phone" do |match|
             format_international_phone match[1..5]
          end
+
+         each /^\s*(.*?)\s*$/, "strip whitespace" do |match|
+            match[1]
+         end
       end
    end
 end

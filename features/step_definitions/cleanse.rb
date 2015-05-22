@@ -20,8 +20,13 @@ Given /^data with "(.*?)" set to "(.*?)"$/ do |arg1, arg2|
    @data[arg1.to_sym] = arg2
 end
 
+
 Given /^"(.*?)" with value "(.*?)"$/ do |field, value|
-   @data = {field.to_sym => value}
+   @data[field.to_sym] = value
+end
+
+Given /^"([^"]*)" with value nil$/ do |field|
+   @data[field.to_sym] = nil
 end
 
 When /^I run a clean$/ do
@@ -41,3 +46,6 @@ Then /^"(.*?)" should be "(.*?)"$/ do |arg1, arg2|
    expect(@cleansed[arg1.to_sym]).to eq(arg2)
 end
 
+Then /^"([^"]*)" should be nil$/ do |field|
+   expect(@cleansed[field.to_sym]).to eq(nil)
+end
