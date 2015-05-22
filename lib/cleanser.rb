@@ -1,4 +1,5 @@
 require "rule.rb"
+require "each_rule.rb"
 class Realm
    attr_reader :rules
 
@@ -7,7 +8,12 @@ class Realm
    end
 
    def rule *args, &block
-      @rules << Rule.new(*args, block)
+      @rules << Rules::Rule.new(*args, block)
+   end
+
+   # run a rule against each field that matches regex
+   def each *args, &block
+      @rules << Rules::Each.new(*args, block)
    end
 end
 

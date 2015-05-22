@@ -6,25 +6,43 @@ describe Cleanser do
    end
 
    describe "#run_rule" do
-      before :each do
-         @cleanser.add do
-            rule :thing, /^abc/, "first" do
-               "changed"
-            end
+      context "single rule" do
+         before :each do
+            @cleanser.add do
+               rule :thing, /^abc/, "first" do
+                  "changed"
+               end
 
-            rule :thing, //, "second" do
-               "wrong"
+               rule :thing, //, "second" do
+                  "wrong"
+               end
             end
+         end
+
+         it "runs a named rule" do
+            expect(@cleanser.run_rule "first", {:thing => "abc"}).to eq({:thing => "changed"})
+         end
+
+         it "respects the rule matcher" do
+            expect(@cleanser.run_rule "first", {:thing => "gef"}).to eq({:thing => "gef"})
+            expect(@cleanser.run_rule "first", {:thing => "abcdef"}).to eq({:thing => "changed"})
          end
       end
 
-      it "runs a named rule" do
-         expect(@cleanser.run_rule "first", {:thing => "abc"}).to eq({:thing => "changed"})
-      end
-
-      it "respects the rule matcher" do
-         expect(@cleanser.run_rule "first", {:thing => "gef"}).to eq({:thing => "gef"})
-         expect(@cleanser.run_rule "first", {:thing => "abcdef"}).to eq({:thing => "changed"})
+      context "each rule" do
+         it "runs a named rule" do
+            @cleanser.add do
+               rule :field, /f/, "burrito" do
+                  "not rawr"
+               end
+               each /s$/, "taco" do
+                  "rawr"
+               end
+            end
+            expect(@cleanser.run_rule "taco",
+                   {:a => "s", :b => "q", :c => "is"})
+            .to eq({:a => "rawr", :b => "q", :c => "rawr"})
+         end
       end
    end
 
@@ -37,12 +55,24 @@ describe Cleanser do
             rule :field, /test/, "test this" do
                "abc"
             end
+            each nil, "run on everything!" do
+               "adf"
+            end
          end
-         expect(@cleanser.dump_rules).to eq(["test this"])
+         expect(@cleanser.dump_rules).to eq(["test this", "run on everything!"])
       end
    end
 
    describe "#cleanse" do
+      it "(each) cleans a field" do
+         @cleanser.add do
+            each /test/, "test this" do
+               "abc"
+            end
+         end
+         expect(@cleanser.cleanse({:f => "test", :g => "tests", :h => "blah"}))
+         .to eq({:f=> "abc", :g => "abc", :h => "blah"})
+      end
       it "cleans a field" do
          @cleanser.add do
             rule :field, /test/, "test this" do
