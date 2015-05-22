@@ -30,6 +30,10 @@ class BusinessRules
             "%s (%s) %s-%s" % parts
          end
 
+         each /^\s*(.*?)\s*$/, "strip whitespace" do |match|
+            match[1]
+         end
+
          rule :phone, /^(\d{3})\D(\d{3})\D(\d{4})$/, "separated phone" do |match|
             format_phone match[1..3]
          end 
@@ -40,10 +44,6 @@ class BusinessRules
 
          rule :phone, /^(011)?(\d{1,2})(\d{3})(\d{3})(\d{4})$/, "international phone" do |match|
             format_international_phone match[1..5]
-         end
-
-         each /^\s*(.*?)\s*$/, "strip whitespace" do |match|
-            match[1]
          end
 
          rule :phone, /^(\d{2})(\d{3})(\d{3})(\d{4})$/, "country code" do |match|
