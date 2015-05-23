@@ -108,6 +108,43 @@ describe Cleanser do
       end
    end
 
+   describe "#missing" do
+      FIELD = :phone
+      context "there is a rule for the field" do
+         before :each do
+            @cleanser.add do
+               rule FIELD, /^$/, "rule" do |match|
+                  "abc"
+               end
+            end
+            @cleanser.record_id = :thing
+         end
+         it "is a hash of fields for which no rule ran" do
+            @cleanser.cleanse({:thing => 234, :phone => "thy"})
+
+            expect(@cleanser.missing).to eq({:phone => [234]})
+         end
+
+         it "does not contain fields which did match" do
+            @cleanser.cleanse({:thing => 234, :phone => ""})
+
+            expect(@cleanser.missing).to eq({})
+         end
+      end
+
+      context "there is not a rule for the field" do
+         before :each do
+            @cleanser.record_id = :thing
+         end
+
+         it "does not contain fields which have no rules" do
+            @cleanser.cleanse({:thing => 334, :phone => "thy"})
+
+            expect(@cleanser.missing).to eq({})
+         end
+      end
+   end
+
    describe "#add" do
       it "adds a rule to the cleanser" do
          @cleanser.add do
