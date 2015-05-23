@@ -18,8 +18,16 @@ class Realm
 end
 
 class Cleanser
+   attr_accessor :record_id
+   attr_reader :missing
+
    def initialize
       @realm = Realm.new
+      @missing = {}
+   end
+
+   def reset_missing
+      @missing = {}
    end
 
    ## Returns a list of names of defined rules
@@ -37,7 +45,10 @@ class Cleanser
 
    def cleanse data
       @realm.rules.each do |rule|
-         data = rule.run data
+         result = rule.run data
+         if rule.is_a? Rules::Rule and not result
+            @missing[rule.field] = data[@record_id]
+         end
       end
       data
    end
