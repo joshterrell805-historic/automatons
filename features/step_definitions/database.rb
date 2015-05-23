@@ -2,7 +2,7 @@ require 'database'
 
 Given /^an empty database$/ do
    @db = Database.new
-   @db.source "DB-truncate.sql"
+   @db.source "DB-truncate-source.sql"
    #@db.source "DB-cleanup.sql"
    #@db.source "DB-setup.sql"
 end
