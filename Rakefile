@@ -1,6 +1,12 @@
 require 'bundler/setup'
 require 'rake/clean'
+
+require_relative 'lib/env'
+require_relative 'lib/database'
+
 require 'dotenv'
+# Load any environment variables which aren't defined
+# Take values from ".env"
 Dotenv.load
 
 BIN = File.absolute_path './bin'
@@ -23,7 +29,7 @@ end
 desc "Run tests"
 task test: [:rspec, :cucumber]
 
-task :cucumber do
+task :cucumber => :test_create do
    sh "cucumber --format progress"
 end
 
@@ -32,17 +38,45 @@ task :rspec do
 end
 
 task :create do
-   sh "#{mysql} < DB-setup.sql"
+   mysql in: "DB-setup.sql"
 end
 
-task :clean do
-   sh "#{mysql} < DB-truncate-clean.sql"
+task :clean => :test_clean do
+   mysql in: "DB-truncate-clean.sql"
 end
 
-task :clobber do
-   sh "#{mysql} < DB-cleanup.sql"
+task :clobber => :test_clobber do
+   mysql in: "DB-cleanup.sql"
 end
 
-def mysql
-   "mysql -u #{ENV['mysql_user']} -p'#{ENV['mysql_password']}' -h #{ENV['mysql_host']} --database #{ENV['mysql_database']}"
+task :test_clobber do
+   with_test_env do
+      mysql in: "DB-cleanup.sql"
+   end
+end
+
+task :test_create do
+   with_test_env do
+      mysql in: "DB-setup.sql"
+   end
+end
+
+task :test_clean do
+   with_test_env do
+      mysql in: "DB-truncate-clean.sql"
+   end
+end
+
+def with_test_env
+   in_separate_environment do
+      # Overwrite environment variables with values for testing
+      Dotenv.overload '.env.test'
+      yield
+   end
+end
+
+def mysql *arg
+   client = SQLClient.new
+   puts (client.command + arg).join(' ')
+   client.run *arg
 end
