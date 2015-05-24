@@ -20,12 +20,19 @@ describe Cleanser do
          end
 
          it "runs a named rule" do
-            expect(@cleanser.run_rule "first", {:thing => "abc"}).to eq({:thing => "changed"})
+            data = {:thing => "abc"}
+            @cleanser.run_rule "first", data
+            expect(data).to eq({:thing => "changed"})
          end
 
          it "respects the rule matcher" do
-            expect(@cleanser.run_rule "first", {:thing => "gef"}).to eq({:thing => "gef"})
-            expect(@cleanser.run_rule "first", {:thing => "abcdef"}).to eq({:thing => "changed"})
+            data = {:thing => "gef"}
+            @cleanser.run_rule "first", data
+            expect(data).to eq({:thing => "gef"})
+
+            data = {:thing => "abcdef"}
+            @cleanser.run_rule "first", data
+            expect(data).to eq({:thing => "changed"})
          end
       end
 
@@ -39,9 +46,9 @@ describe Cleanser do
                   "rawr"
                end
             end
-            expect(@cleanser.run_rule "taco",
-                   {:a => "s", :sid => 43, :b => "q", :c => "is"})
-            .to eq({:a => "rawr", :sid => 43, :b => "q", :c => "rawr"})
+            data = {:a => "s", :sid => 43, :b => "q", :c => "is"}
+            @cleanser.run_rule "taco", data
+            expect(data).to eq({:a => "rawr", :sid => 43, :b => "q", :c => "rawr"})
          end
       end
    end
@@ -70,8 +77,9 @@ describe Cleanser do
                "abc"
             end
          end
-         expect(@cleanser.cleanse({:f => "test", :g => "tests", :h => "blah"}))
-         .to eq({:f=> "abc", :g => "abc", :h => "blah"})
+         data = {:f => "test", :g => "tests", :h => "blah"}
+         @cleanser.cleanse(data)
+         expect(data).to eq({:f => "abc", :g => "abc", :h => "blah"})
       end
       it "cleans a field" do
          @cleanser.add do
@@ -79,7 +87,9 @@ describe Cleanser do
                "abc"
             end
          end
-         expect(@cleanser.cleanse({:field => 'test'})).to eq({:field => "abc"})
+         data = {:field => 'test'}
+         @cleanser.cleanse(data)
+         expect(data).to eq({:field => "abc"})
       end
       it "checks the field contents" do
          @cleanser.add do
@@ -87,7 +97,9 @@ describe Cleanser do
                "abc"
             end
          end
-         expect(@cleanser.cleanse({:field => 'taco'})).to eq({:field => "taco"})
+         data = {:field => 'taco'}
+         @cleanser.cleanse(data)
+         expect(data).to eq({:field => "taco"})
       end
       it "passes the MatchData to the block" do
          @cleanser.add do
@@ -95,7 +107,9 @@ describe Cleanser do
                "(%s) %s-%s" % match[1..3].to_a
             end
          end
-         expect(@cleanser.cleanse({:phone => '805-555-5555'})).to eq({:phone => "(805) 555-5555"})
+         data = {:phone => '805-555-5555'}
+         @cleanser.cleanse(data)
+         expect(data).to eq({:phone => "(805) 555-5555"})
       end
 
       it "leaves other fields untarnished" do
