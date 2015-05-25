@@ -43,8 +43,8 @@ Feature: Cleaning
       id: 24614
       type: Individual
       name: Christina L Grant
-      primarySpecialty: 0
-      secondarySpecialty: 0
+      primarySpecialty: 1
+      secondarySpecialty: 1
       mailingAddress: 1
       practiceAddress: 1
       phone: 1
@@ -93,8 +93,8 @@ Feature: Cleaning
       id: 24614
       type: Organization
       name: Christina L Grant
-      primarySpecialty: 0
-      secondarySpecialty: 0
+      primarySpecialty: 1
+      secondarySpecialty: 1
       mailingAddress: 1
       practiceAddress: 1
       phone: 1
