@@ -21,7 +21,7 @@ Feature: Running the application
    Scenario: Boot and merge
       When I run `app --cleanse`
       And I run `app --merge`
-      Then the output should contain
+      Then the output should contain:
       """
       Merged 2 records
       """
