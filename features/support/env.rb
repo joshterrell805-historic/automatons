@@ -1,7 +1,10 @@
 require 'aruba/cucumber'
 
 require 'dotenv'
-Dotenv.load ".env", ".env.test"
+# Load standard .env
+Dotenv.load
+# Load test environment. Overwrite standard environment
+Dotenv.overload ".env.test"
 
 ROOTDIR=File.join(File.dirname(__FILE__), '..', '..')
 require File.join(ROOTDIR, 'spec', 'example.rb')
