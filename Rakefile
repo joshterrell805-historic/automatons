@@ -67,6 +67,16 @@ task :test_clean do
    end
 end
 
+desc "Runs the :test task with code coverage enabled"
+task :coverage do
+   in_separate_environment do
+      ENV['COVERAGE'] = "true"
+      Rake::Task[:test].invoke
+   end
+end
+
+##
+# Sets up the environment variables to run a test. Restores them afterward, keeping the test settings from polluting the rest of the Rakefile
 def with_test_env
    in_separate_environment do
       # Overwrite environment variables with values for testing

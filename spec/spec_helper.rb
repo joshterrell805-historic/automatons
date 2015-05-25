@@ -1,1 +1,3 @@
-require 'simplecov'
+if ENV['COVERAGE']
+   require 'simplecov'
+end
