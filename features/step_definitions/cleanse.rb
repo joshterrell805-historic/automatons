@@ -40,13 +40,13 @@ When /^I run the "(.*?)" rule$/ do |rule_name|
 end
 
 When /^I run the cleanse$/ do
-   @cleansed = @cleanser.cleanse @data
+   @cleanser.cleanse @data
 end
 
 Then /^"(.*?)" should be "(.*?)"$/ do |arg1, arg2|
-   expect(@cleansed[arg1.to_sym]).to eq(arg2)
+   expect(@data[arg1.to_sym]).to eq(arg2)
 end
 
 Then /^"([^"]*)" should be nil$/ do |field|
-   expect(@cleansed[field.to_sym]).to eq(nil)
+   expect(@data[field.to_sym]).to eq(nil)
 end

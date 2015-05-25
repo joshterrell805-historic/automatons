@@ -7,15 +7,19 @@ describe Rules::Rule do
 
    describe "#run" do
       it "runs the rule on the correct field" do
-         result = @rule.run thing: "beet", frog: "beet"
-         expect(result[:thing]).to eq("output")
-         expect(result[:frog]).to eq("beet")
+         data = {thing: "beet", frog: "beet"}
+         @rule.run data
+         expect(data[:thing]).to eq("output")
+         expect(data[:frog]).to eq("beet")
       end
       it "matches the regex against the input data" do
-         result = @rule.run thing: "beet"
-         expect(result[:thing]).to eq("output")
-         result = @rule.run thing: "cat"
-         expect(result[:thing]).to eq("cat")
+         data = {thing: "beet"}
+         @rule.run data
+         expect(data[:thing]).to eq("output")
+
+         data = {thing: "cat"}
+         @rule.run data
+         expect(data[:thing]).to eq("cat")
       end
       it "won't run on a missing field" do
          ran = false
@@ -26,13 +30,14 @@ describe Rules::Rule do
       it "runs on a present field" do
          ran = false
          rule = Rules::Rule.new :thing, /^/, "a name", Proc.new {ran=true}
-         result = rule.run thing: "cat"
+         rule.run thing: "cat"
          expect(ran).to be true
       end
       it "treats a nil regex as always matching" do
          rule = Rules::Rule.new :thing, nil, "run", Proc.new {"ran"}
-         result = rule.run thing: "goat"
-         expect(result[:thing]).to eq("ran")
+         data = {thing: "goat"}
+         rule.run data
+         expect(data[:thing]).to eq("ran")
       end
    end
 end

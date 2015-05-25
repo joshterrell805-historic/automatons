@@ -119,7 +119,9 @@ describe Cleanser do
                "555-555-5555"
             end
          end
-         expect(@cleanser.cleanse({:name => "tony", :phone => '805-555-5555'})).to eq({:name => "tony", :phone => "555-555-5555"})
+         data = {:name => "tony", :phone => '805-555-5555'}
+         @cleanser.cleanse(data)
+         expect(data).to eq({:name => "tony", :phone => "555-555-5555"})
       end
    end
 
