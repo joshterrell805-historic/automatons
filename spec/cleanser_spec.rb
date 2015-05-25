@@ -1,8 +1,9 @@
 require 'cleanser'
+require 'recorder'
 
 describe Cleanser do
    before :each do
-      @cleanser = Cleanser.new
+      @cleanser = Cleanser.new Recorder.new
    end
 
    describe "#run_rule" do

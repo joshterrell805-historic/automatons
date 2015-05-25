@@ -18,8 +18,10 @@ module Rules
          # case.
          if match or not regex
             data[field] = self[:block].call match
+            true
+         else
+            false
          end
-         data
       end
    end
 end

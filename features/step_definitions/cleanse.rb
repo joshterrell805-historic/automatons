@@ -1,8 +1,9 @@
 require 'cleanser'
+require 'recorder'
 require 'business_rules'
 
 Before do
-   @cleanser = Cleanser.new
+   @cleanser = Cleanser.new Recorder.new
    @data = {}
 end
 

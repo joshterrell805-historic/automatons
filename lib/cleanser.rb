@@ -18,16 +18,9 @@ class Realm
 end
 
 class Cleanser
-   attr_accessor :record_id
-   attr_reader :missing
-
-   def initialize
+   def initialize recorder
       @realm = Realm.new
-      @missing = {}
-   end
-
-   def reset_missing
-      @missing = {}
+      @recorder = recorder
    end
 
    ## Returns a list of names of defined rules
@@ -43,14 +36,20 @@ class Cleanser
       @realm.instance_exec &block
    end
 
+   def missing
+      @recorder.dirty
+   end
+
    def cleanse data
       @realm.rules.each do |rule|
          result = rule.run data
-         if rule.is_a? Rules::Rule and not result
-            @missing[rule.field] = data[@record_id]
+
+         if rule.respond_to? :field
+            # Record the result of running the rule on the data
+            # Allows us to track what each rule is matching
+            @recorder.add rule, data, result
          end
       end
-      data
    end
 
    def run_rule name, data

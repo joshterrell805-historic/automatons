@@ -1,8 +1,9 @@
 require 'cleanser'
+require 'recorder'
 class BusinessRules
    attr_accessor :cleanser
    def initialize
-      @cleanser = Cleanser.new
+      @cleanser = Cleanser.new Recorder.new
       add_rules
    end
 
