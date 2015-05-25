@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'each_rule'
 describe Rules::Each do
    describe "#run" do
