@@ -18,7 +18,7 @@ class Main
       Automatons DataMaster
 
       Usage:
-       app (--cleanse)
+       app (--cleanse|--merge)
        app --help
 
       Options:
@@ -35,6 +35,11 @@ class Main
       if opts['--cleanse']
          count = cleanse
          puts "Cleansed #{count} record#{count != 1 ? 's' : ''}"
+      end
+
+      if opts['--merge']
+         count = merge
+         puts "Merged #{count} record#{count != 1 ? 's' : ''}"
       end
    end
 
@@ -68,6 +73,106 @@ class Main
       end
 
       count
+   end
+
+   def merge
+      record_id = :id
+
+      @db.cindividual_records.map do |record|
+         # Returns best matching record, or nil if none were over the threshold
+         pair = match_record record
+         if pair
+            merge_records record, pair
+         else
+            insert_new_merge record
+         end
+      end
+   end
+
+   def match_record record
+      high_score = 0
+      pair = nil
+      @db.cindividual_records(record).each do |other|
+         p other
+         score = 0
+         record.each do |key, value|
+            o_val = other[key]
+            case key
+            when :id
+               if o_val == value
+                  score -= 5
+               end
+            else
+               score += 1 if o_val == value
+            end
+         end
+         if high_score < score
+            high_score = score
+            pair = other
+         end
+      end
+
+      pair
+   end
+
+   def merge_records first, second
+      first[:mId] = second[:mId] = @db.insert_mprovider first.filter [:type, :name]
+
+      map = {:id => :sId, :mId => :mId}
+      @db.insert_merge first.filter map
+      @db.insert_merge second.filter map
+
+      @db.insert_mindividual first.filter([:gender, :dateOfBirth, :isSoleProprietor], {:mId => :id})
+
+      phone = [:mId, :phone]
+      @db.insert_provider_x_phone first.filter phone
+      @db.insert_provider_x_phone second.filter phone
+
+      @db.insert_provider_x_primary_specialty first.filter([:mId], {:primarySpecialty => :specialty})
+      @db.insert_provider_x_primary_specialty second.filter([:mId], {:primarySpecialty => :specialty})
+
+      @db.insert_provider_x_secondary_specialty first.filter([:mId], {:secondarySpecialty => :specialty})
+      @db.insert_provider_x_secondary_specialty second.filter([:mId], {:secondarySpecialty => :specialty})
+
+      @db.insert_provider_x_mailing_address first.filter([:mId], {:mailingAddress => :address})
+      @db.insert_provider_x_mailing_address second.filter([:mId], {:mailingAddress => :address})
+
+      @db.insert_provider_x_practice_address first.filter([:mId], {:practiceAddress => :address})
+      @db.insert_provider_x_practice_address second.filter([:mId], {:practiceAddress => :address})
+      
+      audit1 = first.filter [:mId], {:id => :sId}
+      audit1[:action] = "Done"
+
+      audit2 = second.filter [:mId], {:id => :sId}
+      audit2[:action] = "Done"
+
+      @db.insert_audit audit1
+      @db.insert_audit audit2
+   end
+
+   def insert_new_merge record
+      record[:mId] = @db.insert_mprovider record.filter [:type, :name]
+
+      map = {:id => :sId, :mId => :mId}
+      @db.insert_merge record.filter map
+
+      @db.insert_mindividual record.filter([:gender, :dateOfBirth, :isSoleProprietor], {:mId => :id})
+
+      phone = [:mId, :phone]
+      @db.insert_provider_x_phone record.filter phone
+
+      @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})
+
+      @db.insert_provider_x_secondary_specialty record.filter([:mId], {:secondarySpecialty => :specialty})
+
+      @db.insert_provider_x_mailing_address record.filter([:mId], {:mailingAddress => :address})
+
+      @db.insert_provider_x_practice_address record.filter([:mId], {:practiceAddress => :address})
+      
+      audit1 = record.filter [:mId], {:id => :sId}
+      audit1[:action] = "Done"
+
+      @db.insert_audit audit1
    end
 
    def insert_phone record

@@ -64,8 +64,49 @@ class Database
       @db[:COrganization].insert data
    end
 
-   def __setobj__ obj
-      @db = obj
+   def cindividual_records start=nil
+      data = @db[:CIndividual].join(:CProvider, [:id]).order(:id)
+      if start
+         data.where{id > start[:id]}
+      else
+         data
+      end
+   end
+
+   def insert_mprovider data
+      @db[:MProvider].insert data
+   end
+
+   def insert_mindividual data
+      @db[:MIndividual].insert data
+   end
+
+   def insert_merge data
+      @db[:Merge].insert data
+   end
+
+   def insert_provider_x_phone data
+      @db[:MProvider_PhoneNumber].check_insert [:mId, :phone], data
+   end
+
+   def insert_provider_x_primary_specialty data
+      @db[:MProvider_PrimarySpecialty].check_insert [:mId, :specialty], data
+   end
+
+   def insert_provider_x_secondary_specialty data
+      @db[:MProvider_SecondarySpecialty].check_insert [:mId, :specialty], data
+   end
+
+   def insert_provider_x_mailing_address data
+      @db[:MProvider_MailingAddress].check_insert [:mId, :address], data
+   end
+
+   def insert_provider_x_practice_address data
+      @db[:MProvider_PracticeAddress].check_insert [:mId, :address], data
+   end
+
+   def insert_audit data
+      @db[:Audit].insert data
    end
 
    ## Sources the given file into the DB

@@ -8,29 +8,154 @@ describe Main do
 
       @main = Main.new @db, @cleanser
    end
-   describe "#cleanse" do
-      it "runs the cleanser on each record" do
-         number_of_records = 2
+   context "cleansing" do
+      describe "#cleanse" do
+         it "runs the cleanser on each record" do
+            number_of_records = 2
 
-         record1 = {:type => 'individual', :phone => '555-555-5555'}
-         record2 = {:type => 'organization', :phone => '555-555-5555'}
-         source_data = [record1, record2]
+            record1 = {:type => 'individual', :phone => '555-555-5555'}
+            record2 = {:type => 'organization', :phone => '555-555-5555'}
+            source_data = [record1, record2]
 
-         expect(@db).to receive(:source_records).and_return(source_data)
-         expect(@cleanser).to receive(:cleanse).with(record1).once
-         expect(@cleanser).to receive(:cleanse).with(record2).once
-         expect(@db).to receive(:insert_address).exactly(number_of_records * 2).times
-         expect(@db).to receive(:insert_specialty).exactly(number_of_records * 2).times
+            expect(@db).to receive(:source_records).and_return(source_data)
+            expect(@cleanser).to receive(:cleanse).with(record1).once
+            expect(@cleanser).to receive(:cleanse).with(record2).once
+            expect(@db).to receive(:insert_address).exactly(number_of_records * 2).times
+            expect(@db).to receive(:insert_specialty).exactly(number_of_records * 2).times
 
-         expect(@db).to receive(:insert_phone).exactly(number_of_records).times
-         expect(@db).to receive(:insert_cprovider).exactly(number_of_records).times
+            expect(@db).to receive(:insert_phone).exactly(number_of_records).times
+            expect(@db).to receive(:insert_cprovider).exactly(number_of_records).times
 
-         expect(@db).to receive(:insert_corganization).once
-         expect(@db).to receive(:insert_cindividual).once
+            expect(@db).to receive(:insert_corganization).once
+            expect(@db).to receive(:insert_cindividual).once
 
-         allow(@cleanser).to receive(:missing).and_return({})
+            allow(@cleanser).to receive(:missing).and_return({})
 
-         @main.cleanse
+            @main.cleanse
+         end
+
+         it "splits records into the appropriate parts" do
+            pending "Refactoring from 'runs the cleanser' case"
+            fail
+         end
+
+         it "only inserts a phone number if one exists on a record" do
+            pending "Refactoring from 'runs the cleanser' case"
+            fail
+         end
+      end
+
+      describe "#insert_phone" do
+         xit "inserts a phone number if one exists on a record" do
+            record1 = {:type => 'individual', :phone => '555-555-5555'}
+            record2 = {:type => 'organization', :phone => nil}
+            source_data = [record1, record2]
+
+            db = instance_spy("Database")
+            allow(db).to receive(:source_records).and_return(source_data)
+            allow(@cleanser).to receive(:cleanse)
+
+            main = Main.new db, @cleanser
+
+            expect(@db).to receive(:insert_phone).once
+            @main.cleanse
+         end
+      end
+   end
+
+   context "merging" do
+      before :each do
+         @first = Example.get_clean_standard_record
+         second = Example.get_clean_standard_record
+         second[:id] += 1
+         @second = second
+         @source = [@first, @second]
+      end
+      describe "#merge" do
+         it "merges identical pairs of records" do
+            allow(@db).to receive(:cindividual_records).and_return(@source)
+            allow(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
+            allow(@db).to receive(:cindividual_records).with(@second).and_return([])
+            # TODO Only query for records which still need to be checked or merged.
+            #allow(@db).to receive(:cindividual_records).with(first[:id]).and_return([second])
+
+            expect(@db).to receive(:insert_mprovider).once
+            expect(@db).to receive(:insert_merge).twice
+            expect(@db).to receive(:insert_mindividual).once
+            expect(@db).to receive(:insert_provider_x_phone).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_secondary_specialty).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_primary_specialty).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_mailing_address).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_practice_address).at_least(:once)
+            expect(@db).to receive(:insert_audit).twice
+
+            @main.merge
+         end
+
+         it "logs the rules that contributed to the match" do
+            pending
+            fail
+         end
+      end
+
+      describe "#match_record" do
+         it "fetches records to compare from the database" do
+            expect(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
+            @main.match_record @first
+         end
+
+         it "returns the best match above a threshold with available records" do
+            allow(@db).to receive(:cindividual_records).and_return(@source)
+            expect(@main.match_record @first).to eq(@second)
+         end
+      end
+
+      describe "#merge_records" do
+         it "merges two records" do
+            @db.as_null_object
+
+            first = nil
+            expect(@db).to receive(:insert_merge).with(include({:sId => @second[:id]})) do |arg|
+               if first
+                  expect(arg[:mId]).to eq(first[:mId])
+               else
+                  first = arg
+               end
+            end
+
+            @main.merge_records @first, @second
+         end
+
+         it "inserts the results into the database" do
+            allow(@db).to receive(:cindividual_records).and_return(@source)
+            expect(@db).to receive(:insert_mprovider).once
+            expect(@db).to receive(:insert_mindividual).once
+            expect(@db).to receive(:insert_merge).twice
+            expect(@db).to receive(:insert_provider_x_phone).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_secondary_specialty).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_primary_specialty).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_mailing_address).at_least(:once)
+            expect(@db).to receive(:insert_provider_x_practice_address).at_least(:once)
+            expect(@db).to receive(:insert_audit).twice
+
+            @main.merge_records @first, @second
+         end
+      end
+
+      describe "#insert_new_merge" do
+         it "inserts the appropriate data into the database" do
+            expect(@db).to receive(:insert_mprovider).once
+            expect(@db).to receive(:insert_mindividual).once
+            expect(@db).to receive(:insert_merge).once
+            expect(@db).to receive(:insert_provider_x_phone).once
+            expect(@db).to receive(:insert_provider_x_secondary_specialty).once
+            expect(@db).to receive(:insert_provider_x_primary_specialty).once
+            expect(@db).to receive(:insert_provider_x_mailing_address).once
+            expect(@db).to receive(:insert_provider_x_practice_address).once
+            expect(@db).to receive(:insert_audit).once
+
+            @main.insert_new_merge @first
+         end
       end
    end
 end
