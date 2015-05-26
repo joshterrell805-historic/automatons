@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
+if ENV['COVERAGE']
+   require 'simplecov'
+   SimpleCov.command_name 'app'
+   puts "Gathering coverage data..."
+end
 # This is the main file for our entire project
 # It provides an interface to the App class, which does the main work.
 # This arrangement is for ease of testing.
