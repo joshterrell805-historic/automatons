@@ -78,12 +78,19 @@ class Main
    def merge
       record_id = :id
 
+      done = {}
       count = 0
       @db.cindividual_records.each do |record|
+         # Skip already-merged records
+         if done[record]
+            next
+         end
+
          # Returns best matching record, or nil if none were over the threshold
          pair = match_record record
          if pair
             merge_records record, pair
+            done[pair] = true
          else
             insert_new_merge record
          end
