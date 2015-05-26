@@ -1,5 +1,6 @@
 require 'docopt'
 require 'sequel'
+require 'psych'
 require_relative '../lib/database.rb'
 require 'hash'
 
