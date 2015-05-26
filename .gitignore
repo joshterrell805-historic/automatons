@@ -10,3 +10,6 @@ vendor/
 audit.log
 Providers-clean.tsv
 .bundle/
+
+coverage/
+doc/
