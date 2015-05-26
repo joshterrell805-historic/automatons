@@ -15,7 +15,7 @@ end
 # This class provides a convenient way to get access to the database. It will
 # read the correct environment variables to find where it is supposed to be
 # connecting.
-class Database < Delegator
+class Database
    include SQLConfig
 
    def initialize
@@ -30,12 +30,38 @@ class Database < Delegator
          database: @database,
          password: @password,
          user:     @user
-
-      super @db
    end
 
-   def __getobj__
-      @db
+   def source_records
+      @db[:SProvider]
+   end
+
+   def insert_source_record data
+      @db[:SProvider].insert data
+   end
+
+   def insert_address data
+      @db[:Address].check_insert :id, data
+   end
+
+   def insert_phone data
+      @db[:PhoneNumber].check_insert :id, data
+   end
+
+   def insert_specialty data
+      @db[:Specialty].check_insert :id, data
+   end
+
+   def insert_cprovider data
+      @db[:CProvider].insert data
+   end
+
+   def insert_cindividual data
+      @db[:CIndividual].insert data
+   end
+
+   def insert_corganization data
+      @db[:COrganization].insert data
    end
 
    def __setobj__ obj
@@ -49,6 +75,10 @@ class Database < Delegator
       @client.run in: file
    end
 
+   ## Return the Sequel instance used by this Database.
+   def sequel
+      @db
+   end
 end
 
 class SQLClient

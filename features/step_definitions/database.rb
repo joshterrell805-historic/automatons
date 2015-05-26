@@ -15,13 +15,12 @@ Given /^(a|\d+) standard (individual|organization) source record(?:s?) in SProvi
       count = count.to_i
    end
 
-   table = @db[:SProvider]
    1.upto(count.to_i) do |i|
       record = Example.get_standard_record
       record['id'] = record['id'].to_i + i-1
       record['type'] = type
 
-      table.insert record
+      @db.insert_source_record record
    end
 end
 
@@ -34,7 +33,7 @@ Then /^the "(.*?)" table should contain:$/ do |table, yaml|
       data[key.to_sym] = value
    end
 
-   dataset = @db[table.to_sym]
+   dataset = @db.sequel[table.to_sym]
 
    expect(dataset.where(data).count).to eq(1)
 end

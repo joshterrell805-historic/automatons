@@ -38,7 +38,7 @@ class Main
    end
 
    def cleanse
-      records = @db[:SProvider]
+      records = @db.source_records
       count = 0
       records.each do |record|
          cleansed = @cleanser.cleanse record
@@ -72,7 +72,7 @@ class Main
    def insert_phone record
       if not record[:phone].nil?
          data = record.filter [:phone]
-         id = @db[:PhoneNumber].check_insert :id, data
+         id = @db.insert_phone data
       else
          id = nil
       end
@@ -109,10 +109,8 @@ class Main
 
       data = record.filter source, destination
       data2 = record.filter source2, destination
-      id = @db[:Address].check_insert :id, data
-      id2 = @db[:Address].check_insert :id, data2
-      record[:mAddress_id] = id
-      record[:pAddress_id] = id2
+      record[:mAddress_id] = @db.insert_address data
+      record[:pAddress_id] = @db.insert_address data2
    end
 
    def insert_specialty record
@@ -121,10 +119,8 @@ class Main
       dest = [:code]
       data = record.filter source, dest
       data2 = record.filter source2, dest
-      id = @db[:Specialty].check_insert :id, data
-      id2 = @db[:Specialty].check_insert :id, data2
-      record[:primarySpecialty_id] = id
-      record[:secondarySpecialty_id] = id
+      record[:primarySpecialty_id] = @db.insert_specialty data
+      record[:secondarySpecialty_id] = @db.insert_specialty data2
    end
 
    def insert_cprovider record
@@ -134,7 +130,7 @@ class Main
          :name
       ]
       data = record.filter source, {mAddress_id: :mailingAddress, pAddress_id: :practiceAddress, phone_id: :phone, primarySpecialty_id: :primarySpecialty, secondarySpecialty_id: :secondarySpecialty}
-      @db[:CProvider].insert data
+      @db.insert_cprovider data
    end
 
    def insert_cindividual record
@@ -145,8 +141,7 @@ class Main
          :id
       ]
       data = record.filter source
-      id = @db[:CIndividual].insert data
-      record[:cIndividual_id] = id
+      record[:cIndividual_id] = @db.insert_cindividual data
    end
 
    def insert_corganization record
@@ -154,7 +149,6 @@ class Main
          :id
       ]
       data = record.filter source
-      id = @db[:COrganization].insert data
-      record[:cOrganization_id] = id
+      record[:cOrganization_id] = @db.insert_corganization data
    end
 end
