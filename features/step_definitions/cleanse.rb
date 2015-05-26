@@ -11,17 +11,6 @@ Given /^the standard business rules$/ do
    @cleanser = BusinessRules.new.cleanser
 end
 
-Given /^this cleanse rule:$/ do |string|
-   @cleanser.add do
-      eval string
-   end
-end
-
-Given /^data with "(.*?)" set to "(.*?)"$/ do |arg1, arg2|
-   @data[arg1.to_sym] = arg2
-end
-
-
 Given /^"(.*?)" with value "(.*?)"$/ do |field, value|
    @data[field.to_sym] = value
 end
@@ -37,10 +26,6 @@ end
 
 When /^I run the "(.*?)" rule$/ do |rule_name|
    @cleansed = @cleanser.run_rule rule_name, @data
-end
-
-When /^I run the cleanse$/ do
-   @cleanser.cleanse @data
 end
 
 Then /^"(.*?)" should be "(.*?)"$/ do |arg1, arg2|
