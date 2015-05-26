@@ -78,7 +78,8 @@ class Main
    def merge
       record_id = :id
 
-      @db.cindividual_records.map do |record|
+      count = 0
+      @db.cindividual_records.each do |record|
          # Returns best matching record, or nil if none were over the threshold
          pair = match_record record
          if pair
@@ -86,7 +87,10 @@ class Main
          else
             insert_new_merge record
          end
+         count += 1
       end
+
+      count
    end
 
    def match_record record
