@@ -75,6 +75,7 @@ class Main
       count
    end
 
+   ## Merges all the records it can from the database
    def merge
       record_id = :id
 
@@ -152,10 +153,10 @@ class Main
       @db.insert_provider_x_practice_address second.filter([:mId], {:practiceAddress => :address})
       
       audit1 = first.filter [:mId], {:id => :sId}
-      audit1[:action] = "Done"
+      audit1[:action] = "merge duplicate records"
 
       audit2 = second.filter [:mId], {:id => :sId}
-      audit2[:action] = "Done"
+      audit2[:action] = "merge duplicate records"
 
       @db.insert_audit audit1
       @db.insert_audit audit2
