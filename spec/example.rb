@@ -28,6 +28,21 @@ primarySpecialty: 390200000X
 secondarySpecialty: 390200000X
 END
 
+   ## This represents the join of the CProvider and CIndividual tables
+   STANDARD_INDIVIDUAL_RECORD = <<END
+id: 24614
+type: Individual
+name: Christina L Grant
+phone: 1
+practiceAddress: 1
+mailingAddress: 1
+primarySpecialty: 1
+secondarySpecialty: 1
+gender: F
+dateOfBirth: '01-01-2000'
+isSoleProprietor: N
+END
+
    ## Returns a record which is representative of what would be found in the
    # SProviders table
    def Example.get_standard_record
@@ -35,6 +50,12 @@ END
       # independent copies of the data to avoid things touching each other's
       # data
       Example.convert STANDARD_RECORD
+   end
+
+   ## Returns a record which represents the join of the CProvider and
+   # CIndividual tables. Intended for use in testing merging
+   def Example.get_clean_standard_record
+      Example.convert STANDARD_INDIVIDUAL_RECORD
    end
 
    ## Accepts a string of YAML and creates a hash of symbol keys to values from it.
