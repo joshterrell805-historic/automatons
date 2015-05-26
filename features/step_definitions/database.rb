@@ -17,8 +17,8 @@ Given /^(a|\d+) standard (individual|organization) source record(?:s?) in SProvi
 
    1.upto(count.to_i) do |i|
       record = Example.get_standard_record
-      record['id'] = record['id'].to_i + i-1
-      record['type'] = type
+      record[:id] = record[:id].to_i + i-1
+      record[:type] = type
 
       @db.insert_source_record record
    end
