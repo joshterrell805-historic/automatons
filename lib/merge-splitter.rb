@@ -4,17 +4,25 @@ module Splitter
          @db = db
       end
 
-   def insert_new_merge type, record
+   def insert_new_merge record
+      insert_merged_record record
+      insert_contrib_record record, "copy record"
+   end
+
+   def insert_merged_record record
       insert_mprovider record
-      insert_merge record
-      case type
-      when :indiv
+      case record[:type]
+      when /individual/i
          insert_mindividual record
-      when :org
+      when /organization/i
          insert_morganization record
       end
+   end
+
+   def insert_contrib_record record, audit_reason
+      insert_merge record
       insert_multiple_parts record
-      insert_audit record, "copy record"
+      insert_audit record, audit_reason
    end
 
    def insert_mprovider record

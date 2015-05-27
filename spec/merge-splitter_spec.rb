@@ -19,7 +19,7 @@ module Splitter
             expect(@db).to receive(:insert_provider_x_practice_address).once
             expect(@db).to receive(:insert_audit).once
 
-            @msplitter.insert_new_merge :indiv, @first
+            @msplitter.insert_new_merge @first
          end
       end
    end

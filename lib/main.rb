@@ -68,52 +68,38 @@ class Main
 
    ## Merges all the records it can from the database
    def merge
-      record_id = :id
-
-      done = {}
       count = 0
-      @db.cindividual_records.each do |record|
-         # Skip already-merged records
-         if done[record]
-            next
-         end
-
-         # Returns best matching record, or nil if none were over the threshold
-         pair = match_record :indiv, record
-         if pair
-            merge_records :indiv, record, pair
-            done[pair] = true
-         else
-            @msplitter.insert_new_merge :indiv, record
-         end
-         count += 1
-      end
-
-      @db.corganization_records.each do |record|
-         # Skip already-merged records
-         if done[record]
-            next
-         end
-
-         # Returns best matching record, or nil if none were over the threshold
-         pair = match_record :org, record
-         if pair
-            merge_records :org, record, pair
-            done[pair] = true
-         else
-            @msplitter.insert_new_merge :org, record
-         end
-         count += 1
-      end
-
+      count += match_record_list @db.cindividual_records
+      count += match_record_list @db.corganization_records
       count
    end
 
-   def match_record type, record
-      case type
-      when :indiv
+   def match_record_list records
+      count = 0
+      done = {}
+      records.each do |record|
+         # Skip already-merged records
+         if done[record]
+            next
+         end
+
+         # Returns best matching record, or nil if none were over the threshold
+         pair = match_record record
+         if pair
+            merge_records record, pair
+            done[pair] = true
+         else
+            @msplitter.insert_new_merge record
+         end
+         count += 1
+      end
+      count end
+
+   def match_record record
+      case record[:type]
+      when /individual/i
          records = @db.cindividual_records(record)
-      when :org
+      when /organization/i
          records = @db.corganization_records(record)
       end
 
@@ -130,23 +116,14 @@ class Main
       pair
    end
 
-   def merge_records type, first, second
-      second[:mId] = @msplitter.insert_mprovider first
+   def merge_records first, second
+      merged = first
+      merge_reason = "merge duplicate records"
 
-      @msplitter.insert_merge first
-      @msplitter.insert_merge second
+      @msplitter.insert_merged_record merged
+      first[:mId] = second[:mId] = merged[:mId]
 
-      case type
-      when :indiv
-         @msplitter.insert_mindividual first
-      when :org
-         @msplitter.insert_morganization first
-      end
-
-      @msplitter.insert_multiple_parts first
-      @msplitter.insert_audit first, "merge duplicate records"
-
-      @msplitter.insert_multiple_parts second
-      @msplitter.insert_audit second, "merge duplicate records"
+      @msplitter.insert_contrib_record first, merge_reason
+      @msplitter.insert_contrib_record second, merge_reason
    end
 end

@@ -78,12 +78,12 @@ describe Main do
       describe "#match_record" do
          it "fetches records to compare from the database" do
             expect(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-            @main.match_record :indiv, @first
+            @main.match_record @first
          end
 
          it "returns the best match above a threshold with available records" do
             allow(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-            expect(@main.match_record :indiv, @first).to eq(@second)
+            expect(@main.match_record @first).to eq(@second)
          end
       end
 
@@ -100,12 +100,12 @@ describe Main do
                end
             end
 
-            @main.merge_records :indiv, @first, @second
+            @main.merge_records @first, @second
          end
 
          it "inserts the results into the database" do
             check_tables
-            @main.merge_records :indiv, @first, @second
+            @main.merge_records @first, @second
          end
       end
 
