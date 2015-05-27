@@ -8,7 +8,7 @@ Before do
 end
 
 Given /^the standard business rules$/ do
-   @cleanser = BusinessRules.new.cleanser
+   @cleanser = BusinessRules.new(Recorder.new).cleanser
 end
 
 Given /^"(.*?)" with value "(.*?)"$/ do |field, value|

@@ -13,8 +13,9 @@ require 'main'
 require 'database'
 require 'business_rules'
 
+recorder = Recorder.new
 db = Database.new
-cleanser = BusinessRules.new
+rules = BusinessRules.new recorder
 
-main = Main.new db, cleanser.cleanser
+main = Main.new db, rules.cleanser
 main.run ARGV
