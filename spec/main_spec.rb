@@ -88,6 +88,7 @@ describe Main do
             expect(@db).to receive(:insert_provider_x_mailing_address).at_least(:once)
             expect(@db).to receive(:insert_provider_x_practice_address).at_least(:once)
             expect(@db).to receive(:insert_audit).twice
+            allow(@db).to receive(:corganization_records).and_return([])
 
             @main.merge
          end
@@ -101,12 +102,12 @@ describe Main do
       describe "#match_record" do
          it "fetches records to compare from the database" do
             expect(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-            @main.match_record @first
+            @main.match_record :indiv, @first
          end
 
          it "returns the best match above a threshold with available records" do
             allow(@db).to receive(:cindividual_records).and_return(@source)
-            expect(@main.match_record @first).to eq(@second)
+            expect(@main.match_record :indiv, @first).to eq(@second)
          end
       end
 

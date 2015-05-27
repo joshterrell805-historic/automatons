@@ -73,6 +73,15 @@ class Database
       end
    end
 
+   def corganization_records start=nil
+      data = @db[:COrganization].join(:CProvider, [:id]).order(:id)
+      if start
+         data.where{id > start[:id]}
+      else
+         data
+      end
+   end
+
    def insert_mprovider data
       @db[:MProvider].insert data
    end

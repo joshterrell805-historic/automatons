@@ -88,7 +88,24 @@ class Main
          end
 
          # Returns best matching record, or nil if none were over the threshold
-         pair = match_record record
+         pair = match_record :indiv, record
+         if pair
+            merge_records record, pair
+            done[pair] = true
+         else
+            insert_new_merge record
+         end
+         count += 1
+      end
+
+      @db.corganization_records.each do |record|
+         # Skip already-merged records
+         if done[record]
+            next
+         end
+
+         # Returns best matching record, or nil if none were over the threshold
+         pair = match_record :org, record
          if pair
             merge_records record, pair
             done[pair] = true
@@ -101,26 +118,47 @@ class Main
       count
    end
 
-   def match_record record
+   def match_record type, record
       high_score = 0
       pair = nil
-      @db.cindividual_records(record).each do |other|
-         p other
-         score = 0
-         record.each do |key, value|
-            o_val = other[key]
-            case key
-            when :id
-               if o_val == value
-                  score -= 5
+      case type
+      when :indiv
+         @db.cindividual_records(record).each do |other|
+            score = 0
+            record.each do |key, value|
+               o_val = other[key]
+               case key
+               when :id
+                  if o_val == value
+                     score -= 5
+                  end
+               else
+                  score += 1 if o_val == value
                end
-            else
-               score += 1 if o_val == value
+            end
+            if high_score < score
+               high_score = score
+               pair = other
             end
          end
-         if high_score < score
-            high_score = score
-            pair = other
+      when :org
+         @db.corganization_records(record).each do |other|
+            score = 0
+            record.each do |key, value|
+               o_val = other[key]
+               case key
+               when :id
+                  if o_val == value
+                     score -= 5
+                  end
+               else
+                  score += 1 if o_val == value
+               end
+            end
+            if high_score < score
+               high_score = score
+               pair = other
+            end
          end
       end
 
