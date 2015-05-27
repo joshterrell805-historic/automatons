@@ -5,6 +5,7 @@ require_relative '../lib/database.rb'
 require 'hash'
 require 'clean-splitter'
 require 'merge-splitter'
+require 'merger'
 
 Sequel.extension :check_insert
 

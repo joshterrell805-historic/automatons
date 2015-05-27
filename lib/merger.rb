@@ -16,23 +16,23 @@
     # create new master record with cprovider
 #
 # And in Ruby...
-THRESHOLD = 0 # Set this to the threshold
-CProvider.each do |cprovider|
-  # This is assuming MProviders is an array
-  if MProviders.empty?
-    create_master_record cprovider
-    next
-  end
-
-  MProviders.each do |mprovider|
-    # establish confidence confidence
-    # select highest confidence
-    if confidence >= THRESHOLD
-      merge_records mprovider, cprovider
-      log_merge mprovider, cprovider
-      # Although perhaps this would be in the merge_records
-    else
-      add_new_mprovider
-    end
-  end
-end
+#THRESHOLD = 0 # Set this to the threshold
+#CProvider.each do |cprovider|
+#  # This is assuming MProviders is an array
+#  if MProviders.empty?
+#    create_master_record cprovider
+#    next
+#  end
+#
+#  MProviders.each do |mprovider|
+#    # establish confidence confidence
+#    # select highest confidence
+#    if confidence >= THRESHOLD
+#      merge_records mprovider, cprovider
+#      log_merge mprovider, cprovider
+#      # Although perhaps this would be in the merge_records
+#    else
+#      add_new_mprovider
+#    end
+#  end
+#end
