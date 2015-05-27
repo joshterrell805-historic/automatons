@@ -1,3 +1,6 @@
+class Merger
+
+end
 # for cprovider in CProvider
 
   # if MProviders if empty
