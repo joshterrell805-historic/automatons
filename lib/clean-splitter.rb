@@ -3,6 +3,15 @@ module Splitter
       def initialize db
          @db = db
       end
+
+      def insert_cleansed record
+         insert_phone record
+         insert_address record
+         insert_specialty record
+         insert_cprovider record
+         insert_cprovidertype record
+      end
+
       def insert_phone record
          if not record[:phone].nil?
             data = record.filter [:phone]

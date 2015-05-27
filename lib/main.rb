@@ -51,11 +51,7 @@ class Main
       records.each do |record|
          cleansed = @cleanser.cleanse record
 
-         @csplitter.insert_phone record
-         @csplitter.insert_address record
-         @csplitter.insert_specialty record
-         @csplitter.insert_cprovider record
-         @csplitter.insert_cprovidertype record
+         @csplitter.insert_cleansed record
 
          count += 1
          if count % 100 == 0
