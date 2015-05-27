@@ -161,63 +161,51 @@ class Main
    end
 
    def merge_records first, second
-      first[:mId] = second[:mId] = @db.insert_mprovider first.filter [:type, :name]
+      second[:mId] = insert_mprovider first
 
-      map = {:id => :sId, :mId => :mId}
-      @db.insert_merge first.filter map
-      @db.insert_merge second.filter map
+      insert_merge first
+      insert_merge second
 
-      @db.insert_mindividual first.filter([:gender, :dateOfBirth, :isSoleProprietor], {:mId => :id})
+      insert_mindividual first
 
-      phone = [:mId, :phone]
-      @db.insert_provider_x_phone first.filter phone
-      @db.insert_provider_x_phone second.filter phone
-
-      @db.insert_provider_x_primary_specialty first.filter([:mId], {:primarySpecialty => :specialty})
-      @db.insert_provider_x_primary_specialty second.filter([:mId], {:primarySpecialty => :specialty})
-
-      @db.insert_provider_x_secondary_specialty first.filter([:mId], {:secondarySpecialty => :specialty})
-      @db.insert_provider_x_secondary_specialty second.filter([:mId], {:secondarySpecialty => :specialty})
-
-      @db.insert_provider_x_mailing_address first.filter([:mId], {:mailingAddress => :address})
-      @db.insert_provider_x_mailing_address second.filter([:mId], {:mailingAddress => :address})
-
-      @db.insert_provider_x_practice_address first.filter([:mId], {:practiceAddress => :address})
-      @db.insert_provider_x_practice_address second.filter([:mId], {:practiceAddress => :address})
-      
-      audit1 = first.filter [:mId], {:id => :sId}
-      audit1[:action] = "merge duplicate records"
-
-      audit2 = second.filter [:mId], {:id => :sId}
-      audit2[:action] = "merge duplicate records"
-
-      @db.insert_audit audit1
-      @db.insert_audit audit2
+      insert_multiple_parts first
+      insert_multiple_parts second
+      insert_audit first, "merge duplicate records"
+      insert_audit second, "merge duplicate records"
    end
 
    def insert_new_merge record
-      record[:mId] = @db.insert_mprovider record.filter [:type, :name]
+      insert_mprovider record
+      insert_merge record
+      insert_mindividual record
+      insert_multiple_parts record
+      insert_audit record, "Done"
+   end
 
+   def insert_mprovider record
+      record[:mId] = @db.insert_mprovider record.filter [:type, :name]
+   end
+
+   def insert_merge record
       map = {:id => :sId, :mId => :mId}
       @db.insert_merge record.filter map
-
-      @db.insert_mindividual record.filter([:gender, :dateOfBirth, :isSoleProprietor], {:mId => :id})
-
-      phone = [:mId, :phone]
-      @db.insert_provider_x_phone record.filter phone
-
-      @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})
-
-      @db.insert_provider_x_secondary_specialty record.filter([:mId], {:secondarySpecialty => :specialty})
-
-      @db.insert_provider_x_mailing_address record.filter([:mId], {:mailingAddress => :address})
-
-      @db.insert_provider_x_practice_address record.filter([:mId], {:practiceAddress => :address})
-      
-      audit1 = record.filter [:mId], {:id => :sId}
-      audit1[:action] = "Done"
-
-      @db.insert_audit audit1
    end
+
+   def insert_mindividual record
+      @db.insert_mindividual record.filter([:gender, :dateOfBirth, :isSoleProprietor], {:mId => :id})
+   end
+
+   def insert_audit record, description
+      audit = record.filter [:mId], {:id => :sId}
+      audit[:action] = description
+      @db.insert_audit audit
+   end
+
+   def insert_multiple_parts record
+      @db.insert_provider_x_phone record.filter [:mId, :phone]
+      @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})
+      @db.insert_provider_x_secondary_specialty record.filter([:mId], {:secondarySpecialty => :specialty})
+      @db.insert_provider_x_mailing_address record.filter([:mId], {:mailingAddress => :address})
+      @db.insert_provider_x_practice_address record.filter([:mId], {:practiceAddress => :address})
    end
 end
