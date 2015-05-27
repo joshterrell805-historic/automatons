@@ -82,7 +82,7 @@ describe Main do
          end
 
          it "returns the best match above a threshold with available records" do
-            allow(@db).to receive(:cindividual_records).and_return(@source)
+            allow(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
             expect(@main.match_record :indiv, @first).to eq(@second)
          end
       end
@@ -92,7 +92,7 @@ describe Main do
             @db.as_null_object
 
             first = nil
-            expect(@db).to receive(:insert_merge).with(include({:sId => @second[:id]})) do |arg|
+            expect(@db).to receive(:insert_merge).twice do |arg|
                if first
                   expect(arg[:mId]).to eq(first[:mId])
                else
@@ -100,13 +100,12 @@ describe Main do
                end
             end
 
-            @main.merge_records @first, @second
+            @main.merge_records :indiv, @first, @second
          end
 
          it "inserts the results into the database" do
-            allow(@db).to receive(:cindividual_records).and_return(@source)
             check_tables
-            @main.merge_records @first, @second
+            @main.merge_records :indiv, @first, @second
          end
       end
 
