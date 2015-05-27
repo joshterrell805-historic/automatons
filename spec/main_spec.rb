@@ -26,25 +26,6 @@ describe Main do
             @main.cleanse
          end
 
-         it "splits records into the appropriate parts" do
-            number_of_records = 2
-
-            source_data = [record1, record2]
-
-            @cleanser.as_null_object
-
-            expect(@db).to receive(:source_records).and_return(source_data)
-            expect(@db).to receive(:insert_address).exactly(number_of_records * 2).times
-            expect(@db).to receive(:insert_specialty).exactly(number_of_records * 2).times
-
-            expect(@db).to receive(:insert_phone).exactly(number_of_records).times
-            expect(@db).to receive(:insert_cprovider).exactly(number_of_records).times
-
-            expect(@db).to receive(:insert_corganization).once
-            expect(@db).to receive(:insert_cindividual).once
-            @main.cleanse
-         end
-
          it "only inserts a phone number if one exists on a record" do
             pending "Refactoring from 'runs the cleanser' case"
             fail
