@@ -62,10 +62,6 @@ class Main
 	 end
       end
 
-      open("cleanse-results.yaml", 'w') do |log|
-         Psych.dump @cleanser.missing, log
-      end
-
       count
    end
 
