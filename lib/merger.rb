@@ -1,4 +1,29 @@
 class Merger
+   def initialize db
+      @db = db
+   end
+
+
+   def score_records record, other
+      score = 0
+      record.each do |key, value|
+         o_val = other[key]
+         res = score_pair key, value, o_val
+         score += res || 0
+      end
+      score
+   end
+
+   def score_pair key, val1, val2
+      case key
+      when :id
+         if val2 == val1
+            -5
+         end
+      else
+         1 if val2 == val1
+      end
+   end
 
 end
 # for cprovider in CProvider
