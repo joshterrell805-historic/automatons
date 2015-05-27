@@ -75,41 +75,6 @@ describe Main do
          end
       end
 
-      describe "#match_record" do
-         it "fetches records to compare from the database" do
-            expect(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-            @main.match_record @first
-         end
-
-         it "returns the best match above a threshold with available records" do
-            allow(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-            expect(@main.match_record @first).to eq(@second)
-         end
-      end
-
-      describe "#merge_records" do
-         it "merges two records" do
-            @db.as_null_object
-
-            first = nil
-            expect(@db).to receive(:insert_merge).twice do |arg|
-               if first
-                  expect(arg[:mId]).to eq(first[:mId])
-               else
-                  first = arg
-               end
-            end
-
-            @main.merge_records @first, @second
-         end
-
-         it "inserts the results into the database" do
-            check_tables
-            @main.merge_records @first, @second
-         end
-      end
-
-
       def check_tables
             expect(@db).to receive(:insert_mprovider).once
             expect(@db).to receive(:insert_mindividual).once

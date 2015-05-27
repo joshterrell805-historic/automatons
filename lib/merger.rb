@@ -1,5 +1,6 @@
 class Merger
-   def initialize db
+   def initialize msplitter, db
+      @msplitter = msplitter
       @db = db
    end
 
@@ -25,6 +26,59 @@ class Merger
       end
    end
 
+   def merge_records first, second
+      merged = first
+      merge_reason = "merge duplicate records"
+
+      @msplitter.insert_merged_record merged
+      first[:mId] = second[:mId] = merged[:mId]
+
+      @msplitter.insert_contrib_record first, merge_reason
+      @msplitter.insert_contrib_record second, merge_reason
+   end
+
+   def match_record record
+      case record[:type]
+      when /individual/i
+         records = @db.cindividual_records(record)
+      when /organization/i
+         records = @db.corganization_records(record)
+      end
+
+      high_score = 0
+      pair = nil
+
+      records.each do |other|
+         score = score_records record, other
+         if high_score < score
+            high_score = score
+            pair = other
+         end
+      end
+      pair
+   end
+
+   def match_record_list records
+      count = 0
+      done = {}
+      records.each do |record|
+         # Skip already-merged records
+         if done[record]
+            next
+         end
+
+         # Returns best matching record, or nil if none were over the threshold
+         pair = match_record record
+         if pair
+            merge_records record, pair
+            done[pair] = true
+         else
+            @msplitter.insert_new_merge record
+         end
+         count += 1
+      end
+      count
+   end
 end
 # for cprovider in CProvider
 
