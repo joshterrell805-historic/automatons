@@ -136,7 +136,10 @@ class SQLClient
        '--database', @database]
    end
 
-   ## Runs the MySQL client and accepts options as for Kernel#spawn
+   ## Runs the MySQL client with options
+   #
+   # Makes it easy to do things like sourcing a file into the DB
+   # @param args Options as for Kernel#spawn
    def run *args
       system *command, *args
    end

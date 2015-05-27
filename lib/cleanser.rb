@@ -7,6 +7,7 @@ class Realm
       @rules = []
    end
 
+   #  run a rule against a particular field which matches regex
    def rule *args, &block
       @rules << Rules::Rule.new(*args, block)
    end
@@ -18,6 +19,10 @@ class Realm
 end
 
 class Cleanser
+   # Sets up the cleanser. The recorder allows tracking records which are
+   # missed by all rules, in order to get better information about what rules
+   # need to be written
+   # @param recorder A Recorder to store information about rule runs on records
    def initialize recorder
       @realm = Realm.new
       @recorder = recorder
