@@ -13,3 +13,6 @@ Providers-clean.tsv
 
 coverage/
 doc/
+
+.yardoc
+.inch
