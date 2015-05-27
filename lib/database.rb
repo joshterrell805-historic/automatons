@@ -90,6 +90,10 @@ class Database
       @db[:MIndividual].insert data
    end
 
+   def insert_morganization data
+      @db[:MOrganization].insert data
+   end
+
    def insert_merge data
       @db[:Merge].insert data
    end

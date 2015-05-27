@@ -4,6 +4,7 @@ require 'psych'
 require_relative '../lib/database.rb'
 require 'hash'
 require 'clean-splitter'
+require 'merge-splitter'
 
 Sequel.extension :check_insert
 
@@ -13,6 +14,7 @@ class Main
       @db = db
       @cleanser = cleanser
       @csplitter = Splitter::CleanSplitter.new @db
+      @msplitter = Splitter::MergeSplitter.new @db
    end
 
    def run argv
@@ -81,10 +83,10 @@ class Main
          # Returns best matching record, or nil if none were over the threshold
          pair = match_record :indiv, record
          if pair
-            merge_records record, pair
+            merge_records :indiv, record, pair
             done[pair] = true
          else
-            insert_new_merge record
+            @msplitter.insert_new_merge :indiv, record
          end
          count += 1
       end
@@ -98,10 +100,10 @@ class Main
          # Returns best matching record, or nil if none were over the threshold
          pair = match_record :org, record
          if pair
-            merge_records record, pair
+            merge_records :org, record, pair
             done[pair] = true
          else
-            insert_new_merge record
+            @msplitter.insert_new_merge :org, record
          end
          count += 1
       end
@@ -110,98 +112,64 @@ class Main
    end
 
    def match_record type, record
-      high_score = 0
-      pair = nil
       case type
       when :indiv
-         @db.cindividual_records(record).each do |other|
-            score = 0
-            record.each do |key, value|
-               o_val = other[key]
-               case key
-               when :id
-                  if o_val == value
-                     score -= 5
-                  end
-               else
-                  score += 1 if o_val == value
-               end
-            end
-            if high_score < score
-               high_score = score
-               pair = other
-            end
-         end
+         records = @db.cindividual_records(record)
       when :org
-         @db.corganization_records(record).each do |other|
-            score = 0
-            record.each do |key, value|
-               o_val = other[key]
-               case key
-               when :id
-                  if o_val == value
-                     score -= 5
-                  end
-               else
-                  score += 1 if o_val == value
-               end
-            end
-            if high_score < score
-               high_score = score
-               pair = other
-            end
-         end
+         records = @db.corganization_records(record)
       end
 
+      high_score = 0
+      pair = nil
+
+      records.each do |other|
+         score = score_records record, other
+         if high_score < score
+            high_score = score
+            pair = other
+         end
+      end
       pair
    end
 
-   def merge_records first, second
-      second[:mId] = insert_mprovider first
-
-      insert_merge first
-      insert_merge second
-
-      insert_mindividual first
-
-      insert_multiple_parts first
-      insert_multiple_parts second
-      insert_audit first, "merge duplicate records"
-      insert_audit second, "merge duplicate records"
+   def score_records record, other
+      score = 0
+      record.each do |key, value|
+         o_val = other[key]
+         res = score_pair key, value, o_val
+         score += res || 0
+      end
+      score
    end
 
-   def insert_new_merge record
-      insert_mprovider record
-      insert_merge record
-      insert_mindividual record
-      insert_multiple_parts record
-      insert_audit record, "Done"
+   def score_pair key, val1, val2
+      case key
+      when :id
+         if val2 == val1
+            -5
+         end
+      else
+         1 if val2 == val1
+      end
    end
 
-   def insert_mprovider record
-      record[:mId] = @db.insert_mprovider record.filter [:type, :name]
-   end
+   def merge_records type, first, second
+      second[:mId] = @msplitter.insert_mprovider first
 
-   def insert_merge record
-      map = {:id => :sId, :mId => :mId}
-      @db.insert_merge record.filter map
-   end
+      @msplitter.insert_merge first
+      @msplitter.insert_merge second
 
-   def insert_mindividual record
-      @db.insert_mindividual record.filter([:gender, :dateOfBirth, :isSoleProprietor], {:mId => :id})
-   end
+      case type
+      when :indiv
+         @msplitter.insert_mindividual first
+      when :org
+         @msplitter.insert_morganization first
+      end
 
-   def insert_audit record, description
-      audit = record.filter [:mId], {:id => :sId}
-      audit[:action] = description
-      @db.insert_audit audit
-   end
+      @msplitter.insert_multiple_parts first
+      @msplitter.insert_audit first, "merge duplicate records"
 
-   def insert_multiple_parts record
-      @db.insert_provider_x_phone record.filter [:mId, :phone]
-      @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})
-      @db.insert_provider_x_secondary_specialty record.filter([:mId], {:secondarySpecialty => :specialty})
-      @db.insert_provider_x_mailing_address record.filter([:mId], {:mailingAddress => :address})
-      @db.insert_provider_x_practice_address record.filter([:mId], {:practiceAddress => :address})
+      @msplitter.insert_multiple_parts second
+      @msplitter.insert_audit second, "merge duplicate records"
    end
 end
