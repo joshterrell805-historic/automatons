@@ -1,9 +1,8 @@
 class Merger
-   def initialize msplitter, db
-      @msplitter = msplitter
+   def initialize db
       @db = db
+      @msplitter = Splitter::MergeSplitter.new db
    end
-
 
    def score_records record, other
       score = 0

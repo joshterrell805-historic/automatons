@@ -7,7 +7,7 @@ describe Merger do
       second[:id] += 1
       @second = second
       @source = [@first, @second]
-      @merger = Merger.new Splitter::MergeSplitter.new(@db), @db
+      @merger = Merger.new @db
    end
    describe "#merge_records" do
       it "merges two records" do

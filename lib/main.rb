@@ -15,8 +15,7 @@ class Main
       @db = db
       @cleanser = cleanser
       @csplitter = Splitter::CleanSplitter.new @db
-      @msplitter = Splitter::MergeSplitter.new @db
-      @merger = Merger.new @msplitter, @db
+      @merger = Merger.new @db
    end
 
    def run argv
