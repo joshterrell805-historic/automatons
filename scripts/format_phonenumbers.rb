@@ -74,6 +74,7 @@ def verifyAreaCode(areacode, regionA, regionB)
    for value in ID[regionB]
       if areacode == value
 	     return true
+      end
    end
    return false
 end
