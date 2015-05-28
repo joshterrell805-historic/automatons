@@ -1,0 +1,4 @@
+- fields: [firstname, lastname]
+  weight: 10
+- fields: [firstname]
+  weight: 3

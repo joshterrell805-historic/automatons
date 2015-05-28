@@ -9,6 +9,20 @@ describe Merger do
       @source = [@first, @second]
       @merger = Merger.new @db
    end
+
+   describe "#score_records" do
+      it "compares two records" do
+         ret = @merger.score_records @first, @second
+         expect(ret).to eq(1)
+      end
+
+      it "returns a smaller value if records don't match" do
+         @first[:firstname] = "tom sawyer"
+         ret = @merger.score_records @first, @second
+         expect(ret).to eq(5/13.to_f)
+      end
+   end
+
    describe "#merge_records" do
       it "merges two records" do
          @db.as_null_object

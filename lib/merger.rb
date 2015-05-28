@@ -1,27 +1,46 @@
+require 'psych'
+require_relative '../spec/example'
 class Merger
    def initialize db
       @db = db
       @msplitter = Splitter::MergeSplitter.new db
+      @config = Psych.load_file 'table.yaml'
    end
 
    def score_records record, other
-      score = 0
-      record.each do |key, value|
-         o_val = other[key]
-         res = score_pair key, value, o_val
-         score += res || 0
+      points_possible = 0
+      points_total = @config.reduce(0) do |points_total, rule|
+         ret = rule['fields'].reduce(0) do |score, field|
+            val1 = record[field.to_sym]
+            val2 = other[field.to_sym]
+            score + edit_dist(val1, val2)
+         end
+
+         ret /= rule['fields'].length.to_f
+         weight = rule['weight']
+         points_possible += weight
+         points_total + ret * weight
       end
-      score
+
+      points_total/points_possible
+   end
+
+   ## Returns a value between 0 and 1, with 0 being completely
+   #dissimilar, and 1 being identical
+   def edit_dist val1, val2
+      val1 == val2 ? 1 : 0
    end
 
    def score_pair key, val1, val2
-      case key
-      when :id
-         if val2 == val1
-            -5
+      default = 1
+      if @scores.key? key
+         if val1==val2
+            @scores[key]
          end
       else
-         1 if val2 == val1
+         if val1 == val2
+            default
+         end
       end
    end
 
