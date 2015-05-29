@@ -25,11 +25,17 @@ class Database
       # @client allows us to run a SQL client with the settings from this
       # Database class
       @client = SQLClient.new
+      if RUBY_PLATFORM != 'java'
       @db = Sequel.connect adapter: 'mysql2',
          host:     @host,
          database: @database,
          password: @password,
          user:     @user
+      else
+         string = "jdbc:mysql://#{@host}/#{@database}?user=#{@user}&password=#{@password}"
+         p string
+         @db = Sequel.connect string
+      end
    end
 
    def source_records
