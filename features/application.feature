@@ -6,6 +6,13 @@ Feature: Running the application
    Background:
       Given an empty database
       And 2 standard individual source records in SProvider
+      And a file named "table.yaml" with:
+      """
+      - fields: [id]
+        weight: -5
+      - fields: all
+        weight: 1
+      """
 
    Scenario: Boot and print help
       When I run `app`
