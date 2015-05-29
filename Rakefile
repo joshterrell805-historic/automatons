@@ -13,7 +13,11 @@ BIN = File.absolute_path './bin'
 ENV["PATH"] += BIN
 
 
-task default: [:loadDB]
+task default: [:cleanse]
+
+task cleanse: :loadDB do
+   sh "bin/app --cleanse"
+end
 
 file "table.yaml" => "match_weights.csv" do |t|
    sh "ruby ./convert_csv_to_yaml.rb #{t.source}"
