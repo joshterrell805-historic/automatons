@@ -54,11 +54,12 @@ class Merger
       @msplitter.insert_contrib_record second, merge_reason
    end
 
-   def match_record record, itr
+   def match_record record, records, i
       high_score = 0
       pair = nil
 
-      itr.each do |other|
+      ((i+1)...records.length).each do |i|
+         other = records[i]
          score = score_records record, other
          if high_score < score
             high_score = score
@@ -72,15 +73,13 @@ class Merger
       count = 0
       done = {}
       list = records.all
-      itr = list.each
-      itr.each do |record|
+      list.each_with_index do |record, i|
          # Skip already-merged records
          if done[record]
             next
          end
 
-         # Returns best matching record, or nil if none were over the threshold
-         pair = match_record record, itr.clone
+         pair = match_record record, list, i
          if pair
             merge_records record, pair
             done[pair] = true
