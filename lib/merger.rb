@@ -82,9 +82,10 @@ class Merger
       pair = nil
 
       total_points_possible = 0
-      points_per_record = {}
-      records.each do |other|
-         points_per_record[other[:id]] = 0
+      points_per_record = []
+      count = records.count
+      (0...count).each do |i|
+         points_per_record[i] = 0
       end
 
       max_points = 0
@@ -98,9 +99,9 @@ class Merger
          end
 
          num = fields.length
-         field_points_per_record = {}
-         records.select_map(:id).each do |other|
-            field_points_per_record[other] = [0, num]
+         field_points_per_record = []
+         (0...count).each do |i|
+            field_points_per_record[i] = [0, num]
          end
          skipped = 0
          fields.each do |field|
@@ -109,32 +110,31 @@ class Merger
                skipped += 1
                next
             end
-            records.each do |other|
-               rid = other[:id]
-               val2 = other[field]
+            records.select_map(field).each_with_index do |val2, id|
                if val2.nil?
-                  field_points_per_record[rid][1] -= 1
+                  field_points_per_record[id][1] -= 1
                   next
                end
-               field_points_per_record[rid][0] += edit_dist(val1, val2)
+               field_points_per_record[id][0] += edit_dist(val1, val2)
             end
          end
 
          weight = rule['weight']
          total_points_possible += weight
 
-         field_points_per_record.each do |key, value|
+         field_points_per_record.each_with_index do |value, id|
             if value[1] > skipped
                score = Rational value[0]*weight, value[1]-skipped
-               points_per_record[key] += score
+               points_per_record[id] += score
                if score > high_score
                   high_score = score
-                  pair = key
+                  pair = id
                end
             end
          end
       end
-      records.where(:id => pair).first
+      id = records.select_map(:id)[pair]
+      records.where(id: id).first
    end
 
    def match_record_list records
