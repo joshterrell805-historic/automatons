@@ -1,10 +1,10 @@
 require 'psych'
-require_relative '../spec/example'
 class Merger
+   attr_accessor :config
    def initialize db
       @db = db
       @msplitter = Splitter::MergeSplitter.new db
-      @config = Psych.load_file 'table.yaml'
+      @config = [{'fields' => 'all', 'weight' => 1}]
    end
 
    def score_records record, other
