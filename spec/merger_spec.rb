@@ -12,14 +12,21 @@ describe Merger do
 
    describe "#score_records" do
       it "compares two records" do
-         ret = @merger.score_records @first, @second
+         ret = @merger.score_records @first, @first
+         expect(ret).to eq(1)
+      end
+
+      it "compares all fields by default" do
+         ret = @merger.score_records @first, @first
          expect(ret).to eq(1)
       end
 
       it "returns a smaller value if records don't match" do
-         @first[:firstname] = "tom sawyer"
+         @first[:name] = "tom sawyer"
+         @merger.config = [{'fields' => ['name'], 'weight' => 1},
+                           {'fields' => ['gender'], 'weight' => 10}]
          ret = @merger.score_records @first, @second
-         expect(ret).to eq(5/13.to_f)
+         expect(ret).to eq(10/11.to_r)
       end
    end
 
