@@ -14,6 +14,12 @@ ENV["PATH"] += BIN
 
 
 task default: [:loadDB]
+
+file "table.yaml" => "match_weights.csv" do |t|
+   sh "ruby ./convert_csv_to_yaml.rb #{t.source}"
+end
+CLEAN << "table.yaml"
+
 task loadDB: [:loadProviders, :loadSpecialties]
 
 desc "Load the raw Providers into the database"
