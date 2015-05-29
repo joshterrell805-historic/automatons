@@ -9,17 +9,33 @@ class Merger
 
    def score_records record, other
       points_possible = 0
-      points_total = @config.reduce(0) do |points_total, rule|
-         ret = rule['fields'].reduce(0) do |score, field|
-            val1 = record[field.to_sym]
-            val2 = other[field.to_sym]
-            score + edit_dist(val1, val2)
+      points_total = 0
+      @config.each do |rule|
+         skipped = 0
+         if rule['fields'] == 'all'
+           fields = record.keys
+         else
+           fields = rule['fields']
+         end
+         score_sum = 0
+         fields.map do |field|
+            val1 = record[field]
+            val2 = other[field]
+            if val1.nil? or val2.nil?
+               skipped += 1
+               next 0
+            end
+            score_sum += edit_dist(val1, val2)
          end
 
-         ret /= rule['fields'].length.to_r
-         weight = rule['weight']
-         points_possible += weight
-         points_total + ret * weight
+         if fields.length > skipped
+            avg_score = Rational score_sum, fields.length-skipped
+            weight = rule['weight']
+            points_possible += weight
+            points_total += avg_score * weight
+         else
+            0
+         end
       end
       points_total/points_possible
    end
