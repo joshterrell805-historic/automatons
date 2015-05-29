@@ -5,7 +5,6 @@ Feature: Merging
       Given the standard business rules
       And an empty database
 
-
    Scenario: Merge identical records
       Given 2 standard individual source records in SProvider
       When I run a clean
