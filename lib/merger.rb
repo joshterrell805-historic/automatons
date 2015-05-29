@@ -81,14 +81,60 @@ class Merger
       high_score = 0
       pair = nil
 
+      total_points_possible = 0
+      points_per_record = {}
       records.each do |other|
-         score = score_records record, other
-         if high_score < score
-            high_score = score
-            pair = other
+         points_per_record[other[:id]] = 0
+      end
+
+      max_points = 0
+      pair = nil
+
+      @config.each do |rule|
+         if rule['fields'] == 'all'
+            fields = record.keys
+         else
+            fields = rule['fields']
+         end
+
+         num = fields.length
+         field_points_per_record = {}
+         records.select_map(:id).each do |other|
+            field_points_per_record[other] = [0, num]
+         end
+         skipped = 0
+         fields.each do |field|
+            val1 = record[field]
+            if val1.nil?
+               skipped += 1
+               next
+            end
+            records.each do |other|
+               rid = other[:id]
+               val2 = other[field]
+               if val2.nil?
+                  field_points_per_record[rid][1] -= 1
+                  next
+               end
+               field_points_per_record[rid][0] += edit_dist(val1, val2)
+            end
+         end
+
+         weight = rule['weight']
+         total_points_possible += weight
+
+         field_points_per_record.each do |key, value|
+            if value[1] > skipped
+               score = Rational value[0]*weight, value[1]-skipped
+               points_per_record[key] += score
+               if score > high_score
+                  high_score = score
+                  pair = key
+               end
+            end
          end
       end
-      pair
+      records.where(:id => pair).first
    end
 
    def match_record_list records
