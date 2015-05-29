@@ -16,12 +16,11 @@ class Merger
             score + edit_dist(val1, val2)
          end
 
-         ret /= rule['fields'].length.to_f
+         ret /= rule['fields'].length.to_r
          weight = rule['weight']
          points_possible += weight
          points_total + ret * weight
       end
-
       points_total/points_possible
    end
 
