@@ -15,7 +15,7 @@ ENV["PATH"] += BIN
 
 task default: [:cleanse]
 
-task cleanse: :loadDB do
+task cleanse: [:loadDB, "table.yaml"] do
    sh "bin/app --cleanse"
 end
 
