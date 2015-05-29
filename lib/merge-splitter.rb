@@ -49,11 +49,21 @@ module Splitter
    end
 
    def insert_multiple_parts record
-      @db.insert_provider_x_phone record.filter [:mId, :phone]
-      @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})
-      @db.insert_provider_x_secondary_specialty record.filter([:mId], {:secondarySpecialty => :specialty})
-      @db.insert_provider_x_mailing_address record.filter([:mId], {:mailingAddress => :address})
-      @db.insert_provider_x_practice_address record.filter([:mId], {:practiceAddress => :address})
+      if not record[:phone].nil?
+         @db.insert_provider_x_phone record.filter [:mId, :phone]
+      end
+      if not record[:primarySpecialty].nil?
+         @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})
+      end
+      if not record[:secondarySpecialty].nil?
+         @db.insert_provider_x_secondary_specialty record.filter([:mId], {:secondarySpecialty => :specialty})
+      end
+      if not record[:mailingAddress].nil?
+         @db.insert_provider_x_mailing_address record.filter([:mId], {:mailingAddress => :address})
+      end
+      if not record[:practiceAddress].nil?
+         @db.insert_provider_x_practice_address record.filter([:mId], {:practiceAddress => :address})
+      end
    end
    end
 end
