@@ -54,19 +54,11 @@ class Merger
       @msplitter.insert_contrib_record second, merge_reason
    end
 
-   def match_record record
-      case record[:type]
-      when /individual/i
-         records = @db.cindividual_records(record)
-      when /organization/i
-         records = @db.corganization_records(record)
-      end
-
+   def match_record record, itr
       high_score = 0
       pair = nil
 
-      list = records.all 
-      list.each do |other|
+      itr.each do |other|
          score = score_records record, other
          if high_score < score
             high_score = score
@@ -79,14 +71,16 @@ class Merger
    def match_record_list records
       count = 0
       done = {}
-      records.each do |record|
+      list = records.all
+      itr = list.each
+      itr.each do |record|
          # Skip already-merged records
          if done[record]
             next
          end
 
          # Returns best matching record, or nil if none were over the threshold
-         pair = match_record record
+         pair = match_record record, itr.clone
          if pair
             merge_records record, pair
             done[pair] = true
