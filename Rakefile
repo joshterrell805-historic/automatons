@@ -55,6 +55,10 @@ task :clean => :test_clean do
    mysql in: "DB-truncate-clean.sql"
 end
 
+task :clean_merge do
+   mysql in: "DB-truncate-merge.sql"
+end
+
 task :clobber => :test_clobber do
    mysql in: "DB-cleanup.sql"
 end
