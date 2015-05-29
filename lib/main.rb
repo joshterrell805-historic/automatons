@@ -16,6 +16,11 @@ class Main
       @cleanser = cleanser
       @csplitter = Splitter::CleanSplitter.new @db
       @merger = Merger.new @db
+      config = Psych.load_file "table.yaml"
+      config.map do |rule|
+         rule['fields'] = rule['fields'].map {|f| f.to_sym}
+      end
+      @merger.config = config
    end
 
    def run argv
