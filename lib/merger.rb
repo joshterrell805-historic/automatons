@@ -84,6 +84,7 @@ class Merger
       total_points_possible = 0
       points_per_record = []
       count = records.count
+
       (0...count).each do |i|
          points_per_record[i] = 0
       end
@@ -91,6 +92,7 @@ class Merger
       max_points = 0
       pair = nil
 
+      field_points_per_record = []
       @config.each do |rule|
          if rule['fields'] == 'all'
             fields = record.keys
@@ -99,7 +101,6 @@ class Merger
          end
 
          num = fields.length
-         field_points_per_record = []
          (0...count).each do |i|
             field_points_per_record[i] = [0, num]
          end
@@ -113,9 +114,9 @@ class Merger
             records.select_map(field).each_with_index do |val2, id|
                if val2.nil?
                   field_points_per_record[id][1] -= 1
-                  next
+               else
+                  field_points_per_record[id][0] += edit_dist(val1, val2)
                end
-               field_points_per_record[id][0] += edit_dist(val1, val2)
             end
          end
 
@@ -124,7 +125,7 @@ class Merger
 
          field_points_per_record.each_with_index do |value, id|
             if value[1] > skipped
-               score = Rational value[0]*weight, value[1]-skipped
+               score = value[0]*weight/(value[1]-skipped).to_f
                points_per_record[id] += score
                if score > high_score
                   high_score = score
