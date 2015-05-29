@@ -65,7 +65,8 @@ class Merger
       high_score = 0
       pair = nil
 
-      records.each do |other|
+      list = records.all 
+      list.each do |other|
          score = score_records record, other
          if high_score < score
             high_score = score
