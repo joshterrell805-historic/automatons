@@ -11,16 +11,11 @@ Sequel.extension :check_insert
 
 class Main
    # Attributes to store the database object and the cleanser
-   def initialize db, cleanser
+   def initialize db, cleanser, merger
       @db = db
       @cleanser = cleanser
       @csplitter = Splitter::CleanSplitter.new @db
-      @merger = Merger.new @db
-      config = Psych.load_file "table.yaml"
-      config.map do |rule|
-         rule['fields'] = rule['fields'].map {|f| f.to_sym}
-      end
-      @merger.config = config
+      @merger = merger
    end
 
    def run argv

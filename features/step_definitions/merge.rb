@@ -1,4 +1,5 @@
 When(/^I run a merge$/) do
-   a = Main.new @db, @cleanser
+   @merger = Merger.new @db
+   a = Main.new @db, @cleanser, @merger
    a.merge
 end

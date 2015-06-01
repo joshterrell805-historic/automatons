@@ -20,7 +20,7 @@ Given /^"([^"]*)" with value nil$/ do |field|
 end
 
 When /^I run a clean$/ do
-   a = Main.new @db, @cleanser
+   a = Main.new @db, @cleanser, @merger
    a.cleanse
 end
 

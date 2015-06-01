@@ -16,6 +16,17 @@ require 'business_rules'
 recorder = Recorder.new
 db = Database.new
 rules = BusinessRules.new recorder
+merger = Merger.new db
 
-main = Main.new db, rules.cleanser
+if File.exists? "table.yaml"
+   config = Psych.load_file "table.yaml"
+   config.map do |rule|
+      if rule['fields'].is_a? Array
+         rule['fields'] = rule['fields'].map {|f| f.to_sym}
+      end
+   end
+end
+merger.config = config
+
+main = Main.new db, rules.cleanser, merger
 main.run ARGV

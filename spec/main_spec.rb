@@ -5,8 +5,9 @@ describe Main do
    before(:each) do
       @db = instance_double("Database")
       @cleanser = instance_double("Cleanser")
+      @merger = instance_double("Merger")
 
-      @main = Main.new @db, @cleanser
+      @main = Main.new @db, @cleanser, @merger
    end
    context "cleansing" do
       let(:record1) {{:type => 'individual', :phone => '555-555-5555'}}
