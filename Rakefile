@@ -20,7 +20,7 @@ task cleanse: [:loadDB, "table.yaml"] do
 end
 
 file "table.yaml" => "match_weights.csv" do |t|
-   sh "ruby ./convert_csv_to_yaml.rb #{t.source}"
+   sh "ruby ./convert_csv_to_yaml.rb #{t.prerequisites[0]}"
 end
 CLEAN << "table.yaml"
 
