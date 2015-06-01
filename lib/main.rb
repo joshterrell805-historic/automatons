@@ -73,8 +73,8 @@ class Main
    ## Merges all the records it can from the database
    def merge
       count = 0
-      count += @merger.match_record_list @db.cindividual_records
-      count += @merger.match_record_list @db.corganization_records
+      count += @merger.match_record_list @db.cindividual_records.all
+      count += @merger.match_record_list @db.corganization_records.all
       count
    end
 end

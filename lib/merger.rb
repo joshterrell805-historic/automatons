@@ -69,10 +69,9 @@ class Merger
       pair
    end
 
-   def match_record_list records
+   def match_record_list list
       count = 0
       done = {}
-      list = records.all
       list.each_with_index do |record, i|
          # Skip already-merged records
          if done[record]
