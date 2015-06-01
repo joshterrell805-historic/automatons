@@ -61,12 +61,15 @@ describe Main do
       end
       describe "#merge" do
          it "merges identical pairs of records" do
-            allow(@db).to receive(:cindividual_records).and_return(@source)
-            allow(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-            allow(@db).to receive(:cindividual_records).with(@second).and_return([])
-            allow(@db).to receive(:corganization_records).and_return([])
+            table_indiv = double("Dataset")
+            table_org = double("Dataset")
+            allow(@db).to receive(:cindividual_records).and_return(table_indiv)
+            allow(@db).to receive(:corganization_records).and_return(table_org)
+            allow(table_indiv).to receive(:all).and_return(@source)
+            allow(table_org).to receive(:all).and_return([])
 
-            check_tables
+            expect(@merger).to receive(:match_record_list).with(@source).and_return(@source.length)
+            expect(@merger).to receive(:match_record_list).with([]).and_return(0)
             @main.merge
          end
 
@@ -74,18 +77,6 @@ describe Main do
             pending
             fail
          end
-      end
-
-      def check_tables
-            expect(@db).to receive(:insert_mprovider).once
-            expect(@db).to receive(:insert_mindividual).once
-            expect(@db).to receive(:insert_merge).twice
-            expect(@db).to receive(:insert_provider_x_phone).at_least(:once)
-            expect(@db).to receive(:insert_provider_x_secondary_specialty).at_least(:once)
-            expect(@db).to receive(:insert_provider_x_primary_specialty).at_least(:once)
-            expect(@db).to receive(:insert_provider_x_mailing_address).at_least(:once)
-            expect(@db).to receive(:insert_provider_x_practice_address).at_least(:once)
-            expect(@db).to receive(:insert_audit).twice
       end
    end
 end

@@ -53,14 +53,8 @@ describe Merger do
    end
 
    describe "#match_record" do
-      it "fetches records to compare from the database" do
-         expect(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-         @merger.match_record @first
-      end
-
       it "returns the best match above a threshold with available records" do
-         allow(@db).to receive(:cindividual_records).with(@first).and_return(@source[1..-1])
-         expect(@merger.match_record @first).to eq(@second)
+         expect(@merger.match_record @first, @source[1..-1]).to eq(@second)
       end
    end
 
