@@ -76,17 +76,10 @@ class Merger
 
    def match_record_list list
       count = 0
-      done = {}
       list.each_with_index do |record, i|
-         # Skip already-merged records
-         if done[record]
-            next
-         end
-
          pair = match_record record, list[i+1..-1]
          if pair
             merge_records record, pair
-            done[pair] = true
          else
             @msplitter.insert_new_merge record
          end
