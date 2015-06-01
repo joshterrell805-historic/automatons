@@ -12,6 +12,9 @@ class Merger
       points_total = @config.reduce(0) do |points_total, rule|
          weight = rule['weight']
          fields = rule['fields']
+         if fields == 'all'
+            fields = record.keys
+         end
 
          ret = fields.reduce(0) do |score, field|
             sym = field.to_sym
