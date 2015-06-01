@@ -48,6 +48,7 @@ class Merger
    end
 
    def merge_records first, second
+      # TODO Really merge record
       merged = first
       merge_reason = "merge duplicate records"
 
