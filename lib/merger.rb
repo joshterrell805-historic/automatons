@@ -10,14 +10,17 @@ class Merger
    def score_records record, other
       points_possible = 0
       points_total = @config.reduce(0) do |points_total, rule|
-         ret = rule['fields'].reduce(0) do |score, field|
-            val1 = record[field.to_sym]
-            val2 = other[field.to_sym]
-            score + edit_dist(val1, val2)
+         weight = rule['weight']
+         fields = rule['fields']
+
+         ret = fields.reduce(0) do |score, field|
+            sym = field.to_sym
+            val1 = record[sym]
+            val2 = other[sym]
+            score + edit_dist(weight, val1, val2)
          end
 
-         ret /= rule['fields'].length.to_r
-         weight = rule['weight']
+         ret /= fields.length.to_f
          points_possible += weight
          points_total + ret * weight
       end
