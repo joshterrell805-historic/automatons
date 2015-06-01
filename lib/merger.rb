@@ -22,15 +22,16 @@ class Merger
 
          ret /= fields.length.to_f
          points_possible += weight
-         points_total + ret * weight
+         points_total + ret
       end
       points_total/points_possible
    end
 
    ## Returns a value between 0 and 1, with 0 being completely
    #dissimilar, and 1 being identical
-   def edit_dist val1, val2
-      val1 == val2 ? 1 : 0
+   def edit_dist weight, val1, val2
+      # TODO: Real edit distance
+      val1 == val2 ? weight : 0
    end
 
    def score_pair key, val1, val2
