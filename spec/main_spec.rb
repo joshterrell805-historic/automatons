@@ -43,9 +43,9 @@ describe Main do
             allow(db).to receive(:source_records).and_return(source_data)
             allow(@cleanser).to receive(:cleanse)
 
-            main = Main.new db, @cleanser
+            main = Main.new db, @cleanser, @merger
 
-            expect(@db).to receive(:insert_phone).once
+            expect(db).to receive(:insert_phone).once
             @main.cleanse
          end
       end
