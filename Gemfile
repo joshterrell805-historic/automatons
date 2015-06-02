@@ -5,7 +5,13 @@ gem 'dotenv'
 gem 'cucumber'
 gem 'aruba'
 gem 'rspec'
-gem 'mysql2'
 gem 'sequel'
-gem 'simplecov'
-gem 'ruby-prof'
+platforms :ruby do
+   gem 'simplecov'
+   gem 'mysql2'
+   gem 'ruby-prof'
+end
+
+platforms :jruby do
+   gem 'jdbc-mysql'
+end
