@@ -66,14 +66,19 @@ class Merger
       high_score = 0
       pair = nil
 
-      records.each do |other|
-         other = records[i]
-         score = score_records record, other
-         if high_score < score
-            high_score = score
-            pair = other
+      threads = []
+      records.split(15) do |hunk|
+         threads << Thread.new do
+            hunk.each do |other|
+               score = score_records record, other
+               if score > 0.5 and high_score < score
+                  high_score = score
+                  pair = other
+               end
+            end
          end
       end
+      threads.map {|thr| thr.join}
       pair
    end
 
@@ -90,5 +95,21 @@ class Merger
          puts "#{count} records merged"
       end
       count
+   end
+end
+
+class Array
+   def split n
+      max = length
+
+      i = 0
+      while i+n < max
+         yield self[i..i+n]
+         i += n
+      end
+
+      if i < max
+         yield self[i..-1]
+      end
    end
 end
