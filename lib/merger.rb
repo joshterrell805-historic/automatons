@@ -1,4 +1,6 @@
 require 'psych'
+require 'java'
+java_import 'MergeAccelerator'
 class Merger
    attr_accessor :config
    def initialize db
