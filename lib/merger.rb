@@ -71,14 +71,30 @@ class Merger
 
    def merge_records first, second
       # TODO Really merge record
-      merged = first
       merge_reason = "merge duplicate records"
 
-      @msplitter.insert_merged_record merged
-      first[:mId] = second[:mId] = merged[:mId]
+      if first[:mId].nil? and second[:mId].nil?
+         # BEGIN Do this in a later step in future
+         merged = first
+         merge_reason = "merge duplicate records"
 
-      @msplitter.insert_contrib_record first, merge_reason
-      @msplitter.insert_contrib_record second, merge_reason
+         @msplitter.insert_merged_record merged
+         first[:mId] = second[:mId] = merged[:mId]
+         # END do in later step
+
+         @msplitter.insert_contrib_record first, merge_reason
+         @msplitter.insert_contrib_record second, merge_reason
+      else
+         if first[:mId].nil?
+            first[:mId] = second[:mId]
+            @msplitter.insert_contrib_record first, merge_reason
+         end
+
+         if second[:mId].nil?
+            second[:mId] = first[:mId]
+            @msplitter.insert_contrib_record second, merge_reason
+         end
+      end
    end
 
    def match_record record, records
