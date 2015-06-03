@@ -1,10 +1,11 @@
 require 'psych'
 class Merger
-   attr_accessor :config
+   attr_accessor :config, :threshold
    def initialize db
       @db = db
       @msplitter = Splitter::MergeSplitter.new db
       @config = [{'fields' => 'all', 'weight' => 1}]
+      @threshold = 0.9
    end
 
    def score_records record, other
@@ -103,18 +104,20 @@ class Merger
 
       records.each do |other|
          score = score_records record, other
-         if high_score < score
+         if score > @threshold and high_score < score
             high_score = score
             pair = other
          end
       end
-      pair
+      [high_score, pair]
    end
 
    def match_record_list list
       count = 0
       list.each_with_index do |record, i|
-         pair = match_record record, list[i+1..-1]
+         pair = match_record(record, list[i+1..-1]).last
+         # TODO If a record matches a merged record, it should be combined into
+         # a merge clump
          if pair
             merge_records record, pair
          else
