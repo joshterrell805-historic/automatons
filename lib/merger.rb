@@ -2,11 +2,12 @@ require 'psych'
 require 'java'
 java_import 'MergeAccelerator'
 class Merger
-   attr_accessor :config
+   attr_accessor :config, :threshold
    def initialize db
       @db = db
       @msplitter = Splitter::MergeSplitter.new db
       @config = [{'fields' => 'all', 'weight' => 1}]
+      @threshold = 0.9
    end
 
    def score_records record, other
@@ -73,40 +74,77 @@ class Merger
 
    def merge_records first, second
       # TODO Really merge record
-      merged = first
       merge_reason = "merge duplicate records"
 
-      @msplitter.insert_merged_record merged
-      first[:mId] = second[:mId] = merged[:mId]
+      if first[:mId].nil? and second[:mId].nil?
+         # BEGIN Do this in a later step in future
+         merged = first
+         merge_reason = "merge duplicate records"
 
-      @msplitter.insert_contrib_record first, merge_reason
-      @msplitter.insert_contrib_record second, merge_reason
+         @msplitter.insert_merged_record merged
+         first[:mId] = second[:mId] = merged[:mId]
+         # END do in later step
+
+         @msplitter.insert_contrib_record first, merge_reason
+         @msplitter.insert_contrib_record second, merge_reason
+      else
+         if first[:mId].nil?
+            first[:mId] = second[:mId]
+            @msplitter.insert_contrib_record first, merge_reason
+         end
+
+         if second[:mId].nil?
+            second[:mId] = first[:mId]
+            @msplitter.insert_contrib_record second, merge_reason
+         end
+      end
    end
 
-   def match_record record, records
+   def match_record_threaded record, records
       high_score = 0
       pair = nil
 
+
       threads = []
-      records.split(15) do |hunk|
+      #records.split(1500) do |hunk|
+      hunk = records
          threads << Thread.new do
-            hunk.each do |other|
-               score = score_records record, other
-               if score > 0.5 and high_score < score
-                  high_score = score
-                  pair = other
-               end
-            end
+            match_record record, hunk
+         end
+      #end
+
+      threads.map do |thr|
+         th_high, th_pair =  thr.value
+         if th_high > high_score
+            high_score = th_high
+            pair = th_pair
          end
       end
-      threads.map {|thr| thr.join}
       pair
    end
 
+   def match_record record, hunk
+      high_score = 0
+      pair = nil
+      hunk.each do |other|
+         score = score_records record, other
+         if score > @threshold and high_score < score
+            high_score = score
+            pair = other
+         end
+      end
+      [high_score, pair]
+   end
+
    def match_record_list list
+      start = Time.now
       count = 0
       list.each_with_index do |record, i|
-         pair = match_record record, list[i+1..-1]
+         #c = MergeAccelerator.new
+         #p c.test java.util.HashMap.new(record)
+         pair = match_record_threaded record, list[i+1..-1]
+         # TODO If a record matches a merged record, it should be combined into
+         # a merge clump
          if pair
             merge_records record, pair
          else
@@ -114,6 +152,10 @@ class Merger
          end
          count += 1
          puts "#{count} records merged"
+         if count >= 150
+            puts "Total time: #{Time.now - start}s"
+            exit
+         end
       end
       count
    end
