@@ -19,7 +19,8 @@ class Merger
             fields = record.keys
          end
 
-         rule_total = rule_total fields, weight, record, other
+         #rule_total = rule_total fields, weight, record, other
+         rule_total = MergeAccelerator.rule_total fields.to_java, weight, record, other
 
          if rule_total
             # Add the rule's weight to the points possible
@@ -47,7 +48,7 @@ class Merger
             return nil
          end
 
-         edit_dist(weight, val1, val2)
+         MergeAccelerator.edit_dist(weight, val1, val2)
       end
       scores.reduce(0, :+)
    end
@@ -106,12 +107,16 @@ class Merger
 
 
       threads = []
-      #records.split(1500) do |hunk|
-      hunk = records
+      record = java.util.HashMap.new(record)
+      records.split(1500) do |hunk|
+      #hunk = records
          threads << Thread.new do
+            hunk = hunk.map do |r|
+               java.util.HashMap.new(r)
+            end
             match_record record, hunk
          end
-      #end
+      end
 
       threads.map do |thr|
          th_high, th_pair =  thr.value
@@ -124,10 +129,11 @@ class Merger
    end
 
    def match_record record, hunk
+
       high_score = 0
       pair = nil
       hunk.each do |other|
-         score = score_records record, other
+         score = MergeAccelerator.score_records @java_rules, record, other
          if score > @threshold and high_score < score
             high_score = score
             pair = other
@@ -139,10 +145,26 @@ class Merger
    def match_record_list list
       start = Time.now
       count = 0
+
+      @java_rules = @config.map do |rule|
+         java.util.HashMap.new(rule)
+      end
+
+      @java_rules.each do |rule|
+         rule["fields"] = rule["fields"].to_java
+      end
+
+      javalist = list.map do |record|
+         java.util.HashMap.new(record)
+      end
+
+      javalist = javalist.to_java
       list.each_with_index do |record, i|
          #c = MergeAccelerator.new
          #p c.test java.util.HashMap.new(record)
          pair = match_record_threaded record, list[i+1..-1]
+         pair = Hash.new pair
+         record = Hash.new record
          # TODO If a record matches a merged record, it should be combined into
          # a merge clump
          if pair
@@ -152,7 +174,7 @@ class Merger
          end
          count += 1
          puts "#{count} records merged"
-         if count >= 150
+         if count >= 1000
             puts "Total time: #{Time.now - start}s"
             exit
          end
