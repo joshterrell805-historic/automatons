@@ -69,6 +69,3 @@ DEPENDENCIES
   ruby-prof
   sequel
   simplecov
-
-BUNDLED WITH
-   1.10.1
