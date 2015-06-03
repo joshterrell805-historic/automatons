@@ -9,25 +9,44 @@ class Merger
 
    def score_records record, other
       points_possible = 0
-      points_total = @config.reduce(0) do |points_total, rule|
+      rule_scores = @config.map do |rule|
          weight = rule['weight']
          fields = rule['fields']
          if fields == 'all'
             fields = record.keys
          end
 
-         ret = fields.reduce(0) do |score, field|
-            sym = field.to_sym
-            val1 = record[sym]
-            val2 = other[sym]
-            score + edit_dist(weight, val1, val2)
+         rule_total = rule_total fields, weight, record, other
+
+         if rule_total
+            # Add the rule's weight to the points possible
+            points_possible += weight
+            # Return the score for the rule
+            rule_total/fields.length.to_f
+         else
+            # A field was nil
+            # Don't add the rule's weight
+            # Return 0 to not change the sum
+            0
+         end
+      end
+
+      total_points = rule_scores.reduce(0, :+)
+      total_points/points_possible
+   end
+
+   def rule_total fields, weight, record, other
+      scores = fields.map do |field|
+         val1 = record[field]
+         val2 = other[field]
+
+         if val1.nil? or val2.nil?
+            return nil
          end
 
-         ret /= fields.length.to_f
-         points_possible += weight
-         points_total + ret
+         edit_dist(weight, val1, val2)
       end
-      points_total/points_possible
+      scores.reduce(0, :+)
    end
 
    ## Returns a value between 0 and 1, with 0 being completely
