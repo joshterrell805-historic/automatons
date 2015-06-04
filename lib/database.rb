@@ -160,6 +160,21 @@ class SQLClient
    # Makes it easy to do things like sourcing a file into the DB
    # @param args Options as for Kernel#spawn
    def run *args
-      system *command, *args
+      if RUBY_PLATFORM == 'java'
+         file = ""
+         args.each do |arg|
+            case arg
+            when Hash
+               file = arg[:in]
+            end
+         end
+         cmd = command.join " "
+         if file
+            cmd += " < #{file}"
+         end
+         system cmd
+      else
+         system *command, *args
+      end
    end
 end
