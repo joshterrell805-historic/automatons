@@ -1,3 +1,5 @@
+require 'array'
+
 require 'psych'
 require 'java'
 java_import 'MergeAccelerator'
