@@ -25,7 +25,7 @@ Given /^(a|\d+) standard (individual|organization) source record(?:s?) in SProvi
 end
 
 Then /^the "(.*?)" table should contain:$/ do |table, yaml|
-   expected = Psych.parse(yaml).to_ruby
+   expected = Psych.parse(yaml.to_s).to_ruby
    data = {}
 
    # Convert string keys to symbol keys
