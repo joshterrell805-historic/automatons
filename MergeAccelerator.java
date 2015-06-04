@@ -10,10 +10,21 @@ public class MergeAccelerator {
    }
 
    public static int edit_dist(int weight, Object val1, Object val2) {
-      if (val1.equals(val2)) {
-         return weight;
+      int happy;
+      int sad;
+
+      if (weight > 0) {
+         happy = weight;
+         sad = 0;
       } else {
-         return 0;
+         happy = 0;
+         sad = weight;
+      }
+
+      if (val1.equals(val2)) {
+         return happy;
+      } else {
+         return sad;
       }
    }
 
@@ -50,11 +61,17 @@ public class MergeAccelerator {
          Object[] fields = (Object[]) rule.get("fields");
          Integer rule_total = MergeAccelerator.rule_total(fields, (int) weight, record, other);
          if (rule_total != null) {
-            points_possible += weight;
+            if (weight > 0) {
+               points_possible += weight;
+            }
             total_points += rule_total/((float) fields.length);
          }
       }
 
-      return total_points/points_possible;
+      if (points_possible > 0) {
+         return total_points/points_possible;
+      } else {
+         return -1;
+      }
    }
 }
