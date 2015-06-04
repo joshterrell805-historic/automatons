@@ -122,7 +122,7 @@ class Merger
 
       threads.map do |thr|
          th_high, th_pair =  thr.value
-         if th_high > high_score
+         if th_high > high_score and th_high > @threshold
             high_score = th_high
             pair = th_pair
          end
