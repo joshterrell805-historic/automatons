@@ -136,6 +136,12 @@ class Merger
       pair = nil
       hunk.each do |other|
          score = @accelerator.score_records @java_rules, record, other
+         if score > @threshold
+            p "Over threshold"
+            p score
+            p record
+            p other
+         end
          if score > @threshold and high_score < score
             high_score = score
             pair = other
@@ -167,6 +173,7 @@ class Merger
 
          if pair
             pair = pair.to_hash
+            puts "paired a record"
             merge_records record, pair
          else
             @msplitter.insert_new_merge record
