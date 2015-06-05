@@ -160,16 +160,13 @@ class Merger
          java.util.HashMap.new(record)
       end
 
-      javalist = javalist.to_java
       list.each_with_index do |record, i|
-         #c = MergeAccelerator.new
-         #p c.test java.util.HashMap.new(record)
          pair = match_record_threaded record, list[i+1..-1]
-         pair = Hash.new pair
-         record = Hash.new record
          # TODO If a record matches a merged record, it should be combined into
          # a merge clump
+
          if pair
+            pair = pair.to_hash
             merge_records record, pair
          else
             @msplitter.insert_new_merge record
