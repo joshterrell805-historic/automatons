@@ -10,6 +10,7 @@ class Merger
       @msplitter = Splitter::MergeSplitter.new db
       @config = [{'fields' => 'all', 'weight' => 1}]
       @threshold = 0.9
+      @accelerator = MergeAccelerator.new
    end
 
    def score_records record, other
@@ -22,7 +23,7 @@ class Merger
          end
 
          #rule_total = rule_total fields, weight, record, other
-         rule_total = MergeAccelerator.rule_total fields.to_java, weight, record, other
+         rule_total = @accelerator.rule_total fields.to_java, weight, record, other
 
          if rule_total
             # Add the rule's weight to the points possible
@@ -50,7 +51,7 @@ class Merger
             return nil
          end
 
-         MergeAccelerator.edit_dist(weight, val1, val2)
+         @accelerator.edit_dist(weight, val1, val2)
       end
       scores.reduce(0, :+)
    end
@@ -131,11 +132,10 @@ class Merger
    end
 
    def match_record record, hunk
-
       high_score = 0
       pair = nil
       hunk.each do |other|
-         score = MergeAccelerator.score_records @java_rules, record, other
+         score = @accelerator.score_records @java_rules, record, other
          if score > @threshold and high_score < score
             high_score = score
             pair = other
