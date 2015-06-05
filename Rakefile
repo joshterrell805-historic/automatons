@@ -13,11 +13,21 @@ BIN = File.absolute_path './bin'
 ENV["PATH"] += BIN
 
 
-task default: [:cleanse]
+task default: [:merge]
 
-task cleanse: [:loadDB, "table.yaml"] do
-   sh "bin/app --cleanse"
+task cleanse: [:loadDB, :build] do
+   with_jruby do
+      sh "jruby bin/app --cleanse"
+   end
 end
+
+task :merge do
+   with_jruby do
+      sh "jruby bin/app --merge"
+   end
+end
+
+task build: ["MergeAccelerator.class", "table.yaml"]
 
 file "table.yaml" => "match_weights.csv" do |t|
    sh "ruby ./convert_csv_to_yaml.rb #{t.prerequisites[0]}"
@@ -28,18 +38,26 @@ task loadDB: [:loadProviders, :loadSpecialties]
 
 desc "Load the raw Providers into the database"
 task :loadProviders => :create do
-   sh "node #{BIN}/insert-providers.js Providers.tsv"
+   begin
+      sh "node #{BIN}/insert-providers.js Providers.tsv"
+   rescue
+      puts "It appears Providers is already loaded. Ignoring. If you really wanted to load Providers, clean it first."
+   end
 end
 
 desc "Load the raw Specialties into the database"
 task :loadSpecialties => :create do
-   sh "node #{BIN}/insert-specialties.js Specialties.tsv"
+   begin
+      sh "node #{BIN}/insert-specialties.js Specialties.tsv"
+   rescue
+      puts "It appears Specialties is already loaded. Ignoring. If you really wanted to load Specialties, clean it first."
+   end
 end
 
 desc "Run tests"
 task test: [:rspec, :cucumber]
 
-task :cucumber => :test_create do
+task :cucumber => [:test_create, :build] do
    sh "cucumber --format progress"
 end
 
@@ -89,12 +107,26 @@ task :coverage do
    end
 end
 
+file "MergeAccelerator.class" => "MergeAccelerator.java" do |t|
+   sh "javac -extdirs /usr/share/java #{t.source}"
+end
+CLEAN << "MergeAccelerator.class"
+
 ##
 # Sets up the environment variables to run a test. Restores them afterward, keeping the test settings from polluting the rest of the Rakefile
 def with_test_env
    in_separate_environment do
       # Overwrite environment variables with values for testing
       Dotenv.overload '.env.test'
+      yield
+   end
+end
+
+def with_jruby
+   in_separate_environment do
+      ENV['RBENV_VERSION'] = 'jruby-9.0.0.0.pre2'
+      ENV['CLASSPATH'] ||= File.absolute_path "."
+      ENV['CLASSPATH'] += ':/usr/share/java/log4j-api-2.0-beta9.jar:log4j-core-2.0-beta9.jar'
       yield
    end
 end
