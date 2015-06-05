@@ -1,4 +1,4 @@
 #!/bin/bash
 . .env
 . .env.test
-$SHELL
+. setup.sh

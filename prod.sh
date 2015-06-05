@@ -1,3 +1,3 @@
 #!/bin/bash
 . .env
-$SHELL
+. setup.sh

@@ -1,32 +1,3 @@
-#!/usr/bin/env ruby
-if ENV['COVERAGE']
-   require 'simplecov'
-   SimpleCov.command_name 'app'
-   puts "Gathering coverage data..."
-end
-# This is the main file for our entire project
-# It provides an interface to the App class, which does the main work.
-# This arrangement is for ease of testing.
-$LOAD_PATH << File.absolute_path(File.join(File.dirname(__FILE__),'..', 'lib'))
-require 'bundler/setup'
-require 'main'
-require 'database'
-require 'business_rules'
-
-recorder = Recorder.new
-db = Database.new
-rules = BusinessRules.new recorder
-merger = Merger.new db
-
-if File.exists? "table.yaml"
-   config = Psych.load_file "table.yaml"
-   config.map do |rule|
-      if rule['fields'].is_a? Array
-         rule['fields'] = rule['fields'].map {|f| f.to_sym}
-      end
-   end
-end
-merger.config = config
-
-main = Main.new db, rules.cleanser, merger
-main.run ARGV
+#!/bin/bash
+start="$(dirname "$0")/start"
+./setup.sh "$start" "$@"
