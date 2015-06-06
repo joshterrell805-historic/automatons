@@ -36,7 +36,7 @@ create table if not exists Address (
     street varchar(100),
     unit varchar(52), -- max length of unit from source records
     city varchar(100),
-    region varchar(5),
+    region varchar(20),
     postcode varchar(20),
     county varchar(100),
     country varchar(5),
