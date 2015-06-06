@@ -73,7 +73,7 @@ Feature: Merging
    Scenario: Merge identical organization records
       Given 2 standard organization source records in SProvider
       When I run a clean
-      And I run a merge
+      And I run a merge with threshold 0.874
       Then the "Merge" table should contain:
       """
       mId: 1
