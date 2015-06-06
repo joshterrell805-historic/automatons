@@ -1,3 +1,9 @@
 #!/bin/bash
 start="$(dirname "$0")/start"
-./setup.sh "$start" "$@"
+
+if [ -e "./bin" ]
+then
+    export PATH="$PATH:$(readlink -e ./bin)"
+fi
+
+setup.sh "$start" "$@"
