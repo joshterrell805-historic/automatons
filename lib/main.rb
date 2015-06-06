@@ -8,6 +8,7 @@ require 'merge-splitter'
 require 'merger'
 
 Sequel.extension :check_insert
+Thread.abort_on_exception = true
 
 class Main
    # Attributes to store the database object and the cleanser
