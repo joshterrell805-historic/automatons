@@ -125,8 +125,6 @@ end
 def with_jruby
    in_separate_environment do
       ENV['RBENV_VERSION'] = 'jruby-9.0.0.0.pre2'
-      ENV['CLASSPATH'] ||= File.absolute_path "."
-      ENV['CLASSPATH'] += ':/usr/share/java/log4j-api-2.0-beta9.jar:log4j-core-2.0-beta9.jar'
       yield
    end
 end
