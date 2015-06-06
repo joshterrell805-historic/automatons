@@ -13,21 +13,32 @@ BIN = File.absolute_path './bin'
 ENV["PATH"] += BIN
 
 
-task default: [:merge]
-
-task cleanse: [:loadDB, :build] do
+task default: :full_merge
+task full_merge: [:full_cleanse, :build] do
    with_jruby do
-      sh "jruby bin/app --cleanse"
+      sh "bin/app --merge"
    end
 end
 
-task :merge do
+task full_cleanse: [:loadDB, :build] do
    with_jruby do
-      sh "jruby bin/app --merge"
+      sh "bin/app --cleanse"
    end
 end
 
-task build: ["MergeAccelerator.class", "table.yaml"]
+task cleanse: :build do
+   with_jruby do
+      sh "bin/app --cleanse"
+   end
+end
+
+task merge: :build do
+   with_jruby do
+      sh "bin/app --merge"
+   end
+end
+
+task build: ["MergeAccelerator.class", "table.yaml", :create]
 
 file "table.yaml" => "match_weights.csv" do |t|
    sh "ruby ./convert_csv_to_yaml.rb #{t.prerequisites[0]}"
