@@ -12,16 +12,19 @@ describe Merger do
 
    describe "#score_records" do
       it "compares two records" do
+      pending "Moved to Java"
          ret = @merger.score_records @first, @first
          expect(ret).to eq(1)
       end
 
       it "compares all fields by default" do
+      pending "Moved to Java"
          ret = @merger.score_records @first, @first
          expect(ret).to eq(1)
       end
 
       it "returns a smaller value if records don't match" do
+      pending "Moved to Java"
          @first[:name] = "tom sawyer"
          @merger.config = [{'fields' => ['name'], 'weight' => 1},
                            {'fields' => ['gender'], 'weight' => 10}]
@@ -54,6 +57,7 @@ describe Merger do
 
    describe "#match_record" do
       it "returns the best match above a threshold with available records" do
+      pending "Moved to Java"
          expect(@merger.match_record @first, @source[1..-1]).to eq(@second)
       end
    end
