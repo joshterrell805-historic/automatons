@@ -4,7 +4,7 @@ class Array
 
       i = 0
       while i+n < max
-         yield self[i..i+n]
+         yield self[i...i+n]
          i += n
       end
 
