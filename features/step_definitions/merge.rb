@@ -1,12 +1,15 @@
 When(/^I run a merge(?: with threshold (\d+(?:.\d+)?))?$/) do |threshold|
    if threshold
-      threshold = threshold.to_f
-   else
-      threshold = 0.9
+      @merge_threshold = threshold.to_f
    end
-   @merger = Merger.new @db
-   @merger.config = [{'fields' => 'all', 'weight' => 10}]
-   @merger.threshold = threshold
-   a = Main.new @db, @cleanser, @merger
+
+   @merge_threshold ||= 0.9
+   @merge_config ||= [{'fields' => 'all', 'weight' => 10}]
+
+   m = Merger.new @db
+   m.config = @merge_config
+   m.threshold = @merge_threshold
+
+   a = Main.new @db, @cleanser, m
    a.merge
 end
