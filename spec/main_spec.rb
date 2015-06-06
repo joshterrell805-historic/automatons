@@ -18,7 +18,9 @@ describe Main do
             source_data = [record1, record2]
 
             @db.as_null_object
-            allow(@db).to receive(:source_records).and_return(source_data)
+            dataset = instance_double("Dataset")
+            allow(@db).to receive(:source_records).and_return(dataset)
+            allow(dataset).to receive(:all).and_return(source_data)
             allow(@cleanser).to receive(:missing).and_return({})
 
             expect(@cleanser).to receive(:cleanse).with(record1).once
