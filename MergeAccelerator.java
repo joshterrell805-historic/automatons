@@ -1,6 +1,7 @@
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class MergeAccelerator {
    static final Logger l = LogManager.getLogger();
@@ -31,39 +32,30 @@ public class MergeAccelerator {
 
    public Integer rule_total(Object[] fields, int weight, HashMap record, HashMap other) {
       int total = 0;
-      l.trace(fields);
-      l.trace(weight);
       for (Object field : fields) {
-         l.trace(field);
          Object val1 = record.get(field);
          Object val2 = other.get(field);
-         l.trace(val1);
-         l.trace(val2);
 
          if (val1 == null || val2 == null) {
             return null;
          }
 
          int dist = edit_dist(val1, val2);
-         l.trace(dist);
          total += rule_resolve(dist, weight);
       }
 
-      l.trace(total);
-      l.trace("Finished rule_total");
       return total;
    }
 
-   public double score_records(HashMap[] rules, HashMap record, HashMap other) {
+   public Object[] score_records(HashMap[] rules, HashMap record, HashMap other) {
       double points_possible = 0;
       double total_points = 0;
 
-      l.trace("Start matching");
-      l.trace(record);
-      l.trace(other);
-      for (HashMap rule : rules) {
-         l.trace("Start rule");
-         l.trace(rule);
+      HashMap rule;
+      ArrayList active_rules = new ArrayList();
+      ArrayList rule_scores = new ArrayList();
+      for (int i = 0; i < rules.length; i++) {
+         rule = rules[i];
          long weight = (Long) rule.get("weight");
 
          Object field_info = rule.get("fields");
@@ -73,6 +65,8 @@ public class MergeAccelerator {
             fields = record.keySet().toArray();
             rule_total = 0;
             Integer partial_total;
+            double rule_score = 0;
+            boolean active = false;
             for (Object key : record.keySet()) {
                Object[] field = {key};
                partial_total = rule_total(field, (int) weight, record, other);
@@ -80,8 +74,14 @@ public class MergeAccelerator {
                   if (weight > 0) {
                      points_possible += weight;
                   }
-                  total_points += partial_total;
+                  rule_score += partial_total;
+                  active = true;
                }
+            }
+            total_points += rule_score;
+            if (active) {
+               active_rules.add(i);
+               rule_scores.add(rule_score);
             }
          } else {
             fields = (Object[]) rule.get("fields");
@@ -91,25 +91,21 @@ public class MergeAccelerator {
                if (weight > 0) {
                   points_possible += weight;
                }
-               total_points += rule_total/((float) fields.length);
+               double rule_score = rule_total/((float) fields.length);
+               total_points += rule_score;
+               active_rules.add(i);
+               rule_scores.add(rule_score);
             }
          }
-
-         l.trace("Total points/points possible");
-         l.trace(total_points);
-         l.trace(points_possible);
       }
 
-      l.trace("Score result");
-      l.trace(total_points);
-      l.trace(points_possible);
-      l.trace(record);
-      l.trace(other);
-      l.trace("Done with score_records");
+      Double points;
       if (points_possible > 0) {
-         return total_points/points_possible;
+         points = total_points/points_possible;
       } else {
-         return -1;
+         points = -1.0;
       }
+      Object [] ret = {points, active_rules, rule_scores};
+      return ret;
    }
 }

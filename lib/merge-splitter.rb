@@ -6,7 +6,7 @@ module Splitter
 
    def insert_new_merge record
       insert_merged_record record
-      insert_contrib_record record, "copy record"
+      insert_contrib_record record
    end
 
    def insert_merged_record record
@@ -19,10 +19,16 @@ module Splitter
       end
    end
 
-   def insert_contrib_record record, audit_reason
+   def insert_contrib_record record
       insert_merge record
       insert_multiple_parts record
-      insert_audit record, audit_reason
+      if record[:rules]
+         record[:rules].each do |rule, score|
+            insert_audit record, rule, score
+         end
+      else
+         insert_no_rules_audit record
+      end
    end
 
    def insert_mprovider record
@@ -42,9 +48,17 @@ module Splitter
       @db.insert_morganization record.filter({:mId => :id})
    end
 
-   def insert_audit record, description
+   def insert_audit record, rule, score
       audit = record.filter [:mId], {:id => :sId}
-      audit[:action] = description
+      audit[:rule] = "%s => %i" % [rule['fields'].to_s, rule['weight']]
+      audit[:score] = score
+      @db.insert_audit audit
+   end
+
+   def insert_no_rules_audit record
+      audit = record.filter [:mId], {:id => :sId}
+      audit[:rule] = "No rules matched"
+      audit[:score] = -1
       @db.insert_audit audit
    end
 

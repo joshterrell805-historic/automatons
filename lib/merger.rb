@@ -13,38 +13,40 @@ class Merger
       @accelerator = MergeAccelerator.new
    end
 
-   def merge_records first, second
+   def merge_records first, second, rules
+      # TODO Make sure that merged records aren't matched again
+      # TODO Make sure that each record is matched against all the others
       # TODO Really merge record
-      merge_reason = "merge duplicate records"
-
       if first[:mId].nil? and second[:mId].nil?
          # BEGIN Do this in a later step in future
          merged = first
-         merge_reason = "merge duplicate records"
 
          @msplitter.insert_merged_record merged
          first[:mId] = second[:mId] = merged[:mId]
          # END do in later step
+         
+         first[:rules] = rules
+         second[:rules] = rules
 
-         @msplitter.insert_contrib_record first, merge_reason
-         @msplitter.insert_contrib_record second, merge_reason
+         @msplitter.insert_contrib_record first
+         @msplitter.insert_contrib_record second
+      elsif first[:mId].nil?
+         first[:mId] = second[:mId]
+         first[:rules] = rules
+         @msplitter.insert_contrib_record first
+      elsif second[:mId].nil?
+         second[:mId] = first[:mId]
+         second[:rules] = rules
+         @msplitter.insert_contrib_record second
       else
-         if first[:mId].nil?
-            first[:mId] = second[:mId]
-            @msplitter.insert_contrib_record first, merge_reason
-         end
-
-         if second[:mId].nil?
-            second[:mId] = first[:mId]
-            @msplitter.insert_contrib_record second, merge_reason
-         end
+         raise "Matched two inserted records. Sad."
       end
    end
 
    def match_record_threaded record, records
       high_score = 0
       pair = nil
-
+      rules = nil
 
       threads = []
       record = java.util.HashMap.new(record)
@@ -59,21 +61,22 @@ class Merger
       end
 
       threads.map do |thr|
-         th_high, th_pair =  thr.value
+         th_high, th_pair, th_rules =  thr.value
          if th_high > high_score and th_high > @threshold
             high_score = th_high
             pair = th_pair
+            rules = th_rules
          end
       end
-      pair
+      [pair, rules]
    end
-
    def match_record record, hunk
       high_score = 0
       pair = nil
+      matched_rules = nil
       hunk.each do |other|
-         score = @accelerator.score_records @java_rules, record, other
-         if score > @threshold
+         score, rules, rule_values = @accelerator.score_records @java_rules, record, other
+         if false and score > @threshold
             p "Over threshold"
             p score
             p record
@@ -82,9 +85,13 @@ class Merger
          if score > @threshold and high_score < score
             high_score = score
             pair = other
+            matched_rules = {}
+            rules.each_with_index do |rule_index, i|
+               matched_rules[@config[rule_index]] = rule_values.get(i)
+            end
          end
       end
-      [high_score, pair]
+      [high_score, pair, matched_rules]
    end
 
    def match_record_list list
@@ -104,14 +111,14 @@ class Merger
       end
 
       list.each_with_index do |record, i|
-         pair = match_record_threaded record, list[i+1..-1]
+         pair, rules = match_record_threaded record, list[i+1..-1]
          # TODO If a record matches a merged record, it should be combined into
          # a merge clump
 
          if pair
             pair = pair.to_hash
             puts "paired a record"
-            merge_records record, pair
+            merge_records record, pair, rules
          else
             @msplitter.insert_new_merge record
          end
