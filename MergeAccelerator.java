@@ -2,27 +2,34 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class MergeAccelerator {
-   public int edit_dist(Object val1, Object val2) {
+
+   /** edit dist returns score 0.0-1.0, 1 being exact match **/
+   public double edit_dist(String val1, String val2) {
+      return (double) Math.max(val1.length(), val2.length()) /
+            Levenshtein.distance(val1, val2);
+   }
+
+   public double edit_dist(Object val1, Object val2) {
       if (val1.equals(val2)) {
-         return 1;
+         return 1.0;
       } else {
-         return 0;
+         return 0.0;
       }
    }
 
-   public int edit_dist(int val1, int val2) {
+   public double edit_dist(int val1, int val2) {
       if (val1 == val2) {
-         return 1;
+         return 1.0;
       } else {
-         return 0;
+         return 0.0;
       }
    }
 
-   private int rule_resolve(int score, int weight) {
+   private int rule_resolve(double score, int weight) {
       if (weight > 0) {
-         return score * weight;
+         return (int)Math.round(score * weight);
       } else {
-         return (1 - score) * weight;
+         return (int)Math.round((1.0 - score) * weight);
       }
    }
 
@@ -37,8 +44,8 @@ public class MergeAccelerator {
             return null;
          }
 
-         int dist = edit_dist(val1, val2);
-         total += rule_resolve(dist, weight);
+         double score = edit_dist(val1, val2);
+         total += rule_resolve(score, weight);
       }
 
       return total;
