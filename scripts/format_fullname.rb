@@ -42,36 +42,36 @@ class FormatFullName
    def FormatFullName.cleanFullName(name)
       name = name.sub(',','').sub('.','')
       @@Replace.each do |key, value|
-	     if name.include? key
-		    name = name.sub(key, value)
+         if name.include? key
+            name = name.sub(key, value)
          end
-	  end
-	  return name
+      end
+      return name
    end
 		 
 
    def FormatFullName.formatName(name)
       # begin by cleaning name for formatting
-	  name = cleanFullName(name)
+      name = cleanFullName(name)
 
       # split name on white space into list of sub strings
       splitname = name.split()
-	  fullprefix = []
-	  fullsuffix = []
+      fullprefix = []
+      fullsuffix = []
       fullcredentials = []
 
       # parse prefixes, suffixes, and prefixes from split name
       while (prefix = FormatFullName.parseSplitName(splitname, 'prefix')) != ''
          fullprefix.push(prefix)
-	     splitname.delete(prefix)
+	 splitname.delete(prefix)
       end
-	  while (suffix = FormatFullName.parseSplitName(splitname, 'suffix')) != ''
+      while (suffix = FormatFullName.parseSplitName(splitname, 'suffix')) != ''
          fullsuffix.push(suffix)
-	     splitname.delete(suffix)
+	 splitname.delete(suffix)
       end
       while (credential = FormatFullName.parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
-	     splitname.delete(credential)
+	 splitname.delete(credential)
       end
 
       # parse first and middle name from split name
@@ -81,14 +81,14 @@ class FormatFullName
          word.capitalize
       end
 
-	  # combine formatted full name and return
+      # combine formatted full name and return
       fullname =
-	    (fullprefix ? (fullprefix.sort!).join(',') : '') + "|" +
+         (fullprefix ? (fullprefix.sort!).join(',') : '') + "|" +
          firstname.capitalize + "|" +
          middlename.capitalize + "|" +
          lastname + "|" + 
-	    (fullsuffix ? (fullsuffix.sort!).join(',') : '') + "|" +
-		(fullcredentials ? (fullcredentials.sort!).join(',') : '')
+         (fullsuffix ? (fullsuffix.sort!).join(',') : '') + "|" +
+         (fullcredentials ? (fullcredentials.sort!).join(',') : '')
       return fullname
    end
    
