@@ -154,10 +154,11 @@ create table if not exists Audit (
     id int not null auto_increment primary key,
     sId int not null,
     mId int not null,
-    -- these fields are provisional;
-    -- we haven't developed audit details much
-    action varchar(255) not null,
+    score int not null, -- This is the score of the winning source record
+    -- This is a string describing the rule. For now, it'll take the form of
+    -- "[field, field] => value"
+    rule varchar(255) not null,
     foreign key (sId, mId) references Merge (sId, mId),
-    CONSTRAINT uc_Audit UNIQUE (sId, mId)
+    CONSTRAINT uc_Audit UNIQUE (sId, mId, rule)
 )
 ENGINE = MEMORY;
