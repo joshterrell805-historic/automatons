@@ -21,4 +21,4 @@ table.yaml
 bin/ruby-prof
 bin/ruby-prof-check-trace
 *.class
-Rakefile.lock
+Gemfile.lock
