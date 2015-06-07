@@ -11,21 +11,21 @@ class FormatFullName
    # returns an prefix, suffix, or medical credential found in the split name
    def FormatFullName.parseSplitName(splitname, type)
       item = ""
-	  if type == 'prefix'
-	     t = @@Prefixes
-	  elsif type == 'suffix'
-	     t = @@Suffixes
-	  else
-	     t = @@Credentials
-	  end
-	  for s in t
-	     for n in splitname
-		    if n == s
-			   item = s
-			end
-	     end
-	  end
-	  return item
+      if type == 'prefix'
+         t = @@Prefixes
+      elsif type == 'suffix'
+         t = @@Suffixes
+      else
+         t = @@Credentials
+      end
+      for s in t
+         for n in splitname
+            if n == s
+               item = s
+	    end
+	 end
+      end
+      return item
    end
     
    #def FormatFullName.checkSpecialCases(name)
@@ -59,8 +59,8 @@ class FormatFullName
       fullcredentials = []
 
       # parse prefixes, suffixes, and prefixes from split name
-	  prefix = FormatFullName.parseSplitName(splitname, 'prefix')
-	  suffix = FormatFullName.parseSplitname(splitname, 'suffix')
+      prefix = FormatFullName.parseSplitName(splitname, 'prefix')
+      suffix = FormatFullName.parseSplitname(splitname, 'suffix')
       while (credential = FormatFullName.parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
          splitname.delete(credential)
