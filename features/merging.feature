@@ -57,18 +57,6 @@ Feature: Merging
       mId: 1
       address: 1
       """
-      And the "Audit" table should contain:
-      """
-      sId: 24614
-      mId: 1
-      action: "merge duplicate records"
-      """
-      And the "Audit" table should contain:
-      """
-      sId: 24615
-      mId: 1
-      action: "merge duplicate records"
-      """
 
    Scenario: Merge identical organization records
       Given 2 standard organization source records in SProvider
@@ -119,18 +107,6 @@ Feature: Merging
       mId: 1
       address: 1
       """
-      And the "Audit" table should contain:
-      """
-      sId: 24614
-      mId: 1
-      action: "merge duplicate records"
-      """
-      And the "Audit" table should contain:
-      """
-      sId: 24615
-      mId: 1
-      action: "merge duplicate records"
-      """
 
    Scenario: Treat a lone record as merged
       Given a standard individual source record in SProvider
@@ -179,12 +155,6 @@ Feature: Merging
       mId: 1
       address: 1
       """
-      And the "Audit" table should contain:
-      """
-      sId: 24614
-      mId: 1
-      action: "copy record"
-      """
 
    Scenario: Treat a lone organization record as merged
       Given a standard organization source record in SProvider
@@ -229,10 +199,4 @@ Feature: Merging
       """
       mId: 1
       address: 1
-      """
-      And the "Audit" table should contain:
-      """
-      sId: 24614
-      mId: 1
-      action: "copy record"
       """
