@@ -1,10 +1,7 @@
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 public class MergeAccelerator {
-   static final Logger l = LogManager.getLogger();
    public int edit_dist(Object val1, Object val2) {
       if (val1.equals(val2)) {
          return 1;
