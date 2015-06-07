@@ -56,22 +56,14 @@ class FormatFullName
 
       # split name on white space into list of sub strings
       splitname = name.split()
-      fullprefix = []
-      fullsuffix = []
       fullcredentials = []
 
       # parse prefixes, suffixes, and prefixes from split name
-      while (prefix = FormatFullName.parseSplitName(splitname, 'prefix')) != ''
-         fullprefix.push(prefix)
-	 splitname.delete(prefix)
-      end
-      while (suffix = FormatFullName.parseSplitName(splitname, 'suffix')) != ''
-         fullsuffix.push(suffix)
-	 splitname.delete(suffix)
-      end
+	  prefix = FormatFullName.parseSplitName(splitname, 'prefix')
+	  suffix = FormatFullName.parseSplitname(splitname, 'suffix')
       while (credential = FormatFullName.parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
-	 splitname.delete(credential)
+         splitname.delete(credential)
       end
 
       # parse first and middle name from split name
@@ -83,11 +75,11 @@ class FormatFullName
 
       # combine formatted full name and return
       fullname =
-         (fullprefix ? (fullprefix.sort!).join(',') : '') + "|" +
+         prefix.capitalize + "|" +
          firstname.capitalize + "|" +
          middlename.capitalize + "|" +
          lastname + "|" + 
-         (fullsuffix ? (fullsuffix.sort!).join(',') : '') + "|" +
+         suffix.capitalize + "|" +
          (fullcredentials ? (fullcredentials.sort!).join(',') : '')
       return fullname
    end
