@@ -119,7 +119,7 @@ task :coverage do
 end
 
 file "MergeAccelerator.class" => "MergeAccelerator.java" do |t|
-   sh "javac -extdirs /usr/share/java #{t.prerequisites[0]}"
+   sh "javac #{t.prerequisites[0]}"
 end
 CLEAN << "MergeAccelerator.class"
 
