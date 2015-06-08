@@ -34,13 +34,13 @@ class FormatFullName
          if name == key
             name = value
          end
-      end
-      return name
+	   end
+	   return name
    end
    
    # returns full name string with problem sub-strings replaced and commas and periods removed
    def FormatFullName.cleanFullName(name)
-      name = name.sub(',','').sub('.','')
+      name = name.sub(',','').sub('.','').upcase
       @@Replace.each do |key, value|
          if name.include? key
             name = name.sub(key, value)
@@ -51,10 +51,10 @@ class FormatFullName
 		 
 		 
    def FormatFullName.formatName(name) 
-      # check for special problem cases
-      if FormatFullName.checkSpecialCases(name) != name
-         return FormatFullName.checkSpecialCases(name)
-      end
+	  # check for special problem cases
+	  if FormatFullName.checkSpecialCases(name) != name
+	     return FormatFullName.checkSpecialCases(name)
+	  end
 	  
       # begin by cleaning name for formatting
       name = cleanFullName(name)
@@ -84,7 +84,7 @@ class FormatFullName
 
       # combine formatted full name and return
       fullname =
-         prefix.capitalize + "|" +
+         prefix + "|" +
          firstname.capitalize + "|" +
          middlename.capitalize + "|" +
          lastname + "|" + 
@@ -95,10 +95,10 @@ class FormatFullName
    
 end
 
-#puts FormatFullName::formatName ""
 #puts FormatFullName::formatName "Test Doctor Test Doctor"
+#puts FormatFullName::formatName ""
 #puts FormatFullName::formatName "Bob Jones"
 #puts FormatFullName::formatName "Muhammad A Khan"
 #puts FormatFullName::formatName "Negar FNP Khaefi"
 #puts FormatFullName::formatName "Leah Gaedeke - Bc FNP"
-#puts FormatFullName::formatName "Doctor John 'Appletini' PhD Dorian III MD BS"
+#puts FormatFullName::formatName "DocTOR John 'APPLETINI' PHD Dorian III md bs"
