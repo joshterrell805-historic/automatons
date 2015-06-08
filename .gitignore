@@ -6,6 +6,8 @@ bin/htmldiff
 bin/ldiff
 bin/rspec
 bin/sequel
+bin/ruby-prof
+bin/ruby-prof-check-trace
 vendor/
 audit.log
 Providers-clean.tsv
@@ -18,7 +20,4 @@ doc/
 .inch
 
 table.yaml
-bin/ruby-prof
-bin/ruby-prof-check-trace
 *.class
-Gemfile.lock
