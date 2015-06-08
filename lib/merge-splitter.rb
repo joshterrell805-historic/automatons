@@ -51,7 +51,7 @@ module Splitter
    end
 
    def insert_audit record, rule, score
-      audit = record.filter [:mId], {:id => :sId}
+      audit = record.filter [:mId], {:id => :sId, :match => :other}
       audit[:rule] = "%s => %i" % [rule['fields'].to_s, rule['weight']]
       audit[:score] = score
       @db.insert_audit audit
@@ -61,6 +61,7 @@ module Splitter
       audit = record.filter [:mId], {:id => :sId}
       audit[:rule] = "No rules matched"
       audit[:score] = -1
+      audit[:other] = -1
       @db.insert_audit audit
    end
 
