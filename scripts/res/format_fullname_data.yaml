@@ -28,6 +28,8 @@ replace:
   BSC (PHARM);RPH: BSPHARM RPH
   CCC SLP: CCC-SLP
   CCC/SLP: CCC-SLP
+  CPHT: CPhT
+  LAC: LAc
   LM&FT: LMFT
   M;BB;S: MBBS
   MACCC/SLP: MA CCC-SLP
@@ -35,9 +37,11 @@ replace:
   MT(ASCP): MT ASCP
   NMD: ND # ND and NMD are interchangeable
   NP/CNS: NP CNS
-  PHARM-D: PHARMD
-  PHARM D: PHARMD
+  PHARM-D: PharmD
+  PHARM D: PharmD
+  PHARMD: PharmD
   PHD: PhD
+  PSYD: PsyD
   RN-SA-C: RN SA-C
   "(OPTOMETRIST)": OD
   ACUPUNCTURE: LAC
@@ -195,7 +199,7 @@ credentials:
   - COMT
   - COTA/L
   - CP
-  - CPHT
+  - CPhT
   - CPM
   - CPN
   - CPNP
@@ -379,7 +383,7 @@ credentials:
   - PD
   - PT
   - PTA
-  - PHARMD
+  - PharmD
   - PhD
   - PHN
   - PLPC
@@ -393,7 +397,7 @@ credentials:
   - PNP
   - PNP-BC
   - PSYCH
-  - PSYD
+  - PsyD
   - PSYNP
   - PSYNP-BC
   - PSYNP-C
