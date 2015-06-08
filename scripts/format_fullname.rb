@@ -51,6 +51,11 @@ class FormatFullName
 		 
 
    def FormatFullName.formatName(name)
+      # check for empty name
+	  if name == ''
+	     return '||||'
+	  end
+	  
       # begin by cleaning name for formatting
       name = cleanFullName(name)
 
@@ -60,7 +65,7 @@ class FormatFullName
 
       # parse prefixes, suffixes, and prefixes from split name
       prefix = FormatFullName.parseSplitName(splitname, 'prefix')
-      suffix = FormatFullName.parseSplitname(splitname, 'suffix')
+      suffix = FormatFullName.parseSplitName(splitname, 'suffix')
       while (credential = FormatFullName.parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
          splitname.delete(credential)
@@ -86,6 +91,8 @@ class FormatFullName
    
 end
 
+#puts FormatFullName::formatName ""
+#puts FormatFullName::formatName "Bob Jones"
 #puts FormatFullName::formatName "Muhammad A Khan"
 #puts FormatFullName::formatName "Negar FNP Khaefi"
 #puts FormatFullName::formatName "Leah Gaedeke - Bc FNP"
