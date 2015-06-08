@@ -39,13 +39,13 @@ replace:
   PHARM D: PHARMD
   RN-SA-C: RN SA-C
   "(OPTOMETRIST)": OD
-  #ACUPUNCTURE: ''
-  #ACUPUNCTURIST: ''
+  ACUPUNCTURE: LAC
+  ACUPUNCTURIST: LAC
   BACHELOR IN PSYCHOLO: BSP
   CHIROPRACTOR: DC
   CLINICAL PSYCHOLO: CP
   DENTIST: DDS
-  #DIPL PSYCH: ''
+  DIPL PSYCH: DiplPSYCH
   #DIPLOMATE: ''
   DISPENSING OPTICIAN: RDO
   DOCTOR: Dr
@@ -61,7 +61,7 @@ replace:
   LAC DIPL OM: LAC DiplOM
   LAC DIPLOM: LAC DiplOM
   #LICENSE PSYCHOLOGIST: ''
-  #MCP LPC CANDIDATE: ''
+  LPC CANDIDATE: LPC-Candidate
   MEDICAL DOCTOR: MD
   MEDICAL STUDENT: MS
   #Nurse: ''
@@ -220,6 +220,7 @@ credentials:
   - DHSC
   - DiplAC
   - DiplOM
+  - DiplPSYCH
   - DMD
   - DMIN
   - DMSC
@@ -299,6 +300,7 @@ credentials:
   - LMT
   - LP
   - LPC
+  - LPC-Candidate
   - LPC-S
   - LPN
   - LVN
@@ -308,6 +310,7 @@ credentials:
   - MACP
   - MBA
   - MBBS
+  - MCP
   - MD
   - ME
   - MED
