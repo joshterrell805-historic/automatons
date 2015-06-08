@@ -70,7 +70,12 @@ module Splitter
          source = [
             :id,
             :type,
-            :name
+            :name_prefix,
+            :name_first,
+            :name_middle,
+            :name_last,
+            :name_sufix,
+            :name_credential,
          ]
          data = record.filter source, {mAddress_id: :mailingAddress, pAddress_id: :practiceAddress, phone_id: :phone, primarySpecialty_id: :primarySpecialty, secondarySpecialty_id: :secondarySpecialty}
          @db.insert_cprovider data

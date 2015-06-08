@@ -56,7 +56,12 @@ create table if not exists Specialty (
 create table if not exists CProvider (
     id int not null primary key,
     type enum('Organization', 'Individual') not null,
-    name varchar(255),
+    name_prefix varchar(255),
+    name_first varchar(255),
+    name_middle varchar(255),
+    name_last varchar(255),
+    name_sufix varchar(255),
+    name_credential varchar(255),
     phone int,
     practiceAddress int,
     mailingAddress int,
@@ -86,7 +91,12 @@ create table if not exists COrganization (
 create table if not exists MProvider (
     id int not null auto_increment primary key,
     type enum('Organization', 'Individual') not null,
-    name varchar(255) not null
+    name_prefix varchar(255),
+    name_first varchar(255),
+    name_middle varchar(255),
+    name_last varchar(255),
+    name_sufix varchar(255),
+    name_credential varchar(255)
 );
 -- ENGINE = MEMORY;
 create table if not exists MOrganization (

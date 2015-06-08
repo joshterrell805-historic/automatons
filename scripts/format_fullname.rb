@@ -1,7 +1,7 @@
 require 'psych'
 
 class FormatFullName
-   data = Psych.load_file 'res/format_fullname_data.yaml'
+   data = Psych.load_file 'scripts/res/format_fullname_data.yaml'
    @@Specialcase = data['specialcase']
    @@Replace = data['replace']
    @@Prefixes = data['prefixes']

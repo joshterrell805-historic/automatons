@@ -55,6 +55,24 @@ class Cleanser
             @recorder.add rule, data, result
          end
       end
+
+      if data[:name].count("|") != 5
+         raise "data[:name] (#{data[:name]}) of record ##{data[:id]} was " +
+               "not split into 6 parts"
+      else
+         parts = data[:name].split("|")
+
+         data[:name_prefix] = parts[0]
+         data[:name_first] = parts[1]
+         data[:name_middle] = parts[2]
+         data[:name_last] = parts[3]
+         data[:name_sufix] = parts[4]
+         data[:name_credential] = parts[5]
+
+         data.delete(:name)
+      end
+
+      data
    end
 
    def run_rule name, data

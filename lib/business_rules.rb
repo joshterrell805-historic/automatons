@@ -1,5 +1,7 @@
 require 'cleanser'
 require 'recorder'
+require_relative '../scripts/format_fullname'
+
 class BusinessRules
    attr_accessor :cleanser
    def initialize recorder
@@ -49,6 +51,10 @@ class BusinessRules
 
          rule :phone, /^(\d{2})(\d{3})(\d{3})(\d{4})$/, "country code" do |match|
             format_country_code_phone match[1..4]
+         end
+
+         rule :name, /^(.*)$/, "split name" do |match|
+            FormatFullName.formatName match[1]
          end
       end
    end
