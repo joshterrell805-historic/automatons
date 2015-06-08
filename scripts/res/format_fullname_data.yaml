@@ -30,6 +30,7 @@ replace:
   BSPHARM: BSPharm
   CCC SLP: CCC-SLP
   CCC/SLP: CCC-SLP
+  CCCA: CCC-A
   CPHT: CPhT
   LM&FT: LMFT
   M;BB;S: MBBS
@@ -198,6 +199,7 @@ credentials:
   - CMA-C
   - CMCN
   - CMT
+  - CN-P
   - CNA
   - CNM
   - CNM-BC
@@ -400,6 +402,7 @@ credentials:
   - PT
   - PTA
   - PharmD
+  - PHD
   - PhD
   - PHN
   - PLPC
