@@ -5,8 +5,7 @@ public class MergeAccelerator {
 
    /** edit dist returns score 0.0-1.0, 1 being exact match **/
    public double edit_dist(String val1, String val2) {
-      return (double) Math.max(val1.length(), val2.length()) /
-            Levenshtein.distance(val1, val2);
+      return (double) 1 - Levenshtein.distance(val1, val2)/Math.max(val1.length(), val2.length());
    }
 
    public double edit_dist(Object val1, Object val2) {
@@ -22,6 +21,20 @@ public class MergeAccelerator {
          return 1.0;
       } else {
          return 0.0;
+      }
+   }
+
+   /**
+    * This runs the appropriate version of edit_dist on val1 and val2
+    */
+   public double dispatch(Object val1, Object val2) {
+      Class klass = val1.getClass();
+      if (klass == String.class) {
+         return edit_dist((String) val1, (String) val2);
+      } else if (klass == Integer.class) {
+         return edit_dist((Integer) val1, (Integer) val2);
+      } else {
+         return edit_dist(val1, val2);
       }
    }
 
