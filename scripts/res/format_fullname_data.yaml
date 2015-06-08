@@ -1,91 +1,19 @@
 specialcase:
-  Doctor Test MD:
-  - Dr
-  - Test
-  - ''
-  - ''
-  - MD
-  Test Doctor Test Doctor:
-  - Dr
-  - Test
-  - D
-  - Test
-  - ''
-  # M D ambiguous and so is handled manually
-  NOAH GILSON M D MD:
-  - ''
-  - Noah
-  - ''
-  - Gilson
-  - MD
-  # M D ambiguous and so is handled manually
-  MD Brian Steingo M D Dr:
-  - Dr
-  - Brian
-  - ''
-  - Steingo
-  - MD
-  # M D ambiguous and so is handled manually
-  MD Jeffrey M D Sponsler:
-  - ''
-  - Jeffrey
-  - ''
-  - Sponsler
-  - MD
-  # http://www.hipaaspace.com/Medical_Billing/Coding/National_Provider_Identifier/Codes/NPI_1750554705.txt : 914 962-8267 is fax number
-  Miodrag 914 962 - 8267 Velickovic:
-  - ''
-  - Miodrag
-  - ''
-  - Velickovic
-  - MD,PC
-  # http://www.healthgrades.com/physician/dr-b-chandramouli-yxdc6
-  B.v. Chandramouli:
-  - ''
-  - B
-  - V
-  - Chandramouli
-  - ''
-  # http://www.healthgrades.com/physician/dr-shailesh-rajguru-x82b9
-  RAJGURU DO:
-  - ''
-  - Shailesh
-  - U
-  - Rajguru
-  - DO
-  # typo that title parsing would not catch
-  Rena Holzer MS APRN BC FNP:
-  - ''
-  - Rena
-  - ''
-  - Holzer
-  - ARPN,MS,FNP-BC
-  # http://johnlewisphd.com/
-  PSYCHOLOGIST John W Lewis:
-  - ''
-  - John
-  - W
-  - Lewis
-  - PHD
-  Leah Gaedeke - Bc FNP:
-  - ''
-  - Leah
-  - ''
-  - Gaedeke
-  - FNP-BC
-  Charles H Bell MHA LLL:
-  - ''
-  - Charles
-  - H
-  - Bell
-  - MHA,LLL
-  # M D ambiguous and so is handled manually
-  Richard Hamer M D P A:
-  - ''
-  - Richard
-  - ''
-  - Hamer
-  - MD,PA
+  '': '|||||'                                                       # garbage
+  Doctor Test MD: "Dr|Test||||MD"                                   # garbage
+  Test Doctor Test Doctor: "Dr|Test|D|Test||"                       # garbage
+  MD Brian Steingo M D Dr: "Dr|Brian||Steingo||MD"                  # M D ambiguous and so is handled manually
+  MD Jeffrey M D Sponsler: "|Jeffrey||Sponsler||MD"                 # M D ambiguous and so is handled manually
+  NOAH GILSON M D MD: "|Noah||Gilson||MD"                           # M D ambiguous and so is handled manually
+  Richard Hamer M D P A: "|Richard||Hamer||MD,PA"                   # M D ambiguous and so is handled manually
+  Miodrag 914 962 - 8267 Velickovic: "|Miodrag||Velickovic||MD,PC"  # http://www.hipaaspace.com/Medical_Billing/Coding/National_Provider_Identifier/Codes/NPI_1750554705.txt : 914 962-8267 is fax number
+  B.v. Chandramouli: "|B|V|Chandramouli||"                          # http://www.healthgrades.com/physician/dr-b-chandramouli-yxdc6
+  RAJGURU DO: "|Shailesh|U|Rajguru||DO"                             # http://www.healthgrades.com/physician/dr-shailesh-rajguru-x82b9
+  PSYCHOLOGIST John W Lewis: "|John|W|Lewis||PHD"                   # http://johnlewisphd.com/
+  Charles H Bell MHA LLL: "|Charles|H|Bell|III|MHA"                 # typo that parsing would not catch
+  Leah Gaedeke - Bc FNP: "|Leah||Gaedeke||FNP-BC"                   # typo that parsing would not catch
+  Rena Holzer MS APRN BC FNP: "|Rena||Holzer||ARPN,MS,FNP-BC"       # typo that parsing would not catch
+
 replace:
   "- -": "-"
   " - ": "-"
@@ -165,16 +93,19 @@ replace:
   #Replace['DM D']                = 'DMD'
   #Replace['M D']                 = 'MD'
   #Replace['RP']                  = 'RCP'
+  
 prefixes:
   - Dr
   - Ms
   - Mr
+  
 suffixes:
   - Sr
   - Jr
   - I
   - II
   - III
+  
 credentials:
   - AAHIVS
   - ABFP
