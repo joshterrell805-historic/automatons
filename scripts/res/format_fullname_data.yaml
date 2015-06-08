@@ -37,6 +37,7 @@ replace:
   NP/CNS: NP CNS
   PHARM-D: PHARMD
   PHARM D: PHARMD
+  PhD: PHD
   RN-SA-C: RN SA-C
   "(OPTOMETRIST)": OD
   ACUPUNCTURE: LAC
@@ -379,8 +380,8 @@ credentials:
   - PD
   - PT
   - PTA
-  - PHD
   - PHARMD
+  - PHD
   - PHN
   - PLPC
   - PM
