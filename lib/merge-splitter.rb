@@ -32,7 +32,9 @@ module Splitter
    end
 
    def insert_mprovider record
-      record[:mId] = @db.insert_mprovider record.filter [:type, :name]
+      record[:mId] = @db.insert_mprovider record.filter [:type, :name_prefix,
+            :name_first, :name_middle, :name_last, :name_sufix,
+            :name_credential]
    end
 
    def insert_merge record
