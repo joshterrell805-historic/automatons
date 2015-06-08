@@ -14,7 +14,6 @@ class Merger
    end
 
    def merge_records first, second, rules
-      # TODO Make sure that merged records aren't matched again
       # TODO Make sure that each record is matched against all the others
       # TODO Really merge record
       if first[:mId].nil? and second[:mId].nil?
@@ -111,6 +110,9 @@ class Merger
       end
 
       list.each_with_index do |record, i|
+         if record[:mId] != nil
+            next
+         end
          pair, rules = match_record_threaded record, list[i+1..-1]
          # TODO If a record matches a merged record, it should be combined into
          # a merge clump
