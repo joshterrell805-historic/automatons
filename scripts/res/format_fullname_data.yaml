@@ -25,16 +25,21 @@ replace:
   ARRT-RT(R): ARRT(R) RT
   ARRT (R)(CT): AART(R)(CT)
   BC FMP: FMP-BC
-  BSC (PHARM);RPH: BSPHARM RPH
+  BPHARM: BPharm
+  BSC (PHARM);RPH: BSPharm RPH
+  BSPHARM: BSPharm
   CCC SLP: CCC-SLP
   CCC/SLP: CCC-SLP
   CPHT: CPhT
-  LAC: LAc
   LM&FT: LMFT
   M;BB;S: MBBS
   MACCC/SLP: MA CCC-SLP
+  MD/PHD: MD PhD
   MDFAAP: MD FAAP
+  MPHARM: MPharm
+  MPSYCH: MPsych
   MT(ASCP): MT ASCP
+  N E L S O N: NELSON
   NMD: ND # ND and NMD are interchangeable
   NP/CNS: NP CNS
   PHARM-D: PharmD
@@ -42,7 +47,11 @@ replace:
   PHARMD: PharmD
   PHD: PhD
   PSYD: PsyD
+  PSYNP: PsyNP
+  PSYNP-BC: PsyNP-BC
+  PSYNP-C: PsyNP-C
   RN-SA-C: RN SA-C
+  
   "(OPTOMETRIST)": OD
   ACUPUNCTURE: LAC
   ACUPUNCTURIST: LAC
@@ -55,7 +64,7 @@ replace:
   DISPENSING OPTICIAN: RDO
   DOCTOR: DR
   DOCTOR OF OPTOMETRY: OD
-  DOCTOR OF PSYCH: PSYD
+  DOCTOR OF PSYCH: PsyD
   DOCTORATE: MD
   FAMILY NURSE PRACTIT: FNP
   HEARING AID DISPENSE: HAD
@@ -80,8 +89,8 @@ replace:
   OPTOMETRIST: OD
   PARAMEDIC: PM
   PEDIATRIC: PD
-  PHARMACIST: PHARMD
-  PHARMACY TECHNICIAN: CPHT
+  PHARMACIST: PharmD
+  PHARMACY TECHNICIAN: CPhT
   PHYSICIAN ASSISTANT: PA
   PHYSICIANS ASSISTANT: PA
   PHYSICAL THERAPIST: PT
@@ -100,7 +109,6 @@ replace:
   
 prefixes:
   - DR
-  - MS
   - MR
   
 suffixes:
@@ -115,6 +123,7 @@ credentials:
   - ABFP
   - ABO
   - ABPP
+  - ACA
   - ACNP
   - ACNP-BC
   - ACNP-C
@@ -144,13 +153,14 @@ credentials:
   - AU
   - AUD
   - BA
+  - BC
   - BC-ADM
   - BCNSP
   - BCPS
   - BOCO
   - BOCOP
-  - BPHARM
-  - BSPHARM
+  - BPharm
+  - BSPharm
   - BS
   - BSN
   - BSP
@@ -168,6 +178,7 @@ credentials:
   - CDE
   - CDTC
   - CEN
+  - CFA
   - CFNP
   - CF-SLP
   - CGC
@@ -216,6 +227,7 @@ credentials:
   - CSFA
   - CSO
   - CSSD
+  - CST
   - CTBS
   - CVA
   - DA
@@ -273,12 +285,14 @@ credentials:
   - FNP-C
   - FP
   - FPA
+  - FRCP
   - FRCS
   - FSCAI
   - FSTS
   - GNP
   - GNP-BC
   - HAD
+  - HIS
   - HOS
   - IBCLC
   - IV
@@ -287,6 +301,7 @@ credentials:
   - LCDC
   - LCPC
   - LCSW
+  - LCSW-C
   - LCSW-R
   - LD
   - LE
@@ -307,6 +322,7 @@ credentials:
   - LPC-Candidate
   - LPC-S
   - LPN
+  - LSW
   - LVN
   - LVT
   - MA
@@ -331,8 +347,8 @@ credentials:
   - MPA
   - MPAS
   - MPH
-  - MPHARM
-  - MPSYNCH
+  - MPharm
+  - MPsych
   - MPT
   - MRCP(UK)
   - MS
@@ -398,9 +414,9 @@ credentials:
   - PNP-BC
   - PSYCH
   - PsyD
-  - PSYNP
-  - PSYNP-BC
-  - PSYNP-C
+  - PsyNP
+  - PsyNP-BC
+  - PsyNP-C
   - PT
   - PTA
   - QCSW
