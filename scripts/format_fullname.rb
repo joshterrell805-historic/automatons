@@ -40,21 +40,47 @@ class FormatFullName
    
    # returns full name string with problem sub-strings replaced and commas and periods removed
    def FormatFullName.cleanFullName(name)
-      name = name.sub(',','').sub('.','').upcase
+      name = name.gsub(/\,/,"").gsub(/\./,"").upcase
       @@Replace.each do |key, value|
-         if name.include? key
+         while name.include? key
             name = name.sub(key, value)
          end
       end
       return name
    end
+   
+   # combines credentials separated by whitespace in split name
+   def FormatFullName.cleanSplitName(splitname)
+      for name in splitname
+         if name.size == 1
+            temp = name
+            j = splitname.index(name)
+            i = j + 1
+            while splitname[i] && splitname[i].size == 1
+                temp += splitname[i]
+                i += 1
+                for title in @@Credentials
+                   if temp == title
+                      while j < i
+                         splitname.delete_at(j)
+                         i -= 1
+                      end
+                      splitname.push(temp)
+                      i = j
+                      temp = ''
+                   end
+                end
+             end  
+          end
+       end
+   end
 		 
 		 
    def FormatFullName.formatName(name) 
-	  # check for special problem cases
-	  if FormatFullName.checkSpecialCases(name) != name
-	     return FormatFullName.checkSpecialCases(name)
-	  end
+      # check for special problem cases
+      if checkSpecialCases(name) != name
+         return checkSpecialCases(name)
+      end
 	  
       # begin by cleaning name for formatting
       name = cleanFullName(name)
@@ -62,15 +88,18 @@ class FormatFullName
       # split name on white space into list of sub strings
       splitname = name.split()
       fullcredentials = []
+	  
+      #
+      cleanSplitName(splitname)
 
       # parse prefixes, suffixes, and prefixes from split name
-      if (prefix = FormatFullName.parseSplitName(splitname, 'prefix')) != ''
+      if (prefix = parseSplitName(splitname, 'prefix')) != ''
 	     splitname.delete(prefix)
 	  end
-      if (suffix = FormatFullName.parseSplitName(splitname, 'suffix')) != ''
+      if (suffix = parseSplitName(splitname, 'suffix')) != ''
 	     splitname.delete(suffix)
       end
-      while (credential = FormatFullName.parseSplitName(splitname, 'credential')) != ''
+      while (credential = parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
          splitname.delete(credential)
       end
@@ -92,7 +121,6 @@ class FormatFullName
          (fullcredentials ? (fullcredentials.sort!).join(',') : '')
       return fullname
    end
-   
 end
 
 #puts FormatFullName::formatName "Test Doctor Test Doctor"
@@ -102,3 +130,7 @@ end
 #puts FormatFullName::formatName "Negar FNP Khaefi"
 #puts FormatFullName::formatName "Leah Gaedeke - Bc FNP"
 #puts FormatFullName::formatName "DocTOR John 'APPLETINI' PHD Dorian III md bs"
+#puts FormatFullName::formatName "Man O. Steel, Acupuncturist"
+#puts FormatFullName::formatName "Md. Owusu - Bekoe Opoku - Owusu"
+#puts FormatFullName::formatName "Joseph J Taylor Pt."
+#puts FormatFullName::formatName "SIDDHARAMA PAWATE M B B S M D"
