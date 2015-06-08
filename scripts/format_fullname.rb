@@ -64,8 +64,12 @@ class FormatFullName
       fullcredentials = []
 
       # parse prefixes, suffixes, and prefixes from split name
-      prefix = FormatFullName.parseSplitName(splitname, 'prefix')
-      suffix = FormatFullName.parseSplitName(splitname, 'suffix')
+      if (prefix = FormatFullName.parseSplitName(splitname, 'prefix')) != ''
+	     splitname.delete(prefix)
+	  end
+      if (suffix = FormatFullName.parseSplitName(splitname, 'suffix')) != ''
+	     splitname.delete(suffix)
+      end
       while (credential = FormatFullName.parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
          splitname.delete(credential)
@@ -84,7 +88,7 @@ class FormatFullName
          firstname.capitalize + "|" +
          middlename.capitalize + "|" +
          lastname + "|" + 
-         suffix.capitalize + "|" +
+         suffix + "|" +
          (fullcredentials ? (fullcredentials.sort!).join(',') : '')
       return fullname
    end
@@ -97,3 +101,4 @@ end
 #puts FormatFullName::formatName "Muhammad A Khan"
 #puts FormatFullName::formatName "Negar FNP Khaefi"
 #puts FormatFullName::formatName "Leah Gaedeke - Bc FNP"
+#puts FormatFullName::formatName "Doctor John 'Appletini' PhD Dorian III MD BS"
