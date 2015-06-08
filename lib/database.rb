@@ -70,8 +70,51 @@ class Database
       @db[:COrganization].insert data
    end
 
+   def cprovider_records
+      dataset = @db[:CProvider]
+      .left_join(:PhoneNumber, :id => :CProvider__phone)
+      .left_join(:Address___p, :id => :CProvider__practiceAddress)
+      .left_join(:Address___m, :id => :CProvider__mailingAddress)
+      .order(:CProvider__id)
+      .select_all
+   end
+
+   ## Appends selects for all the columns in the given schema, aliasing each to qualifierColumn
+   # i.e.
+   # given select_qualified(dataset, a, :Address, p)
+   # it makes a lot of aliases like "`a`.`id` AS `pId`", "`a`.`street` AS
+   # `pStreet`", etc.
+   #
+   # @param skip An Array of columns to skip, rather than converting.
+   # @param dataset The dataset to select from
+   # @param table The alias of the table to rename columns from
+   # @param schema The DB name of the table to rename columns from. Will be used to get the list of columns.
+   # @param qualifier The identifier to prepend to each column name
+   def select_qualified dataset, table, schema, qualifier, skip={}
+      skips = {}
+      skip.each {|i| skips[i] = true}
+      @db.schema(schema).each do |column|
+         name = column.first
+         if skips[name]
+            next
+         end
+         dataset = dataset.select_append(("#{table}__#{name.to_s}___#{qualifier}#{name.to_s.capitalize!}").to_sym)
+      end
+      dataset
+   end
+   private :select_qualified
+
+   def dataset_filter dataset
+      dataset.select_append(:PhoneNumber__phone___phone, :PhoneNumber__id___phoneId)
+      dataset = select_qualified dataset, 'p', :Address, 'p'
+      dataset = select_qualified dataset, 'm', :Address, 'm', [:id]
+      dataset
+   end
+   private :dataset_filter
+
    def cindividual_records start=nil
-      data = @db[:CIndividual].join(:CProvider, [:id]).order(:id)
+      data = cprovider_records.join(:CIndividual, :id => :CProvider__id)
+      data = dataset_filter data
       if start
          data.where{id > start[:id]}
       else
@@ -80,7 +123,8 @@ class Database
    end
 
    def corganization_records start=nil
-      data = @db[:COrganization].join(:CProvider, [:id]).order(:id)
+      data = cprovider_records.join(:COrganization, :id => :CProvider__id)
+      data = dataset_filter data
       if start
          data.where{id > start[:id]}
       else
