@@ -37,7 +37,7 @@ replace:
   NP/CNS: NP CNS
   PHARM-D: PHARMD
   PHARM D: PHARMD
-  PhD: PHD
+  PHD: PhD
   RN-SA-C: RN SA-C
   "(OPTOMETRIST)": OD
   ACUPUNCTURE: LAC
@@ -49,7 +49,7 @@ replace:
   DIPL PSYCH: DiplPSYCH
   #DIPLOMATE: ''
   DISPENSING OPTICIAN: RDO
-  DOCTOR: Dr
+  DOCTOR: DR
   DOCTOR OF OPTOMETRY: OD
   DOCTOR OF PSYCH: PSYD
   DOCTORATE: MD
@@ -65,7 +65,7 @@ replace:
   LPC CANDIDATE: LPC-Candidate
   MEDICAL DOCTOR: MD
   MEDICAL STUDENT: MS
-  #Nurse: ''
+  #NURSE: ''
   NURSE PRACTITIONER: NP
   NURSE PRACTITIONER FAM: FNP
   ORTHODONTIST: DDS MS
@@ -75,7 +75,7 @@ replace:
   OPTICIAN: OPT
   OPTOMETRIST: OD
   PARAMEDIC: PM
-  Pediatric: PD
+  PEDIATRIC: PD
   PHARMACIST: PHARMD
   PHARMACY TECHNICIAN: CPHT
   PHYSICIAN ASSISTANT: PA
@@ -90,19 +90,18 @@ replace:
   STUDENT: MS
   # MAY CAUSE ISSUES WITHOUT REGEX
   #Replace['LCPC']                = 'LPC'
-  #Replace['DR']                  = 'Dr'
   #Replace['DM D']                = 'DMD'
   #Replace['M D']                 = 'MD'
   #Replace['RP']                  = 'RCP'
   
 prefixes:
-  - Dr
-  - Ms
-  - Mr
+  - DR
+  - MS
+  - MR
   
 suffixes:
-  - Sr
-  - Jr
+  - SR
+  - JR
   - I
   - II
   - III
@@ -381,7 +380,7 @@ credentials:
   - PT
   - PTA
   - PHARMD
-  - PHD
+  - PhD
   - PHN
   - PLPC
   - PM
