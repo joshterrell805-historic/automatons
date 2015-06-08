@@ -1,74 +1,91 @@
 specialcase:
   Doctor Test MD:
-  - Dr,MD
-  - ''
-  - ''
+  - Dr
   - Test
+  - ''
+  - ''
+  - MD
   Test Doctor Test Doctor:
   - Dr
-  - ''
-  - ''
   - Test
-  NOAH GILSON M D MD: # M D ambiguous and should be handled manually
-  - MD
+  - D
+  - Test
+  - ''
+  # M D ambiguous and so is handled manually
+  NOAH GILSON M D MD:
+  - ''
   - Noah
   - ''
   - Gilson
-  MD Brian Steingo M D Dr: # M D ambiguous and should be handled manually
-  - Dr,MD
+  - MD
+  # M D ambiguous and so is handled manually
+  MD Brian Steingo M D Dr:
+  - Dr
   - Brian
   - ''
   - Steingo
-  MD Jeffrey M D Sponsler: # M D ambiguous and should be handled manually
   - MD
+  # M D ambiguous and so is handled manually
+  MD Jeffrey M D Sponsler:
+  - ''
   - Jeffrey
   - ''
   - Sponsler
-  Miodrag 914 962 - 8267 Velickovic: # http://www.hipaaspace.com/Medical_Billing/Coding/National_Provider_Identifier/Codes/NPI_1750554705.txt : 914 962-8267 is fax number
-  - MD,PC
+  - MD
+  # http://www.hipaaspace.com/Medical_Billing/Coding/National_Provider_Identifier/Codes/NPI_1750554705.txt : 914 962-8267 is fax number
+  Miodrag 914 962 - 8267 Velickovic:
+  - ''
   - Miodrag
   - ''
   - Velickovic
-  B.v. Chandramouli: # http://www.healthgrades.com/physician/dr-b-chandramouli-yxdc6
+  - MD,PC
+  # http://www.healthgrades.com/physician/dr-b-chandramouli-yxdc6
+  B.v. Chandramouli:
   - ''
   - B
   - V
   - Chandramouli
-  THOMAS ERIC PA MOOSE RPA-C: # title should be outside other name fields
-  - PA,RPA-C
-  - Thomas
-  - Eric
-  - Moose
-  RAJGURU DO: # http://www.healthgrades.com/physician/dr-shailesh-rajguru-x82b9
-  - DO
+  - ''
+  # http://www.healthgrades.com/physician/dr-shailesh-rajguru-x82b9
+  RAJGURU DO:
+  - ''
   - Shailesh
   - U
   - Rajguru
-  Rena Holzer MS APRN BC FNP: # typo that title parsing would not catch
-  - ARPN,MS,FNP-BC
+  - DO
+  # typo that title parsing would not catch
+  Rena Holzer MS APRN BC FNP:
+  - ''
   - Rena
   - ''
   - Holzer
-  PSYCHOLOGIST John W Lewis: # http://johnlewisphd.com/
-  - PHD
+  - ARPN,MS,FNP-BC
+  # http://johnlewisphd.com/
+  PSYCHOLOGIST John W Lewis:
+  - ''
   - John
   - W
   - Lewis
+  - PHD
   Leah Gaedeke - Bc FNP:
-  - FNP-BC
+  - ''
   - Leah
   - ''
   - Gaedeke
+  - FNP-BC
   Charles H Bell MHA LLL:
-  - MHA,LLL
+  - ''
   - Charles
   - H
   - Bell
+  - MHA,LLL
+  # M D ambiguous and so is handled manually
   Richard Hamer M D P A:
-  - MD,PA
+  - ''
   - Richard
   - ''
   - Hamer
+  - MD,PA
 replace:
   "- -": "-"
   " - ": "-"
