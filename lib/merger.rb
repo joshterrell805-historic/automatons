@@ -24,17 +24,20 @@ class Merger
          # END do in later step
          
          first[:rules] = rules
+         first[:match] = second[:id]
          second[:rules] = rules
-
+         second[:match] = first[:id]
          @msplitter.insert_contrib_record first
          @msplitter.insert_contrib_record second
       elsif first[:mId].nil?
          first[:mId] = second[:mId]
          first[:rules] = rules
+         first[:match] = second[:id]
          @msplitter.insert_contrib_record first
       elsif second[:mId].nil?
          second[:mId] = first[:mId]
          second[:rules] = rules
+         second[:match] = first[:id]
          @msplitter.insert_contrib_record second
       else
          raise "Matched two inserted records. Sad."
