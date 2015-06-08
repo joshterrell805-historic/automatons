@@ -28,15 +28,15 @@ class FormatFullName
       return item
    end
     
-   #def FormatFullName.checkSpecialCases(name)
-   #   @@Specialcase.each do |key, value|
-   #   if name == key
-   #	     return True
-   #	  end
-   #	        return False
-   #		 end
-   #   return True
-   #end
+   # returns fully formatted name in case of specific documented issue
+   def FormatFullName.checkSpecialCases(name)
+      @@Specialcase.each do |key, value|
+         if name == key
+            name = value
+         end
+      end
+      return name
+   end
    
    # returns full name string with problem sub-strings replaced and commas and periods removed
    def FormatFullName.cleanFullName(name)
@@ -49,12 +49,12 @@ class FormatFullName
       return name
    end
 		 
-
-   def FormatFullName.formatName(name)
-      # check for empty name
-	  if name == ''
-	     return '||||'
-	  end
+		 
+   def FormatFullName.formatName(name) 
+      # check for special problem cases
+      if FormatFullName.checkSpecialCases(name) != name
+         return FormatFullName.checkSpecialCases(name)
+      end
 	  
       # begin by cleaning name for formatting
       name = cleanFullName(name)
@@ -92,6 +92,7 @@ class FormatFullName
 end
 
 #puts FormatFullName::formatName ""
+#puts FormatFullName::formatName "Test Doctor Test Doctor"
 #puts FormatFullName::formatName "Bob Jones"
 #puts FormatFullName::formatName "Muhammad A Khan"
 #puts FormatFullName::formatName "Negar FNP Khaefi"
