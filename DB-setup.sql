@@ -60,7 +60,7 @@ create table if not exists CProvider (
     name_first varchar(255),
     name_middle varchar(255),
     name_last varchar(255),
-    name_sufix varchar(255),
+    name_suffix varchar(255),
     name_credential varchar(255),
     phone int,
     practiceAddress int,
@@ -95,7 +95,7 @@ create table if not exists MProvider (
     name_first varchar(255),
     name_middle varchar(255),
     name_last varchar(255),
-    name_sufix varchar(255),
+    name_suffix varchar(255),
     name_credential varchar(255)
 )
 ENGINE = MEMORY;

@@ -33,7 +33,7 @@ module Splitter
 
    def insert_mprovider record
       record[:mId] = @db.insert_mprovider record.filter [:type, :name_prefix,
-            :name_first, :name_middle, :name_last, :name_sufix,
+            :name_first, :name_middle, :name_last, :name_suffix,
             :name_credential]
    end
 
