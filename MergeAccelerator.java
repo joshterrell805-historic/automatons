@@ -52,7 +52,7 @@ public class MergeAccelerator {
    }
 
 
-   public Integer rule_total(Object[] fields, int weight, HashMap record, HashMap other) {
+   public Integer rule_total(Object[] fields, int weight, HashMap record, HashMap other, String compare_type) {
       int total = 0;
       for (Object field : fields) {
          Object val1 = record.get(field);
@@ -62,7 +62,12 @@ public class MergeAccelerator {
             return null;
          }
 
-         double score = dispatch(val1, val2);
+         double score;
+         if (compare_type != null && compare_type.equals("edit")) {
+            score = edit_dist((String) val1, (String) val2);
+         } else {
+            score = edit_dist(val1, val2);
+         }
          total += rule_resolve(score, weight);
       }
 
@@ -81,6 +86,7 @@ public class MergeAccelerator {
          long weight = (Long) rule.get("weight");
 
          Object field_info = rule.get("fields");
+         String compare_type = (String) rule.get("compare");
          Object[] fields;
          Integer rule_total;
          if (field_info.getClass() == String.class) {
@@ -91,7 +97,7 @@ public class MergeAccelerator {
             boolean active = false;
             for (Object key : record.keySet()) {
                Object[] field = {key};
-               partial_total = rule_total(field, (int) weight, record, other);
+               partial_total = rule_total(field, (int) weight, record, other, compare_type);
                if (partial_total != null) {
                   if (weight > 0) {
                      points_possible += weight;
@@ -107,7 +113,7 @@ public class MergeAccelerator {
             }
          } else {
             fields = (Object[]) rule.get("fields");
-            rule_total = rule_total(fields, (int) weight, record, other);
+            rule_total = rule_total(fields, (int) weight, record, other, compare_type);
 
             if (rule_total != null) {
                if (weight > 0) {
