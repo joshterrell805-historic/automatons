@@ -6,4 +6,4 @@ then
     export PATH="$PATH:$(readlink -e ./bin)"
 fi
 
-setup.sh jruby "$start" "$@"
+setup.sh jruby --server "$start" "$@"
