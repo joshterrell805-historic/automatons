@@ -40,7 +40,7 @@ class FormatFullName
    
    # returns full name string with problem sub-strings replaced and commas and periods removed
    def FormatFullName.cleanFullName(name)
-      name = name.gsub(/\,/,"").gsub(/\./,"").upcase
+      name = name.gsub(/\,/,"").gsub(/\./,"").gsub(/\>/,"").upcase
       @@Replace.each do |key, value|
          while name.include? key
             name = name.sub(key, value)
@@ -52,7 +52,7 @@ class FormatFullName
    # returns split name list with problem sub-strings replaced
    def FormatFullName.cleanSplitName(splitname)
       for name in splitname
-         if name.size == 1 || name == 'PH'
+         if name.size == 1 || name == 'PH' || name == 'PA'
             temp = name
             j = splitname.index(name)
             i = j + 1
