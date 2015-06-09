@@ -50,7 +50,7 @@ class Merger
 
       threads = []
       record = java.util.HashMap.new(record)
-      records.split(1500) do |hunk|
+      records.split(7500) do |hunk|
          threads << Thread.new do
             accelerator = MergeAccelerator.new
             match_record record, hunk, accelerator
