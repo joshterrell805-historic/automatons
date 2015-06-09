@@ -62,7 +62,7 @@ public class MergeAccelerator {
             return null;
          }
 
-         double score = edit_dist(val1, val2);
+         double score = dispatch(val1, val2);
          total += rule_resolve(score, weight);
       }
 

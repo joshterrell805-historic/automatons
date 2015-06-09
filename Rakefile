@@ -118,7 +118,7 @@ task :coverage do
    end
 end
 
-file "MergeAccelerator.class" => "MergeAccelerator.java" do |t|
+file "MergeAccelerator.class" => ["MergeAccelerator.java", "Levenshtein.java"] do |t|
    sh "javac #{t.prerequisites[0]}"
 end
 CLEAN << "MergeAccelerator.class"
