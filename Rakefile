@@ -49,11 +49,7 @@ task loadDB: [:loadProviders, :loadSpecialties]
 
 desc "Load the raw Providers into the database"
 task :loadProviders => :create do
-   begin
-      sh "node #{BIN}/insert-providers.js Providers.tsv"
-   rescue
-      puts "It appears Providers is already loaded. Ignoring. If you really wanted to load Providers, clean it first."
-   end
+   mysqlimport "--local", "--ignore-lines=1", "automatons", "SProvider.tsv"
 end
 
 desc "Load the raw Specialties into the database"
@@ -143,5 +139,11 @@ end
 def mysql *arg
    client = SQLClient.new
    puts (client.command + arg).join(' ')
+   client.run *arg
+end
+
+def mysqlimport *arg
+   client = SQLImport.new
+   puts (client.import + arg).join(' ')
    client.run *arg
 end

@@ -222,3 +222,30 @@ class SQLClient
       end
    end
 end
+
+class SQLImport
+   include SQLConfig
+   def initialize
+      set_from_env
+   end
+
+   def import
+      ['mysqlimport',
+       '--user', @user,
+       '--password=' + @password
+      ]
+   end
+
+   ## Runs the MySQL client with options
+   #
+   # Makes it easy to do things like sourcing a file into the DB
+   # @param args Options as for Kernel#spawn
+   def run *args
+      if RUBY_PLATFORM == 'java'
+         cmd = (import + args).join " "
+         system cmd
+      else
+         system *import, *args
+      end
+   end
+end
