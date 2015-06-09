@@ -68,9 +68,11 @@ class Main
 
    ## Merges all the records it can from the database
    def merge
+start = Time.now
       count = 0
       count += @merger.match_record_list @db.cindividual_records.all
       count += @merger.match_record_list @db.corganization_records.all
       count
+puts "Total time: #{Time.now - start}"
    end
 end

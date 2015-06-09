@@ -89,7 +89,6 @@ class Merger
    end
 
    def match_record_list list
-      start = Time.now
       count = 0
 
       @java_rules = @config.map do |rule|
@@ -117,10 +116,6 @@ class Merger
          end
          count += 1
          puts "#{count} records merged"
-         if count >= 1000
-            puts "Total time: #{Time.now - start}s"
-            exit
-         end
       end
       count
    end
