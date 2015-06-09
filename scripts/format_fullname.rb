@@ -22,8 +22,8 @@ class FormatFullName
          for name in splitname
             if name == item
                result = name
-	        end
-	     end
+            end
+         end
       end
       return result
    end
@@ -34,13 +34,13 @@ class FormatFullName
          if name == key
             name = value
          end
-	   end
-	   return name
+      end
+      return name
    end
    
    # returns full name string with problem sub-strings replaced and commas and periods removed
    def FormatFullName.cleanFullName(name)
-      name = name.gsub(/\,/,"").gsub(/\./,"").upcase
+      name = name.gsub(/\,/,"").gsub(/\./,"").gsub(/\>/,"").upcase
       @@Replace.each do |key, value|
          while name.include? key
             name = name.sub(key, value)
@@ -49,38 +49,41 @@ class FormatFullName
       return name
    end
    
-   # combines credentials separated by whitespace in split name
+   # returns split name list with problem sub-strings replaced
    def FormatFullName.cleanSplitName(splitname)
       for name in splitname
-         if name.size == 1
+         if name.size == 1 || name == 'PH' || name == 'PA'
             temp = name
             j = splitname.index(name)
             i = j + 1
             while splitname[i] && splitname[i].size == 1
-                temp += splitname[i]
-                i += 1
-                for title in @@Credentials
-                   if temp == title
-                      while j < i
-                         splitname.delete_at(j)
-                         i -= 1
-                      end
-                      splitname.push(temp)
-                      i = j
-                      temp = ''
-                   end
-                end
-             end  
-          end
-       end
+               temp += splitname[i]
+               i += 1
+               for title in @@Credentials
+                  if temp == title
+                     if temp == 'PHD'
+                        temp = 'PhD'
+                     end
+                     while j < i
+                        splitname.delete_at(j)
+                        i -= 1
+                     end
+                     splitname.push(temp)
+                     i = j
+                     temp = ''
+                  end
+               end
+            end  
+         end
+      end
    end
 		 
 		 
    def FormatFullName.formatName(name) 
-      # check for special problem cases
-      if checkSpecialCases(name) != name
-         return checkSpecialCases(name)
-      end
+	  # check for special problem cases
+	  if checkSpecialCases(name) != name
+	     return checkSpecialCases(name)
+	  end
 	  
       # begin by cleaning name for formatting
       name = cleanFullName(name)
@@ -88,16 +91,16 @@ class FormatFullName
       # split name on white space into list of sub strings
       splitname = name.split()
       fullcredentials = []
-	  
+
       #
       cleanSplitName(splitname)
 
       # parse prefixes, suffixes, and prefixes from split name
       if (prefix = parseSplitName(splitname, 'prefix')) != ''
-	     splitname.delete(prefix)
-	  end
+         splitname.delete(prefix)
+      end
       if (suffix = parseSplitName(splitname, 'suffix')) != ''
-	     splitname.delete(suffix)
+         splitname.delete(suffix)
       end
       while (credential = parseSplitName(splitname, 'credential')) != ''
          fullcredentials.push(credential)
@@ -134,3 +137,4 @@ end
 #puts FormatFullName::formatName "Md. Owusu - Bekoe Opoku - Owusu"
 #puts FormatFullName::formatName "Joseph J Taylor Pt."
 #puts FormatFullName::formatName "SIDDHARAMA PAWATE M B B S M D"
+#puts FormatFullName::formatName "Test Doctor Test Doctor Ph D M D D S"

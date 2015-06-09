@@ -66,8 +66,8 @@ module Splitter
    end
 
    def insert_multiple_parts record
-      if not record[:phone].nil?
-         @db.insert_provider_x_phone record.filter [:mId, :phone]
+      if not record[:phoneId].nil?
+         @db.insert_provider_x_phone record.filter [:mId], {:phoneId => :phone}
       end
       if not record[:primarySpecialty].nil?
          @db.insert_provider_x_primary_specialty record.filter([:mId], {:primarySpecialty => :specialty})

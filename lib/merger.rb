@@ -10,7 +10,6 @@ class Merger
       @msplitter = Splitter::MergeSplitter.new db
       @config = [{'fields' => 'all', 'weight' => 1}]
       @threshold = 0.9
-      @accelerator = MergeAccelerator.new
    end
 
    def merge_records first, second, rules
@@ -53,7 +52,8 @@ class Merger
       record = java.util.HashMap.new(record)
       records.split(1500) do |hunk|
          threads << Thread.new do
-            match_record record, hunk
+            accelerator = MergeAccelerator.new
+            match_record record, hunk, accelerator
          end
       end
 
@@ -67,7 +67,7 @@ class Merger
       end
       [pair, rules]
    end
-   def match_record record, hunk
+   def match_record record, hunk, accelerator
       high_score = 0
       pair = nil
       matched_rules = nil
@@ -75,7 +75,7 @@ class Merger
          if other == record
             next
          end
-         score, rules, rule_values = @accelerator.score_records @java_rules, record, java.util.HashMap.new(other)
+         score, rules, rule_values = accelerator.score_records @java_rules, record, java.util.HashMap.new(other)
          if score > @threshold and high_score < score
             high_score = score
             pair = other

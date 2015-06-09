@@ -38,12 +38,12 @@ task merge: :build do
    end
 end
 
-task build: ["MergeAccelerator.class", "table.yaml", :create]
+task build: ["MergeAccelerator.class", :create]
 
 file "table.yaml" => "match_weights.csv" do |t|
    sh "ruby ./convert_csv_to_yaml.rb #{t.prerequisites[0]}"
 end
-CLEAN << "table.yaml"
+#CLEAN << "table.yaml"
 
 task loadDB: [:loadProviders, :loadSpecialties]
 
@@ -118,7 +118,7 @@ task :coverage do
    end
 end
 
-file "MergeAccelerator.class" => "MergeAccelerator.java" do |t|
+file "MergeAccelerator.class" => ["MergeAccelerator.java", "Levenshtein.java"] do |t|
    sh "javac #{t.prerequisites[0]}"
 end
 CLEAN << "MergeAccelerator.class"

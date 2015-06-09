@@ -2,23 +2,19 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class MergeAccelerator {
+   private Levenshtein compare;
+
+   public MergeAccelerator() {
+      compare = new Levenshtein();
+   }
 
    /** edit dist returns score 0.0-1.0, 1 being exact match **/
    public double edit_dist(String val1, String val2) {
-      return (double) Math.max(val1.length(), val2.length()) /
-            Levenshtein.distance(val1, val2);
+      return (double) 1 - compare.distance(val1, val2)/Math.max(val1.length(), val2.length());
    }
 
    public double edit_dist(Object val1, Object val2) {
       if (val1.equals(val2)) {
-         return 1.0;
-      } else {
-         return 0.0;
-      }
-   }
-
-   public double edit_dist(int val1, int val2) {
-      if (val1 == val2) {
          return 1.0;
       } else {
          return 0.0;
@@ -34,7 +30,7 @@ public class MergeAccelerator {
    }
 
 
-   public Integer rule_total(Object[] fields, int weight, HashMap record, HashMap other) {
+   public Integer rule_total(Object[] fields, int weight, HashMap record, HashMap other, String compare_type) {
       int total = 0;
       for (Object field : fields) {
          Object val1 = record.get(field);
@@ -44,7 +40,12 @@ public class MergeAccelerator {
             return null;
          }
 
-         double score = edit_dist(val1, val2);
+         double score;
+         if (compare_type != null && compare_type.equals("edit")) {
+            score = edit_dist((String) val1, (String) val2);
+         } else {
+            score = edit_dist(val1, val2);
+         }
          total += rule_resolve(score, weight);
       }
 
@@ -63,6 +64,7 @@ public class MergeAccelerator {
          long weight = (Long) rule.get("weight");
 
          Object field_info = rule.get("fields");
+         String compare_type = (String) rule.get("compare");
          Object[] fields;
          Integer rule_total;
          if (field_info.getClass() == String.class) {
@@ -73,7 +75,7 @@ public class MergeAccelerator {
             boolean active = false;
             for (Object key : record.keySet()) {
                Object[] field = {key};
-               partial_total = rule_total(field, (int) weight, record, other);
+               partial_total = rule_total(field, (int) weight, record, other, compare_type);
                if (partial_total != null) {
                   if (weight > 0) {
                      points_possible += weight;
@@ -89,7 +91,7 @@ public class MergeAccelerator {
             }
          } else {
             fields = (Object[]) rule.get("fields");
-            rule_total = rule_total(fields, (int) weight, record, other);
+            rule_total = rule_total(fields, (int) weight, record, other, compare_type);
 
             if (rule_total != null) {
                if (weight > 0) {

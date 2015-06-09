@@ -1,115 +1,162 @@
 specialcase:
-  '': '|||||'                                                       # garbage
-  Doctor Test MD: "Dr|Test||||MD"                                   # garbage
-  Test Doctor Test Doctor: "Dr|Test|D|Test||"                       # garbage
-  MD Brian Steingo M D Dr: "Dr|Brian||Steingo||MD"                  # M D ambiguous and so is handled manually
-  MD Jeffrey M D Sponsler: "|Jeffrey||Sponsler||MD"                 # M D ambiguous and so is handled manually
-  NOAH GILSON M D MD: "|Noah||Gilson||MD"                           # M D ambiguous and so is handled manually
-  Richard Hamer M D P A: "|Richard||Hamer||MD,PA"                   # M D ambiguous and so is handled manually
+  '': '|||||'                                                       # misc
+  James M Cochran M D MD PHD: "|James|M|Cochran||MD,PhD"            # misc
+  L AC John Nathan Ross: "|John|Nathan|Ross||LAC"                   # misc
+  T R Rick Lawson Dds Pc: "|Tr|Rick|Lawson||DDS,PC"                 # misc 
   Miodrag 914 962 - 8267 Velickovic: "|Miodrag||Velickovic||MD,PC"  # http://www.hipaaspace.com/Medical_Billing/Coding/National_Provider_Identifier/Codes/NPI_1750554705.txt : 914 962-8267 is fax number
   B.v. Chandramouli: "|B|V|Chandramouli||"                          # http://www.healthgrades.com/physician/dr-b-chandramouli-yxdc6
   RAJGURU DO: "|Shailesh|U|Rajguru||DO"                             # http://www.healthgrades.com/physician/dr-shailesh-rajguru-x82b9
-  PSYCHOLOGIST John W Lewis: "|John|W|Lewis||PHD"                   # http://johnlewisphd.com/
+  NYS LICENSED CLINICA Lana M Ackaway: "|Lana|M|Ackaway||LCSW-R"    # http://www.lanaackaway.com/AboutMe.en.html
+  PSYCHOLOGIST John W Lewis: "|John|W|Lewis||PhD"                   # http://johnlewisphd.com/
   Charles H Bell MHA LLL: "|Charles|H|Bell|III|MHA"                 # typo that parsing would not catch
   Leah Gaedeke - Bc FNP: "|Leah||Gaedeke||FNP-BC"                   # typo that parsing would not catch
   Rena Holzer MS APRN BC FNP: "|Rena||Holzer||ARPN,MS,FNP-BC"       # typo that parsing would not catch
-
+  
 replace:
   "- -": "-"
   " - ": "-"
+  " H H ": H
   "(NP)": NP
   "(ASCP)": ASCP
+  2nd Address: ''
   A-SLP: SLP-A
   APN-CPNP: APN CPNP
   APN/NP: APN NP
+  APRNBC: APRN-BC
+  ARNP/CPNP: ARNP CPNP
   ARRT-RT(R): ARRT(R) RT
   ARRT (R)(CT): AART(R)(CT)
+  ATC/PT: ATC PT
   BC FMP: FMP-BC
   BPHARM: BPharm
   BSC (PHARM);RPH: BSPharm RPH
   BSPHARM: BSPharm
   CCC SLP: CCC-SLP
   CCC/SLP: CCC-SLP
+  CCCSLP: CCC-SLP
+  CCCA: CCC-A
+  CERT AVT: CertAVT
+  CNS/ARNP: CNS ARNP
+  COTA /L: COTA/L
+  COTAL: COTA/L
   CPHT: CPhT
+  DM D: DMD
+  INTERN: Intern
   LM&FT: LMFT
+  LMSW- IPR: LMSW-IPR
   M;BB;S: MBBS
   MACCC/SLP: MA CCC-SLP
+  MACCCSLP: MA CCC-SLP
+  MD/HOS: MD HOS
+  MD/MPH: MD MPH
   MD/PHD: MD PhD
+  MDCM: MD CM
   MDFAAP: MD FAAP
+  MDFACC: MD FACC
+  MED/LPC: MED LPC
+  MLDT-CLT: MLDT CLT
+  Moved Office: ''
   MPHARM: MPharm
   MPSYCH: MPsych
+  MS-CCC-SLP: MS CCC-SLP
+  MS/CCC-A: MS CCC-A
+  MSN-ARPN: MSN, ARPN
   MT(ASCP): MT ASCP
+  N E A L O N: NEALON
   N E L S O N: NELSON
   NMD: ND # ND and NMD are interchangeable
   NP/CNS: NP CNS
+  "PA- C": PA-C
+  "PA -C": PA-C
   PHARM-D: PharmD
   PHARM D: PharmD
   PHARMD: PharmD
   PHD: PhD
+  PSY D: PsyD
   PSYD: PsyD
   PSYNP: PsyNP
   PSYNP-BC: PsyNP-BC
   PSYNP-C: PsyNP-C
+  RAS/CATC: RAS CATC
+  R EEG/EP T/RPSGT: REEG EPT RPSGT
+  R EP T: REPT
   RN-SA-C: RN SA-C
   
   "(OPTOMETRIST)": OD
   ACUPUNCTURE: LAC
   ACUPUNCTURIST: LAC
   BACHELOR IN PSYCHOLO: BSP
+  CERTIFIED PEDORTHIST: CPED
   CHIROPRACTOR: DC
   CLINICAL PSYCHOLO: CP
+  #COUNSELING: ''
+  #COUNSELOR: ''
   DENTIST: DDS
+  #DEVELOPMENTAL INTERV: ''
   DIPL PSYCH: DiplPSYCH
-  #DIPLOMATE: ''
+  DIPLOMATE: MD
   DISPENSING OPTICIAN: RDO
-  DOCTOR: DR
+  MEDICAL DOCTOR: MD
   DOCTOR OF OPTOMETRY: OD
   DOCTOR OF PSYCH: PsyD
   DOCTORATE: MD
+  DOCTOR: DR
+  #ELEMENTARY EDUC: ''
   FAMILY NURSE PRACTIT: FNP
   HEARING AID DISPENSE: HAD
   HEARING AID SPECIAL: HIS
   HEARING SPECIALIST: HIS
+  HOME HEALTH AIDE: HHA
   HOSPITALIST: HOS
+  #HUMAN SERVICES: ''
   LAC DIPL OF AC: LAC DiplAC
   LAC DIPL OM: LAC DiplOM
   LAC DIPLOM: LAC DiplOM
   #LICENSE PSYCHOLOGIST: ''
+  #LICENSED COUNSELOR: ''
   LPC CANDIDATE: LPC-Candidate
-  MEDICAL DOCTOR: MD
+  MASSAGE THERAPIST: LMT
+  MASTECTOMY FITTER: CMF
   MEDICAL STUDENT: MS
-  #NURSE: ''
+  #MFT-INTERN: ''
+  MIDWIFE: CNM
+  NURSE PRACTIONER FAM: FNP
   NURSE PRACTITIONER: NP
   NURSE PRACTITIONER FAM: FNP
+  REGISTER NURSE: RN
+  REGISTERED NURSE: RN
+  NURSE: RN
   ORTHODONTIST: DDS MS
-  #ORTHOTIST: ''
+  ORTHOTIST: CO
+  OPHTHALMOLOGIST: DO
+  #OPTHALMIC DISPENSER: ''
   OPTICAL DISPENSER: ROD
   #OPTICAL SUPPLIERS: ''
   OPTICIAN: OPT
   OPTOMETRIST: OD
   PARAMEDIC: PM
   PEDIATRIC: PD
+  PEDORTHIST: CPED
   PHARMACIST: PharmD
   PHARMACY TECHNICIAN: CPhT
   PHYSICIAN ASSISTANT: PA
+  PHYSICIAN ASSTISTANT: PA
   PHYSICIANS ASSISTANT: PA
   PHYSICAL THERAPIST: PT
-  #PSYCHIATRY: ''
-  #PSYCHOLOGY: ''
-  REGISTER NURSE: RN
-  REGISTERED NURSE: RN
+  POLYGRAPH EXAMINER: Polygrapher
+  PSYCHIATRY: PSYCH
+  PSYCHOLOGY: PSYD
+  #RECOVERY ASSISTANT: ''
   REGISTERED OPTICIAN: OPT
+  SLP ASSISTANT: SLP-A
+  SOCIAL WORKER: LCSW
   SPCH LANGUAGE PATH: SLP
+  #SPECIAL EDUCATOR: ''
+  SPEECH PATHOLOGIST: SLP
   STUDENT: MS
-  # MAY CAUSE ISSUES WITHOUT REGEX
-  #Replace['LCPC']                = 'LPC'
-  #Replace['DM D']                = 'DMD'
-  #Replace['M D']                 = 'MD'
-  #Replace['RP']                  = 'RCP'
   
 prefixes:
   - DR
-  - MR
   
 suffixes:
   - SR
@@ -119,69 +166,116 @@ suffixes:
   - III
   
 credentials:
+  - AAC
   - AAHIVS
+  - AAS-HIS
   - ABFP
   - ABO
   - ABPP
+  - ABSM
+  - AC
   - ACA
   - ACNP
   - ACNP-BC
   - ACNP-C
+  - ACNS-BC
+  - ACSW
+  - ADC3
   - AGACNP
-  - AGACNP-C
   - AGACNP-BC
+  - AGACNP-C
+  - AGNP
   - ANP
   - ANP-BC
   - ANP-C
   - AOCNP
+  - AP
   - APN
+  - APN-BC
+  - APN-C
+  - APN-CNS
+  - APNP
   - APRN
   - APRN-BC
   - APRN-C
   - ARNP
   - ARNP-BC
   - ARNP-C
+  - ARPN
   - ARRT(R)
   - ARRT(R)(CT)
   - ASCP
   - ASN
   - AT
   - ATC
+  - ATP
   - ATR
   - ATR-BC
   - ATR-C
   - AU
   - AUD
   - BA
+  - BBA
   - BC
   - BC-ADM
+  - BC-HIS
+  - BCBA
+  - BCD
+  - BCH
   - BCNSP
   - BCPS
+  - BCSS
+  - BED
   - BOCO
   - BOCOP
   - BPharm
-  - BSPharm
   - BS
+  - BSC
   - BSN
+  - BSN-RN
   - BSP
+  - BSPH
+  - BSPharm
   - BSRS
   - BSW
-  - CATC
+  - C-NP
+  - C-PNP
+  - CADAC
+  - CADC-II
   - CANP
+  - CAS
+  - CASAC
+  - CATC
   - CBE
+  - CCC
   - CCC-A
   - CCC-SLP
+  - CCC-SLP/L
+  - CCC/A
+  - CCDP-D
   - CCM
+  - CCMHC
   - CCRN
+  - CCSP
+  - CCSW
   - CD
   - CDA
   - CDE
+  - CDM
+  - CDPT
   - CDTC
+  - CEAP
+  - CEAP
   - CEN
-  - CFA
-  - CFNP
+  - CertAVT
   - CF-SLP
+  - CFA
+  - CFM
+  - CFNP
+  - CFO
+  - CFP
   - CGC
+  - CHB
   - CHN
   - CHP
   - CHPA
@@ -190,6 +284,8 @@ credentials:
   - CHSE
   - CHSS
   - CHT
+  - CHTD
+  - CLC
   - CLE
   - CLT
   - CM
@@ -197,29 +293,44 @@ credentials:
   - CMA-A
   - CMA-C
   - CMCN
+  - CMF
   - CMT
+  - CN-P
   - CNA
+  - CNIM
   - CNM
   - CNM-BC
+  - CNN
+  - CNOR
   - CNP
   - CNS
   - CNS-BC
   - CNS-LS
   - CNSC
   - CNSD
+  - CO
   - COMT
+  - COTA
   - COTA/L
   - CP
+  - CPCS
+  - CPED
   - CPhT
   - CPM
   - CPN
   - CPNP
+  - CPNP-AC
   - CPNP-PC
+  - CPO
+  - CPO
+  - CPOT
   - CPT
   - CRNA
+  - CRNFA
+  - CRNI
   - CRNP
   - CRNP-BC
-  - CRNP-PMH
+  - CRNP-PM
   - CRT
   - CRTT
   - CS
@@ -228,11 +339,15 @@ credentials:
   - CSO
   - CSSD
   - CST
+  - CSW
   - CTBS
   - CVA
   - DA
+  - DABCN
   - DC
   - DDS
+  - DDSPC
+  - DH
   - DHSC
   - DiplAC
   - DiplOM
@@ -244,36 +359,47 @@ credentials:
   - DNP
   - DNP-C
   - DO
+  - DOM
   - DP
   - DPH
   - DPM
+  - DPS
   - DPT
   - DRNP
+  - DRPH
   - DS
   - DTM&H
   - DVM
   - EDD
+  - EDS
   - EMD
+  - EMT
   - EMT-B
+  - EMT-I
   - EMT-I/85
   - EMT-I/99
   - EMT-P
+  - EPT
+  - FAAA
   - FAAEM
   - FAAFP
   - FAAN
+  - FAAO
   - FAAP
   - FACC
+  - FACCP
   - FACD
   - FACE
   - FACEP
-  - FACG
   - FACFAS
+  - FACG
+  - FACMMS
   - FACOFP
   - FACOG
   - FACOS
   - FACP
-  - FACCP
   - FACS
+  - FAGD
   - FASHP
   - FASPEN
   - FASPS
@@ -286,90 +412,153 @@ credentials:
   - FP
   - FPA
   - FRCP
+  - FRCPC
   - FRCS
   - FSCAI
   - FSTS
+  - G-PA
   - GNP
   - GNP-BC
   - HAD
+  - HHA
   - HIS
   - HOS
+  - HSPP
   - IBCLC
+  - ICADC
+  - IDC
+  - Intern
   - IV
+  - JD
+  - KT
   - LAC
+  - LADC
   - LAT
+  - LC
+  - LCAC
+  - LCAS
+  - LCASA
   - LCDC
   - LCPC
+  - LCS
   - LCSW
   - LCSW-C
+  - LCSW-P
   - LCSW-R
+  - LCSWA
   - LD
+  - LDN
+  - LDO
   - LE
+  - LGPC
+  - LGSW
+  - LIC
   - LICSW
+  - LIOOC
+  - LISW
   - LISW-S
   - LLC
   - LLL
+  - LLMSW
+  - LLP
+  - LLPC
   - LM
+  - LMBT
+  - LMBT
   - LMCT
   - LMFT
   - LMHC
+  - LMHC-A
   - LMHP
+  - LMP
   - LMSW
   - LMSW-IPR
   - LMT
+  - LNP
   - LP
   - LPC
   - LPC-Candidate
+  - LPC-MH
   - LPC-S
+  - LPCA
+  - LPCC
   - LPN
+  - LPT
+  - LRD
+  - LSA
+  - LSAC
   - LSW
   - LVN
   - LVT
   - MA
   - MAC
   - MACP
+  - MAT
+  - MB
   - MBA
+  - MBBCH
   - MBBS
+  - MBE
   - MCP
+  - MCR
   - MD
   - ME
   - MED
+  - MFCC
   - MFT
+  - MFTI
   - MHA
   - MHRS
   - MHS
+  - MLDT
   - MLS
   - MLT
+  - MMFT
   - MMS
   - MMSC
+  - MN-LADC
   - MOT
   - MOTR/L
+  - MP
   - MPA
   - MPAS
   - MPH
   - MPharm
+  - MPPH
   - MPsych
   - MPT
   - MRCP(UK)
+  - MRP
   - MS
   - MSBCBA
   - MSC
+  - MSCN
+  - MSD
   - MSE
+  - MSED
+  - MSN
   - MSN
   - MSN(R)
+  - MSNA
   - MSPAS
   - MSPC
+  - MSPH
   - MSPT
-  - MSN
+  - MSSW
   - MSW
   - MT
+  - MT-BC
+  - NASM-CES
+  - NBC-HIS
   - NBCCH
   - NBCCH-PS
   - NBCDCH
   - NBCDCH-PS
   - NBCFCH
   - NBCFCH-PS
+  - NCAC
   - NCC
+  - NCSC
   - ND
   - NNP
   - NNP-BC
@@ -380,28 +569,42 @@ credentials:
   - NREMR
   - NREMT
   - NRP
-  - OD
+  - NYS
+  - NYS
   - OCN
   - OCS
+  - OD
+  - OF
   - ONC
   - ONP
   - ONP-C
   - OPA-C
   - OPT
+  - OT
   - OT/L
+  - OT/R
+  - OTA
   - OTD
   - OTR
   - OTR/L
+  - OTRL
   - PA
   - PA-C
   - PA-S
+  - PAC
+  - PAC
   - PC
+  - PCC
+  - PCC-S
   - PD
-  - PT
-  - PTA
   - PharmD
   - PhD
+  - PHD
   - PHN
+  - PL
+  - PLC
+  - PLLC
+  - PLMHP
   - PLPC
   - PM
   - PMHCNS
@@ -411,7 +614,11 @@ credentials:
   - PMHNP-BC
   - PMHNP-C
   - PNP
+  - PNP-AC
   - PNP-BC
+  - Polygrapher
+  - PS
+  - PSY
   - PSYCH
   - PsyD
   - PsyNP
@@ -422,32 +629,65 @@ credentials:
   - QCSW
   - QMHA
   - QMHP
+  - QP
   - RAS
   - RAS-CA
   - RCP
+  - RCS
   - RD
   - RDA
+  - RDCDE
+  - RDCS
+  - RDCS
   - RDH
+  - RDHAP
+  - RDMS
   - RDO
+  - REEG
+  - RKT
   - RMA
   - RN
+  - RN-FNP
   - RNA
   - RNC
   - RNFA
+  - RNP
+  - RNP
+  - RNP
   - RPA-C
+  - RPAC
   - RPH
+  - RPSGT
   - RPT
   - RRT
   - RRT-ACCS
   - RRT-NPS
   - RRT-SDS
+  - RRW
   - RT
   - RT(T)
   - RVT
   - SA-C
+  - SAP
+  - SC
+  - SCD
   - SCS
+  - SLP
   - SLP-A
+  - SLPD
+  - SOIDC
+  - SPTA
+  - SRNA
   - ST
+  - SUPV
+  - SW
+  - TEM
+  - TLLP
+  - TLPC
+  - TR
+  - UCSW
+  - UTT
+  - VI
   - WHNP
   - WHNP-BC
   - WHNP-C
