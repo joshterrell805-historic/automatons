@@ -63,11 +63,13 @@ class Cleanser
          parts = data[:name].split("|")
 
          data[:name_prefix] = parts[0] || ""
-         data[:name_first] = parts[1] || ""
-         data[:name_middle] = parts[2] || ""
-         data[:name_last] = parts[3] || ""
-         data[:name_suffix] = parts[4] || ""
-         data[:name_credential] = parts[5] || ""
+
+         data[:name_prefix] = parts[0] == "" ? nil : parts[0]
+         data[:name_first] = parts[1] == ""  ? nil : parts[1]
+         data[:name_middle] = parts[2] == "" ? nil : parts[2]
+         data[:name_last] = parts[3] == "" ? nil : parts[3]
+         data[:name_suffix] = parts[4] == "" ? nil : parts[4]
+         data[:name_credential] = parts[5] == "" ? nil : parts[5]
 
          data.delete(:name)
       end
