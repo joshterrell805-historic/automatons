@@ -24,13 +24,13 @@ create table if not exists SProvider (
     primarySpecialty varchar(255),
     secondarySpecialty varchar(255)
 )
-ENGINE = MEMORY;
+;
 create table if not exists PhoneNumber (
     id int not null auto_increment primary key,
     phone varchar(255) not null,
     unique(phone)
 )
-ENGINE = MEMORY;
+;
 create table if not exists Address (
     id int not null auto_increment primary key,
     street varchar(100),
@@ -42,7 +42,7 @@ create table if not exists Address (
     country varchar(5),
     CONSTRAINT uc_Address UNIQUE (street, unit, city, region, postcode, county, country)
 )
-ENGINE = MEMORY;
+;
 create table if not exists Specialty (
     parentId int,
     id int not null primary key auto_increment,
@@ -52,7 +52,7 @@ create table if not exists Specialty (
     foreign key (parentId) references Specialty (id),
     CONSTRAINT uc_Specialty UNIQUE (parentid, title)
 )
-ENGINE = MEMORY;
+;
 create table if not exists CProvider (
     id int not null primary key,
     type enum('Organization', 'Individual') not null,
@@ -74,7 +74,7 @@ create table if not exists CProvider (
     foreign key (primarySpecialty) references Specialty (id),
     foreign key (secondarySpecialty) references Specialty (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists CIndividual (
     id int not null primary key,
     gender char(1),
@@ -82,12 +82,12 @@ create table if not exists CIndividual (
     isSoleProprietor enum('y', 'n', 'x'),
     foreign key (id) references CProvider (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists COrganization (
     id int not null auto_increment primary key,
     foreign key (id) references CProvider (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MProvider (
     id int not null auto_increment primary key,
     type enum('Organization', 'Individual') not null,
@@ -98,12 +98,12 @@ create table if not exists MProvider (
     name_suffix varchar(255),
     name_credential varchar(255)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MOrganization (
     id int not null primary key,
     foreign key (id) references MProvider(id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MIndividual (
     id int not null primary key,
     gender char(1),
@@ -111,7 +111,7 @@ create table if not exists MIndividual (
     isSoleProprietor enum('y', 'n', 'x'),
     foreign key (id) references MProvider(id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MProvider_PhoneNumber (
     mId int not null,
     phone int not null,
@@ -119,7 +119,7 @@ create table if not exists MProvider_PhoneNumber (
     foreign key (mId) references MProvider (id),
     foreign key (phone) references PhoneNumber (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MProvider_SecondarySpecialty (
     mId int not null,
     specialty int not null,
@@ -127,7 +127,7 @@ create table if not exists MProvider_SecondarySpecialty (
     foreign key (mId) references MProvider (id),
     foreign key (specialty) references Specialty (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MProvider_PrimarySpecialty (
     mId int not null,
     specialty int not null,
@@ -135,7 +135,7 @@ create table if not exists MProvider_PrimarySpecialty (
     foreign key (mId) references MProvider (id),
     foreign key (specialty) references Specialty (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MProvider_MailingAddress (
     mId int not null,
     address int not null,
@@ -143,7 +143,7 @@ create table if not exists MProvider_MailingAddress (
     foreign key (mId) references MProvider (id),
     foreign key (address) references Address (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists MProvider_PracticeAddress (
     mId int not null,
     address int not null,
@@ -151,7 +151,7 @@ create table if not exists MProvider_PracticeAddress (
     foreign key (mId) references MProvider (id),
     foreign key (address) references Address (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists Merge (
     mId int not null,
     sId int not null,
@@ -159,7 +159,7 @@ create table if not exists Merge (
     foreign key (mId) references MProvider (id),
     foreign key (sId) references CProvider (id)
 )
-ENGINE = MEMORY;
+;
 create table if not exists Audit (
     id int not null auto_increment primary key,
     sId int not null,
@@ -172,4 +172,4 @@ create table if not exists Audit (
     foreign key (sId, mId) references Merge (sId, mId),
     CONSTRAINT uc_Audit UNIQUE (sId, mId, rule)
 )
-ENGINE = MEMORY;
+;
