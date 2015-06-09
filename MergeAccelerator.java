@@ -21,28 +21,6 @@ public class MergeAccelerator {
       }
    }
 
-   public double edit_dist(int val1, int val2) {
-      if (val1 == val2) {
-         return 1.0;
-      } else {
-         return 0.0;
-      }
-   }
-
-   /**
-    * This runs the appropriate version of edit_dist on val1 and val2
-    */
-   public double dispatch(Object val1, Object val2) {
-      Class klass = val1.getClass();
-      if (klass == String.class) {
-         return edit_dist((String) val1, (String) val2);
-      } else if (klass == Integer.class) {
-         return edit_dist((Integer) val1, (Integer) val2);
-      } else {
-         return edit_dist(val1, val2);
-      }
-   }
-
    private int rule_resolve(double score, int weight) {
       if (weight > 0) {
          return (int)Math.round(score * weight);
