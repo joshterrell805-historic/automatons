@@ -2,10 +2,15 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class MergeAccelerator {
+   private Levenshtein compare;
+
+   public MergeAccelerator() {
+      compare = new Levenshtein();
+   }
 
    /** edit dist returns score 0.0-1.0, 1 being exact match **/
    public double edit_dist(String val1, String val2) {
-      return (double) 1 - Levenshtein.distance(val1, val2)/Math.max(val1.length(), val2.length());
+      return (double) 1 - compare.distance(val1, val2)/Math.max(val1.length(), val2.length());
    }
 
    public double edit_dist(Object val1, Object val2) {
