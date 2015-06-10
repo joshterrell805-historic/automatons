@@ -60,8 +60,6 @@ module Splitter
    def insert_no_rules_audit record
       audit = record.filter [:mId], {:id => :sId}
       audit[:rule] = "No rules matched"
-      audit[:score] = -1
-      audit[:other] = -1
       @db.insert_audit audit
    end
 

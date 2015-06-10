@@ -164,8 +164,8 @@ create table if not exists Audit (
     id int not null auto_increment primary key,
     sId int not null,
     mId int not null,
-    other int not null,
-    score int not null, -- This is the score of the winning source record
+    other int,
+    score int, -- This is the score of the winning source record
     -- This is a string describing the rule. For now, it'll take the form of
     -- "[field, field] => value"
     rule varchar(255) not null,
