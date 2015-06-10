@@ -113,13 +113,15 @@ class Merger
          # a merge clump
 
          if pair
-            puts "paired a record"
+            # puts "paired a record"
             merge_records record, pair, rules
          else
             @msplitter.insert_new_merge record
          end
          count += 1
-         puts "#{count} records merged"
+			if count % 100 == 0
+            puts "#{count} records merged"
+         end
       end
       count
    end
