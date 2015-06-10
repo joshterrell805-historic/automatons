@@ -17,26 +17,29 @@ file "Masters_#{Groupstamp}.txt" => "select-masters.sql" do |t|
   end
 end
 
-file "select-masters.sql" do
+file "select-masters.sql" => "build-extract-script.js" do
   sh "node build-extract-script.js"
 end
 CLEAN << "select-masters.sql"
 
-file "Crosswalk_#{Groupstamp}.txt" do |t|
+file "Crosswalk_#{Groupstamp}.txt" => "select-crosswalk.sql" do |t|
   cd ".." do
      sh "./connect-to-mysql.sh  --batch < submissions/select-crosswalk.sql > submissions/#{t.name}"
   end
 end
 
-file "Address_#{Groupstamp}.txt" do |t|
+file "Address_#{Groupstamp}.txt" => "select-addresses.sql" do |t|
   cd ".." do
      sh "./connect-to-mysql.sh  --batch < submissions/select-addresses.sql > submissions/#{t.name}"
   end
 end
 
-file "README_EXTRACT_#{Groupstamp}.txt" => "readme.md" do |t|
+file "README_EXTRACT_#{Groupstamp}.txt" => "select-audit.sql" do |t|
    cp t.prerequisites[0], t.name
 end
 
-file "Audit_#{Groupstamp}.txt" do
+file "Audit_#{Groupstamp}.txt" do |t|
+  cd ".." do
+     sh "./connect-to-mysql.sh  --batch < submissions/select-audit.sql > submissions/#{t.name}"
+  end
 end
