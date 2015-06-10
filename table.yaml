@@ -8,11 +8,9 @@
 - fields:
   - name_first
   weight: 15
-  compare: edit
 - fields:
   - name_middle
   weight: 10
-  compare: edit
 - fields:
   - name_last
   weight: 25
