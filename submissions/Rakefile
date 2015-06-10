@@ -1,13 +1,26 @@
+require 'rake/clean'
 Groupstamp = Time.now.strftime "%Y%m%d%H%M%S"
-Required = ["Masters_#{Groupstamp}.txt",
-            "Crosswalk_#{Groupstamp}.txt",
-            "Address_#{Groupstamp}.txt",
-            "README_EXTRACT_#{Groupstamp}.txt",
-            "Audit_#{Groupstamp}.txt"]
-task :default => Required
-
-file "Masters_#{Groupstamp}.txt" do
+def required groupstamp
+["Masters_#{groupstamp}.txt",
+  "Crosswalk_#{groupstamp}.txt",
+  "Address_#{groupstamp}.txt",
+  "README_EXTRACT_#{groupstamp}.txt",
+  "Audit_#{groupstamp}.txt"]
 end
+
+CLOBBER.include *required('*')
+task :default => required(Groupstamp)
+
+file "Masters_#{Groupstamp}.txt" => "select-masters.sql" do |t|
+  cd ".." do
+     sh "./connect-to-mysql.sh  --batch < submissions/select-masters.sql > submissions/#{t.name}"
+  end
+end
+
+file "select-masters.sql" do
+  sh "node build-extract-script.js"
+end
+CLEAN << "select-masters.sql"
 
 file "Crosswalk_#{Groupstamp}.txt" do
 end
