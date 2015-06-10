@@ -113,7 +113,6 @@ class Merger
          # a merge clump
 
          if pair
-            pair = pair.to_hash
             puts "paired a record"
             merge_records record, pair, rules
          else
