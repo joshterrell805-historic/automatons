@@ -55,9 +55,12 @@ end
 desc "Load the raw Specialties into the database"
 task :loadSpecialties => :create do
    begin
+      #mysqlimport "--local", "--ignore-lines=1", "automatons", "Specialties.tsv"
       sh "node #{BIN}/insert-specialties.js Specialties.tsv"
-   rescue
-      puts "It appears Specialties is already loaded. Ignoring. If you really wanted to load Specialties, clean it first."
+   rescue Exception => e
+p e
+raise e
+      #puts "It appears Specialties is already loaded. Ignoring. If you really wanted to load Specialties, clean it first."
    end
 end
 
