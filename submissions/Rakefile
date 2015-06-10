@@ -1,0 +1,23 @@
+Groupstamp = Time.now.strftime "%Y%m%d%H%M%S"
+Required = ["Masters_#{Groupstamp}.txt",
+            "Crosswalk_#{Groupstamp}.txt",
+            "Address_#{Groupstamp}.txt",
+            "README_EXTRACT_#{Groupstamp}.txt",
+            "Audit_#{Groupstamp}.txt"]
+task :default => Required
+
+file "Masters_#{Groupstamp}.txt" do
+end
+
+file "Crosswalk_#{Groupstamp}.txt" do
+end
+
+file "Address_#{Groupstamp}.txt" do
+end
+
+file "README_EXTRACT_#{Groupstamp}.txt" => "readme.md" do |t|
+   cp t.prerequisites[0], t.name
+end
+
+file "Audit_#{Groupstamp}.txt" do
+end
