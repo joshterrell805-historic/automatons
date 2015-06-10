@@ -59,6 +59,7 @@ var queryMostFrequentOfRelatedField =
 "group by counts.mId";
 
 var fields = {
+  "name_prefix": {},
   "name_first": {},
   "name_middle": {},
   "name_last": {},
@@ -66,7 +67,7 @@ var fields = {
   "name_credential": {},
   "gender": {individual: true},
   "dateOfBirth": {individual: true},
-  "isSoleProprietor": {individual: true},
+  "isSoleProprietor": {individual: true, uppercase: true},
   "phone": {table: "PhoneNumber", field: "phone"},
   "primarySpecialty": {table: "Specialty", field: "code"},
   "secondarySpecialty": {table: "Specialty", field: "code"},
@@ -91,7 +92,9 @@ _.forEach(field_keys, function(field) {
 });
 
 var select = "select m.id, m.type, " + field_keys.map(function(field) {
-  return field + "_t." + field;
+  var f =  field + "_t." + field;
+  if (fields[field].uppercase) f = "upper(" + f + ") as " + field;
+  return f;
 }).join(", ") + "\n";
 
 var query = select + "from MProvider m"
