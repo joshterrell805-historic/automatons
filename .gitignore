@@ -20,5 +20,3 @@ doc/
 .inch
 
 *.class
-
-bin/select-masters.sql
