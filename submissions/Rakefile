@@ -22,10 +22,16 @@ file "select-masters.sql" do
 end
 CLEAN << "select-masters.sql"
 
-file "Crosswalk_#{Groupstamp}.txt" do
+file "Crosswalk_#{Groupstamp}.txt" do |t|
+  cd ".." do
+     sh "./connect-to-mysql.sh  --batch < submissions/select-crosswalk.sql > submissions/#{t.name}"
+  end
 end
 
-file "Address_#{Groupstamp}.txt" do
+file "Address_#{Groupstamp}.txt" do |t|
+  cd ".." do
+     sh "./connect-to-mysql.sh  --batch < submissions/select-addresses.sql > submissions/#{t.name}"
+  end
 end
 
 file "README_EXTRACT_#{Groupstamp}.txt" => "readme.md" do |t|
