@@ -19,7 +19,7 @@
   compare: edit
 - fields:
   - name_suffix
-  weight: 20
+  weight: 5
 - fields:
   - name_suffix
   weight: -80
