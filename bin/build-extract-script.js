@@ -101,7 +101,7 @@ query = _.reduce(field_keys, function(query, field) {
       + field + "_t.mId";
 }, query);
 
- query = 'drop table if exists asdf; create table asdf as (' + query + ');';
-// query += ';';
+// query = 'drop table if exists asdf; create table asdf as (' + query + ');';
+ query += ';';
 
 fs.writeFileSync('select-masters.sql', query);
