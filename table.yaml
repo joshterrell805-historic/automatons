@@ -1,0 +1,121 @@
+---
+- fields:
+  - phone
+  weight: 40
+- fields:
+  - name_prefix
+  weight: 5
+- fields:
+  - name_first
+  weight: 15
+  compare: edit
+- fields:
+  - name_middle
+  weight: 10
+  compare: edit
+- fields:
+  - name_last
+  weight: 25
+  compare: edit
+- fields:
+  - name_suffix
+  weight: 20
+- fields:
+  - name_suffix
+  weight: -80
+- fields:
+  - name_credential
+  weight: 20
+- fields:
+  - primarySpecialty
+  weight: 10
+- fields:
+  - secondarySpecialty
+  weight: 15
+- fields:
+  - gender
+  weight: -80
+- fields:
+  - isSoleProprietor
+  weight: 5
+- fields:
+  - mStreet
+  weight: 25
+- fields:
+  - mUnit
+  weight: 3
+- fields:
+  - mCity
+  weight: 5
+- fields:
+  - mRegion
+  weight: 3
+- fields:
+  - mPostCode
+  weight: 10
+- fields:
+  - mCounty
+  weight: 4
+- fields:
+  - mCountry
+  weight: -80
+- fields:
+  - pStreet
+  weight: 25
+- fields:
+  - pUnit
+  weight: 3
+- fields:
+  - pCity
+  weight: 5
+- fields:
+  - pRegion
+  weight: 3
+- fields:
+  - pPostCode
+  weight: 10
+- fields:
+  - pCounty
+  weight: 4
+- fields:
+  - pCountry
+  weight: 1
+- fields:
+  - name_first
+  - name_last
+  weight: 40
+- fields:
+  - name_first
+  - name_middle
+  - name_last
+  - title
+  weight: 100
+- fields:
+  - name_first
+  - name_last
+  - phone
+  weight: 100
+- fields:
+  - name_first
+  - name_middle
+  - name_last
+  - title
+  - phone
+  weight: 100
+- fields:
+  - name_first
+  - name_last
+  - gender
+  weight: 45
+- fields:
+  - mStreet
+  - mCity
+  - mRegion
+  - mPostCode
+  weight: 70
+- fields:
+  - pStreet
+  - pCity
+  - pRegion
+  - pPostCode
+  weight: 70
