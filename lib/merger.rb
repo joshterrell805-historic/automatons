@@ -49,7 +49,7 @@ class Merger
       rules = nil
 
       threads = []
-      record = java.util.HashMap.new(record)
+      record = record[:hash_map]
       records.split(7500) do |hunk|
          threads << Thread.new do
             accelerator = MergeAccelerator.new
@@ -72,10 +72,11 @@ class Merger
       pair = nil
       matched_rules = nil
       hunk.each do |other|
-         if other == record
+         if other[:id] == record.get(:id)
             next
          end
-         score, rules, rule_values = accelerator.score_records @java_rules, record, java.util.HashMap.new(other)
+         score, rules, rule_values = accelerator.score_records @java_rules,
+               record, other[:hash_map]
          if score > @threshold and high_score < score
             high_score = score
             pair = other
@@ -97,6 +98,10 @@ class Merger
 
       @java_rules.each do |rule|
          rule["fields"] = rule["fields"].to_java
+      end
+      
+      list.each do |record|
+         record[:hash_map] = java.util.HashMap.new(record)
       end
 
       list.each_with_index do |record, i|
